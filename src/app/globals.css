@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+@layer base {
+  button,
+  [type='button'],
+  [type='reset'],
+  [type='submit'] {
+    cursor: pointer;
+  }
+  
+  button:disabled {
+    cursor: not-allowed;
+  }
+}
+
+/* 1. Khai báo Theme trong CSS (Thay thế tailwind.config.ts) */
+@theme {
+  /* Fonts: Mapping biến CSS từ Next.js vào Tailwind */
+  --font-serif: var(--font-playfair), serif;
+  --font-sans: var(--font-inter), sans-serif;
+  
+  /* Box Shadows */
+  --shadow-soft: 0 4px 20px rgba(245, 158, 11, 0.08);
+  --shadow-soft-lg: 0 10px 40px rgba(245, 158, 11, 0.1);
+  --shadow-soft-xl: 0 20px 60px rgba(245, 158, 11, 0.12);
+  --shadow-dark: 0 4px 20px rgba(0, 0, 0, 0.5);
+  --shadow-dark-lg: 0 10px 40px rgba(0, 0, 0, 0.6);
+  --shadow-dark-xl: 0 20px 60px rgba(0, 0, 0, 0.7);
+  
+  /* Animations */
+  --animate-float: float 6s ease-in-out infinite;
+  
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+}
+
+/* 2. Cấu hình Dark Mode */
+/* Trong v4, dark mode mặc định dùng media query.
+   Nếu muốn dùng class (thêm class="dark" vào html), bạn khai báo variant: */
+@variant dark (&:where(.dark, .dark *));
+
+/* 3. Custom Scrollbar & Smooth Scroll */
+@layer utilities {
+  /* Ẩn scrollbar default đi nếu muốn */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Scrollbar Style - Viết CSS thuần, v4 sẽ tự gộp */
+html {
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #f59e0b;
+  border-radius: 5px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #d97706;
+}
+
+/* Support dark mode cho scrollbar */
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar-track {
+    background: #1c1917;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #b45309;
+  }
+}
+
+:where(.dark) ::-webkit-scrollbar-track {
+  background: #1c1917;
+}
+
+:where(.dark) ::-webkit-scrollbar-thumb {
+  background-color: #b45309;
+}
