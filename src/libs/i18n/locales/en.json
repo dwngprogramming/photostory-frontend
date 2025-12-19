@@ -4,7 +4,8 @@
     "logout": "Logout",
     "signup": "Sign Up",
     "openMenu": "Open Menu",
-    "closeMenu": "Close Menu"
+    "closeMenu": "Close Menu",
+    "copyright": "© {year} Photostory. Made with ❤\uFE0F by Dung Pham for preserving memories."
   },
   "Landing": {
     "features": "Features",
@@ -69,6 +70,27 @@
       "noTimeLimit": "No time limit",
       "noHiddenFees": "No hidden fees",
       "termsApply": "1 GB of storage included. Upgrade will be supported in future."
+    },
+    "footer": {
+      "description": "Preserve memories, share photos-stories, cherish moments. A free platform for your digital keepsakes.",
+      "product": {
+        "title": "Product",
+        "features": "Features",
+        "howItWorks": "How It Works",
+        "demo": "Demo Album"
+      },
+      "author": {
+        "title": "Author",
+        "about": "About Me",
+        "contact": "Contact",
+        "feedback": "Feedback"
+      },
+      "support": {
+        "title": "Support",
+        "privacy": "Privacy Policy",
+        "terms": "Terms of Service",
+        "faq": "FAQ"
+      }
     }
   },
   "App": {

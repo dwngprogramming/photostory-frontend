@@ -4,7 +4,8 @@
     "logout": "Đăng xuất",
     "signup": "Đăng ký",
     "openMenu": "Mở menu",
-    "closeMenu": "Đóng menu"
+    "closeMenu": "Đóng menu",
+    "copyright": "© {year} Photostory. Tạo ra với ❤\uFE0F của Dũng Phạm để lưu giữ kỷ niệm."
   },
   "Landing": {
     "features": "Tính năng",
@@ -69,6 +70,27 @@
       "noTimeLimit": "Không giới hạn thời gian",
       "noHiddenFees": "Không có phí phát sinh",
       "termsApply": "Có sẵn 1 GB dung lượng lưu trữ. Sẽ hỗ trợ nâng cấp trong tương lai."
+    },
+    "footer": {
+      "description": "Lưu giữ kỷ niệm và trân trọng từng khoảnh khắc. Nền tảng miễn phí cho kho tàng ký ức số của bạn.",
+      "product": {
+        "title": "Sản phẩm",
+        "features": "Tính năng",
+        "howItWorks": "Cách sử dụng",
+        "demo": "Album demo"
+      },
+      "author": {
+        "title": "Tác giả",
+        "about": "Thông tin về tôi",
+        "contact": "Liên hệ",
+        "feedback": "Góp ý"
+      },
+      "support": {
+        "title": "Hỗ trợ",
+        "privacy": "Chính sách bảo mật",
+        "terms": "Điều khoản dịch vụ",
+        "faq": "Câu hỏi thường gặp"
+      }
     }
   },
   "App": {

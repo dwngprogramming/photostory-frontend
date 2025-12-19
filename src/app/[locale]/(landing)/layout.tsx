@@ -13,30 +13,27 @@ export default function LandingLayout({children}: { children: React.ReactNode })
   
   const footerSections: FooterSection[] = [
     {
-      title: "Product",
+      title: t('footer.product.title'),
       links: [
-        {label: "Features", href: "#features"},
-        {label: "How It Works", href: "#how-it-works"},
-        {label: "Demo Album", href: "#demo"},
-        {label: "Updates", href: "#updates"},
+        {label: t('footer.product.features'), href: "#features"},
+        {label: t('footer.product.howItWorks'), href: "#how-it-works"},
+        {label: t('footer.product.demo'), href: "#demo"},
       ]
     },
     {
-      title: "Company",
+      title: t('footer.author.title'),
       links: [
-        {label: "About", href: "#about"},
-        {label: "Blog", href: "#blog"},
-        {label: "Contact", href: "#contact"},
-        {label: "Feedback", href: "#feedback"},
+        {label: t('footer.author.about'), href: "#about"},
+        {label: t('footer.author.contact'), href: "#contact"},
+        {label: t('footer.author.feedback'), href: "#feedback"},
       ]
     },
     {
-      title: "Support",
+      title: t('footer.support.title'),
       links: [
-        {label: "Help Center", href: "#help"},
-        {label: "Privacy Policy", href: "#privacy"},
-        {label: "Terms of Service", href: "#terms"},
-        {label: "FAQ", href: "#faq"},
+        {label: t('footer.support.privacy'), href: "#privacy"},
+        {label: t('footer.support.terms'), href: "#terms"},
+        {label: t('footer.support.faq'), href: "#faq"},
       ]
     },
   ];
