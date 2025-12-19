@@ -13,7 +13,7 @@ interface EmptyStateProps {
 }
 
 export const EmptyState: React.FC<EmptyStateProps> = ({ onCreateAlbum, onDropFiles }) => {
-  const t = useTranslations('App.myAlbums');
+  const t = useTranslations('App.User.myAlbums');
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: onDropFiles,
     accept: { 'image/*': [], 'video/*': [] },
