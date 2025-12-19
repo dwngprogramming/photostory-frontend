@@ -1,0 +1,101 @@
+{
+  "Common": {
+    "login": "Login",
+    "logout": "Logout",
+    "signup": "Sign Up",
+    "openMenu": "Open Menu",
+    "closeMenu": "Close Menu"
+  },
+  "Landing": {
+    "features": "Features",
+    "hiw": "How it works",
+    "getStarted": "Get Started",
+    "free": "Free - No Credit Card Required",
+    "slogan": {
+      "left": "Preserve Your ",
+      "highlight": "Memories",
+      "right": " in a Beautiful Digital Album."
+    },
+    "description": "Create stunning photo diaries with stories, emotions, and moments that matter. Share them with loved ones through a simple code.",
+    "startFree": "Start Creating Free",
+    "viewDemo": "View Demo",
+    "albumIllustration": {
+      "season": {
+        "spring": "Spring",
+        "summer": "Summer",
+        "autumn": "Autumn",
+        "winter": "Winter"
+      },
+      "title": "My {season} Season",
+      "caption": "— {season} {year}"
+    },
+    "everythingYouNeed": {
+      "title": "Everything You Need to Tell Your Story",
+      "subtitle": "Simple, beautiful, and completely free.",
+      "beautiful": {
+        "title": "Beautiful Book Layout",
+        "description": "View your memories as a realistic flipping book with smooth page transitions and nostalgic design."
+      },
+      "richMedia": {
+        "title": "Rich Media Support",
+        "description": "Add photos, videos, and background music to your stories. Drag, rotate, and arrange them like a real scrapbook."
+      },
+      "private": {
+        "title": "Private & Shareable",
+        "description": "Keep albums private or share via unique access codes. No account needed for viewers to enjoy your stories."
+      }
+    },
+    "createYourAlbum": {
+      "title": "Create Your Album in Minutes",
+      "subtitle": "Three simple steps to preserve your memories.",
+      "createAlbum": {
+        "title": "Create Album",
+        "description": "Set up your album with a title, cover image, and optional preface. Choose who can view it."
+      },
+      "addPhotostory": {
+        "title": "Add Photos - Stories",
+        "description": "Upload photos and videos, arrange them beautifully, then write your memories and emotions for each moment."
+      },
+      "shareEnjoy": {
+        "title": "Share & Enjoy",
+        "description": "View your album as a beautiful flipping book or share the unique code with friends and family."
+      }
+    },
+    "startPreserveMemories": {
+      "title": "Start Preserving Your Memories Today",
+      "subtitle": "Join our community of memory keepers. Completely free, forever.",
+      "getStartedFree": "Get Started Free",
+      "noCreditCard": "No credit card",
+      "noTimeLimit": "No time limit",
+      "noHiddenFees": "No hidden fees",
+      "termsApply": "1 GB of storage included. Upgrade will be supported in future."
+    }
+  },
+  "App": {
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "Welcome back! Here's an overview of your albums and recent activity.",
+      "stats": {
+        "myAlbums": "My Albums",
+        "totalPhotos": "Total Photos",
+        "publicAlbums": "Public Albums",
+        "privateAlbums": "Private Albums",
+        "storageUsage": "Storage Usage",
+        "upgradeStorage": "Upgrade"
+      }
+    },
+    "myAlbums": {
+      "title": "My Albums",
+      "subtitle": "Manage and organize your photo-story",
+      "empty": {
+        "noAlbums": "No albums yet",
+        "description": "Get started by creating your first photo-story. Drag and drop photo here to set cover album image or use the button below.",
+        "dropPhoto": "Drop photo to create album"
+      },
+      "createAlbum": "Create Album"
+    },
+    "sharedWithMe": "Shared With Me",
+    "settings": "Settings",
+    "createAlbum": "Create Album"
+  }
+}

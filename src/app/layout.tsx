@@ -3,6 +3,9 @@ import {Inter, Playfair_Display} from "next/font/google";
 import "./globals.css";
 import React from "react";
 import {ThemeProvider} from "next-themes";
+import {Toaster} from "react-hot-toast";
+import {NextIntlClientProvider} from "next-intl";
+import {getMessages} from "next-intl/server";
 
 // Khai báo Font
 const inter = Inter({
@@ -22,23 +25,36 @@ export const metadata: Metadata = {
   description: "Create & Preserve your photo-story moments.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
                                      children,
                                    }: Readonly<{
   children: React.ReactNode;
 }>) {
+  
+  const messages = await getMessages();
+  
   return (
-    // Thêm class "dark" vào đây nếu bạn muốn test giao diện tối thủ công
-    // hoặc dùng next-themes để quản lý
     <html lang="en" className={`${inter.variable} ${playfair.variable} antialiased`} suppressHydrationWarning>
       <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-        >
-          {children}
-        </ThemeProvider>
+        <NextIntlClientProvider messages={messages}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+          >
+            <Toaster
+              position="top-center"
+              toastOptions={{
+                className: 'dark:bg-stone-800 dark:text-white',
+                style: {
+                  background: 'var(--toast-bg)',
+                  color: 'var(--toast-color)',
+                },
+              }}
+            />
+              {children}
+          </ThemeProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

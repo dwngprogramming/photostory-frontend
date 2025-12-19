@@ -12,7 +12,8 @@ const StepCard: React.FC<Step & { delay: number }> = ({number, icon, title, desc
       className={`flex flex-col items-center text-center relative z-10 transition-all duration-700 ease-out transform ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
     >
       <div
-        className="text-5xl font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 border-2 border-amber-400 dark:border-amber-700/50 rounded-full w-20 h-20 flex items-center justify-center mb-6 font-serif shadow-sm">
+        className="text-5xl font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950 border-2 border-amber-400 dark:border-amber-700
+        rounded-full w-20 h-20 flex items-center justify-center mb-6 font-serif shadow-sm leading-none pb-3">
         {number}
       </div>
       <div
