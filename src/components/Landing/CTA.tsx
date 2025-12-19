@@ -1,8 +1,10 @@
 import React from "react";
 import {useScrollAnimation} from "@/hooks/useScrollAnimation";
 import {ArrowRight} from "lucide-react";
+import {useTranslations} from "next-intl";
 
 const CTA = () => {
+  const t = useTranslations('Landing.startPreserveMemories');
   const {ref, inView} = useScrollAnimation();
   
   return (
@@ -13,17 +15,20 @@ const CTA = () => {
       >
         <h2
           className="font-serif font-bold text-white text-4xl md:text-5xl lg:text-6xl leading-tight mb-6 drop-shadow-sm">
-          Start Preserving Your Memories Today
+          {t('title')}
         </h2>
         <p className="text-white text-xl md:text-2xl opacity-90 mb-8 font-light">
-          Join our community of memory keepers. Completely free, forever.
+          {t('subtitle')}
         </p>
         <button
           className="bg-white text-amber-600 font-semibold hover:bg-amber-50 hover:scale-105 px-8 py-4 rounded-xl shadow-xl transition-all duration-200 flex items-center gap-2 mx-auto justify-center w-fit">
-          Get Started Free <ArrowRight className="w-5 h-5"/>
+          {t('getStartedFree')} <ArrowRight className="w-5 h-5"/>
         </button>
-        <p className="text-white text-sm mt-6 opacity-80">
-          No credit card • No time limits • No hidden fees
+        <p className="text-white mt-6 opacity-80">
+          {t('noCreditCard')} • {t('noTimeLimit')} • {t('noHiddenFees')}
+        </p>
+        <p className="text-white text-xs mt-2 opacity-80">
+          * {t('termsApply')}
         </p>
       </div>
     </section>

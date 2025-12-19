@@ -4,10 +4,13 @@ import {useEffect, useState} from "react";
 import {Book, Menu, X} from "lucide-react";
 import {NavLink} from "@/types";
 import ThemeToggle from "@/components/Common/ThemeToggle";
+import {useTranslations} from "next-intl";
 
 const Navbar = ({navLinks}: {navLinks: NavLink[]}) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const tLanding = useTranslations('Landing');
+  const tCommon = useTranslations('Common');
   
   useEffect(() => {
     const handleScroll = () => {
@@ -48,13 +51,14 @@ const Navbar = ({navLinks}: {navLinks: NavLink[]}) => {
         {/* Desktop Actions */}
         <div className="hidden md:flex items-center gap-4">
           <a href="#"
-             className="text-stone-600 dark:text-stone-300 hover:text-amber-500 dark:hover:text-amber-400 transition-colors duration-200 font-medium">
-            Login
+             className="text-stone-600 dark:text-stone-300 hover:text-amber-500 dark:hover:text-amber-400 transition-colors duration-200 font-medium"
+          >
+            {tCommon('login')}
           </a>
           <ThemeToggle/>
           <button
             className="bg-amber-500 text-white px-6 py-2.5 rounded-lg hover:bg-amber-600 hover:scale-105 transition-all duration-200 font-semibold shadow-sm focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 focus:outline-none">
-            Get Started
+            {tLanding('getStarted')}
           </button>
         </div>
         
@@ -64,7 +68,7 @@ const Navbar = ({navLinks}: {navLinks: NavLink[]}) => {
           <button
             onClick={() => setIsMobileMenuOpen(true)}
             className="text-stone-800 dark:text-stone-100 hover:text-amber-500 dark:hover:text-amber-400 transition-colors"
-            aria-label="Open menu"
+            aria-label={`${tCommon('openMenu')}`}
           >
             <Menu className="w-6 h-6"/>
           </button>
@@ -83,7 +87,7 @@ const Navbar = ({navLinks}: {navLinks: NavLink[]}) => {
             <button
               onClick={() => setIsMobileMenuOpen(false)}
               className="absolute top-4 right-4 text-stone-800 dark:text-stone-100 hover:text-amber-500 dark:hover:text-amber-400"
-              aria-label="Close menu"
+              aria-label={`${tCommon('closeMenu')}`}
             >
               <X className="w-6 h-6"/>
             </button>

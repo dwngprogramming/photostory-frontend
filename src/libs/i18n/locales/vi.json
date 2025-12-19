@@ -1,0 +1,101 @@
+{
+  "Common": {
+    "login": "Đăng nhập",
+    "logout": "Đăng xuất",
+    "signup": "Đăng ký",
+    "openMenu": "Mở menu",
+    "closeMenu": "Đóng menu"
+  },
+  "Landing": {
+    "features": "Tính năng",
+    "hiw": "Cách sử dụng",
+    "getStarted": "Bắt đầu",
+    "free": "Miễn phí - Không cần thẻ tín dụng",
+    "slogan": {
+      "left": "Lưu giữ những",
+      "highlight": "Kỷ Niệm",
+      "right": "trong một Album kỹ thuật số đẹp mắt."
+    },
+    "description": "Tạo nhật ký ảnh tuyệt đẹp với những câu chuyện, cảm xúc và khoảnh khắc đặc biệt. Chia sẻ với những người thân yêu dễ dàng thông qua một mã bảo vệ.",
+    "startFree": "Bắt đầu ngay",
+    "viewDemo": "Xem demo",
+    "albumIllustration": {
+      "season": {
+        "spring": "Xuân",
+        "summer": "Hè",
+        "autumn": "Thu",
+        "winter": "Đông"
+      },
+      "title": "Mùa {season} Của Tôi",
+      "caption": "— {season} {year}"
+    },
+    "everythingYouNeed": {
+      "title": "Tất cả những gì bạn cần để kể lại câu chuyện",
+      "subtitle": "Đơn giản, tinh tế và hoàn toàn miễn phí.",
+      "beautiful": {
+        "title": "Giao diện Sách Ảnh Tuyệt đẹp",
+        "description": "Xem lại những kỷ niệm như một cuốn sách lật trang chân thực, với hiệu ứng mượt mà và thiết kế mang màu sắc hoài niệm."
+      },
+      "richMedia": {
+        "title": "Hỗ trợ Đa phương tiện",
+        "description": "Thêm hình ảnh, video và nhạc nền vào câu chuyện của bạn. Kéo thả chúng hệt như một cuốn sổ dán ảnh (scrapbook) thực thụ."
+      },
+      "private": {
+        "title": "Riêng tư & Chia sẻ",
+        "description": "Giữ album cho riêng mình hoặc chia sẻ qua mã truy cập. Người xem không cần tạo tài khoản để thưởng thức câu chuyện của bạn."
+      }
+    },
+    "createYourAlbum": {
+      "title": "Tạo Album của bạn chỉ trong vài phút",
+      "subtitle": "Ba bước đơn giản để lưu giữ lại những ký ức.",
+      "createAlbum": {
+        "title": "Khởi tạo Album",
+        "description": "Thiết lập album với tiêu đề, ảnh bìa và lời tựa. Tùy chọn quyền riêng tư cho người xem."
+      },
+      "addPhotostory": {
+        "title": "Thêm Ảnh - Câu chuyện",
+        "description": "Tải lên hình ảnh và video, sắp xếp bố cục thật đẹp, rồi viết lại những cảm xúc cho từng khoảnh khắc đáng nhớ."
+      },
+      "shareEnjoy": {
+        "title": "Chia sẻ - Tận hưởng",
+        "description": "Thưởng thức album dưới dạng sách lật trang tuyệt đẹp hoặc gửi mã truy cập riêng cho bạn bè và người thân."
+      }
+    },
+    "startPreserveMemories": {
+      "title": "Bắt đầu hành trình lưu giữ kỷ niệm ngay hôm nay",
+      "subtitle": "Gia nhập cộng đồng những người trân trọng ký ức. Hoàn toàn miễn phí, trọn đời.",
+      "getStartedFree": "Bắt đầu miễn phí",
+      "noCreditCard": "Không cần thẻ tín dụng",
+      "noTimeLimit": "Không giới hạn thời gian",
+      "noHiddenFees": "Không có phí phát sinh",
+      "termsApply": "Có sẵn 1 GB dung lượng lưu trữ. Sẽ hỗ trợ nâng cấp trong tương lai."
+    }
+  },
+  "App": {
+    "dashboard": {
+      "title": "Bảng điều khiển",
+      "subtitle": "Xin chào! Đây là tổng quan về album và thống kê của bạn.",
+      "stats": {
+        "myAlbums": "Album của tôi",
+        "totalPhotos": "Tổng số ảnh",
+        "publicAlbums": "Album công khai",
+        "privateAlbums": "Album riêng tư",
+        "storageUsage": "Dung lượng sử dụng",
+        "upgradeStorage": "Nâng cấp"
+      }
+    },
+    "myAlbums": {
+      "title": "Album của tôi",
+      "subtitle": "Quản lý và chỉnh sửa các photo-story của bạn.",
+      "empty": {
+        "noAlbums": "Bạn chưa có album nào",
+        "description": "Bắt đầu tạo photo-story đầu tiên của bạn. Kéo thả ảnh vào đây để đặt làm ảnh bìa album, hoặc sử dụng nút bên dưới",
+        "dropPhoto": "Thả ảnh để tạo album"
+      },
+      "createAlbum": "Tạo Album"
+    },
+    "sharedWithMe": "Album chia sẻ với tôi",
+    "settings": "Cài đặt",
+    "createAlbum": "Tạo album"
+  }
+}

@@ -2,11 +2,13 @@ import React from "react";
 import {FooterSection, NavLink} from "@/types";
 import Navbar from "@/components/Landing/Navbar";
 import Footer from "@/components/Landing/Footer";
+import {useTranslations} from "next-intl";
 
 export default function LandingLayout({children}: { children: React.ReactNode }) {
+  const t = useTranslations('Landing');
   const navLinks: NavLink[] = [
-    {label: 'Features', href: '#features'},
-    {label: 'How It Works', href: '#how-it-works'},
+    {label: `${t('features')}`, href: '#features'},
+    {label: `${t('hiw')}`, href: '#how-it-works'}
   ];
   
   const footerSections: FooterSection[] = [
