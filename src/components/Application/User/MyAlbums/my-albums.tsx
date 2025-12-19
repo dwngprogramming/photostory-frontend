@@ -1,16 +1,15 @@
 "use client";
 
-import React, { useState } from 'react';
-import { toast } from 'react-hot-toast';
-import { Filter, ArrowUpDown, LayoutGrid, List } from 'lucide-react';
+import React, {useState} from 'react';
+import {toast} from 'react-hot-toast';
+import {ArrowUpDown, Filter, LayoutGrid, List} from 'lucide-react';
 
 // Components
-import { EmptyState, AlbumGrid } from '@/components/Application/User/MyAlbums/AlbumComponents';
+import {AlbumGrid, EmptyState} from '@/components/Application/User/MyAlbums/AlbumComponents';
 // import DiaryModal from './DiaryModal';
-
 // Data & Types
-import { Album } from '@/types';
-import { MOCK_STATS, INITIAL_ALBUMS } from '@/mock_data/constants';
+import {Album} from '@/types';
+import {MOCK_STATS} from '@/mock_data/constants';
 import StatsOverview from "@/components/Application/User/MyAlbums/StatsOverview";
 import {useTranslations} from "next-intl";
 
@@ -19,7 +18,7 @@ export default function MyAlbums() {
   const [stats, setStats] = useState(MOCK_STATS);
   const [droppedFiles, setDroppedFiles] = useState<File[]>([]);
   const [isDiaryOpen, setIsDiaryOpen] = useState(false);
-  const t = useTranslations('App');
+  const t = useTranslations('App.User');
   
   const handleCreateAlbum = () => {
     setDroppedFiles([]);

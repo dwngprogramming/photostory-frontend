@@ -94,30 +94,43 @@
     }
   },
   "App": {
-    "dashboard": {
-      "title": "Dashboard",
-      "subtitle": "Welcome back! Here's an overview of your albums and recent activity.",
-      "stats": {
-        "myAlbums": "My Albums",
-        "totalPhotos": "Total Photos",
-        "publicAlbums": "Public Albums",
-        "privateAlbums": "Private Albums",
-        "storageUsage": "Storage Usage",
-        "upgradeStorage": "Upgrade"
-      }
-    },
-    "myAlbums": {
-      "title": "My Albums",
-      "subtitle": "Manage and organize your photo-story",
-      "empty": {
-        "noAlbums": "No albums yet",
-        "description": "Get started by creating your first photo-story. Drag and drop photo here to set cover album image or use the button below.",
-        "dropPhoto": "Drop photo to create album"
+    "User": {
+      "dashboard": {
+        "title": "Dashboard",
+        "subtitle": "Welcome back! Here's an overview of your albums and recent activity.",
+        "stats": {
+          "myAlbums": "My Albums",
+          "totalPhotos": "Total Photos",
+          "publicAlbums": "Public Albums",
+          "privateAlbums": "Private Albums",
+          "storageUsage": "Storage Usage",
+          "upgradeStorage": "Upgrade"
+        }
       },
+      "myAlbums": {
+        "title": "My Albums",
+        "subtitle": "Manage and organize your photo-story",
+        "empty": {
+          "noAlbums": "No albums yet",
+          "description": "Get started by creating your first photo-story. Drag and drop photo here to set cover album image or use the button below.",
+          "dropPhoto": "Drop photo to create album"
+        },
+        "createAlbum": "Create Album"
+      },
+      "sharedWithMe": "Shared With Me",
+      "settings": "Settings",
       "createAlbum": "Create Album"
     },
-    "sharedWithMe": "Shared With Me",
-    "settings": "Settings",
-    "createAlbum": "Create Album"
+    "Guest": {
+      "unwrap": {
+        "title": "Enter Your Code",
+        "description": "Unwrap magical moments in the album gifted by your loved one.",
+        "enterCode": "Enter Code Here",
+        "submit": "Unwrap Now",
+        "example": "Example code",
+        "createNew": "Want to create one?",
+        "signup": "Sign up now!"
+      }
+    }
   }
 }

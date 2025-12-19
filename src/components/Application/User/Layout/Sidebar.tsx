@@ -16,7 +16,7 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ currentUser, isOpen, onCloseMobile }: SidebarProps) {
-  const t = useTranslations('App');
+  const t = useTranslations('App.User');
   const pathname = usePathname();
   
   const isActive = (path: string) => pathname.startsWith(path);
