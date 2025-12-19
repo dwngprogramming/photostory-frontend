@@ -1,7 +1,10 @@
 import {Book, Facebook, Github, Instagram, Twitter} from "lucide-react";
 import {FooterSection} from "@/types";
+import {useTranslations} from "next-intl";
 
-const Footer= ({footerSections}: {footerSections: FooterSection[]} ) => {
+const Footer = ({footerSections}: { footerSections: FooterSection[] }) => {
+  const tCommon = useTranslations('Common');
+  const t = useTranslations('Landing.footer');
   return (
     <footer
       className="pt-16 pb-8 px-4 bg-stone-50 dark:bg-stone-950 border-t border-stone-200 dark:border-stone-800 transition-colors duration-300">
@@ -14,7 +17,7 @@ const Footer= ({footerSections}: {footerSections: FooterSection[]} ) => {
               <span className="text-xl font-bold text-stone-800 dark:text-stone-100 font-serif">Photostory</span>
             </div>
             <p className="text-stone-600 dark:text-stone-300 leading-relaxed mb-6">
-              Preserve memories, share stories, cherish moments. A free platform for your digital legacy.
+              {t('description')}
             </p>
             <div className="flex gap-3">
               {[Facebook, Twitter, Instagram, Github].map((Icon, i) => (
@@ -46,7 +49,7 @@ const Footer= ({footerSections}: {footerSections: FooterSection[]} ) => {
         
         <div className="border-t border-stone-200 dark:border-stone-800 mt-12 pt-8 text-center">
           <p className="text-stone-500 dark:text-stone-400 text-sm">
-            © {new Date().getFullYear()} Photostory. Made with ❤️ for preserving memories.
+            {tCommon('copyright', {year: new Date().getFullYear()})}
           </p>
         </div>
       </div>
