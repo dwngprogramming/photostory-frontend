@@ -4,7 +4,7 @@ import {Book, Globe, HardDrive, Image, Lock} from "lucide-react";
 import {useTranslations} from "next-intl";
 
 const StatsOverview: React.FC<{ stats: Stats }> = ({stats}) => {
-  const t = useTranslations('App.dashboard.stats');
+  const t = useTranslations('App.User.dashboard.stats');
   const cards = [
     {label: t('myAlbums'), value: stats.myAlbums, icon: Book},
     {label: t('totalPhotos'), value: stats.totalPhotos, icon: Image},

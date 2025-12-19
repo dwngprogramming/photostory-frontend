@@ -94,30 +94,43 @@
     }
   },
   "App": {
-    "dashboard": {
-      "title": "Bảng điều khiển",
-      "subtitle": "Xin chào! Đây là tổng quan về album và thống kê của bạn.",
-      "stats": {
-        "myAlbums": "Album của tôi",
-        "totalPhotos": "Tổng số ảnh",
-        "publicAlbums": "Album công khai",
-        "privateAlbums": "Album riêng tư",
-        "storageUsage": "Dung lượng sử dụng",
-        "upgradeStorage": "Nâng cấp"
-      }
-    },
-    "myAlbums": {
-      "title": "Album của tôi",
-      "subtitle": "Quản lý và chỉnh sửa các photo-story của bạn.",
-      "empty": {
-        "noAlbums": "Bạn chưa có album nào",
-        "description": "Bắt đầu tạo photo-story đầu tiên của bạn. Kéo thả ảnh vào đây để đặt làm ảnh bìa album, hoặc sử dụng nút bên dưới",
-        "dropPhoto": "Thả ảnh để tạo album"
+    "User": {
+      "dashboard": {
+        "title": "Bảng điều khiển",
+        "subtitle": "Xin chào! Đây là tổng quan về album và thống kê của bạn.",
+        "stats": {
+          "myAlbums": "Album của tôi",
+          "totalPhotos": "Tổng số ảnh",
+          "publicAlbums": "Album công khai",
+          "privateAlbums": "Album riêng tư",
+          "storageUsage": "Dung lượng sử dụng",
+          "upgradeStorage": "Nâng cấp"
+        }
       },
-      "createAlbum": "Tạo Album"
+      "myAlbums": {
+        "title": "Album của tôi",
+        "subtitle": "Quản lý và chỉnh sửa các photo-story của bạn.",
+        "empty": {
+          "noAlbums": "Bạn chưa có album nào",
+          "description": "Bắt đầu tạo photo-story đầu tiên của bạn. Kéo thả ảnh vào đây để đặt làm ảnh bìa album, hoặc sử dụng nút bên dưới",
+          "dropPhoto": "Thả ảnh để tạo album"
+        },
+        "createAlbum": "Tạo Album"
+      },
+      "sharedWithMe": "Album chia sẻ với tôi",
+      "settings": "Cài đặt",
+      "createAlbum": "Tạo album"
     },
-    "sharedWithMe": "Album chia sẻ với tôi",
-    "settings": "Cài đặt",
-    "createAlbum": "Tạo album"
+    "Guest": {
+      "unwrap": {
+        "title": "Nhập mã của bạn",
+        "description": "Khám phá những khoảnh khắc tuyệt đẹp trong album mà người thương đã dành tặng bạn.",
+        "enterCode": "Nhập mã ở đây",
+        "submit": "Mở Album Ngay",
+        "example": "Code mẫu",
+        "createNew": "Muốn tạo một album?",
+        "signup": "Đăng ký ngay!"
+      }
+    }
   }
 }
