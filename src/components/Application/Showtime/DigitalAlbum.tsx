@@ -1,7 +1,9 @@
-'use client';
-
-import React, { useRef, useState, useCallback } from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import HTMLFlipBook from 'react-pageflip';
+import Image from "next/image";
+import {useIsMobile} from "@/hooks/useIsMobile";
+import {UnwrapPhase} from "@/types";
+import {useAlbumTour} from "@/hooks/useAlbumTour";
 
 // --- INTERFACES ---
 interface PageProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -69,11 +71,23 @@ const Page = React.forwardRef<HTMLDivElement, PageProps>(
 
 Page.displayName = 'Page';
 
+interface DigitalAlbumProps {
+  phase: UnwrapPhase;
+}
+
 // --- MAIN COMPONENT ---
-export default function FlipBookDemo() {
-  const bookRef = useRef<any>(null); // Thư viện này types hơi lỏng lẻo, dùng any cho ref là an toàn nhất
+const DigitalAlbum = ({phase}: DigitalAlbumProps) => {
+  const bookRef = useRef<any>(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const isMobile = useIsMobile();
+  const {startTour, closeTour} = useAlbumTour();
+  
+  useEffect(() => {
+    if (phase === UnwrapPhase.REVEALED && bookRef.current) {
+      startTour();
+    }
+  }, [phase]);
   
   // Sử dụng useCallback để tránh re-render không cần thiết
   const onFlip = useCallback((e: any) => {
@@ -86,28 +100,18 @@ export default function FlipBookDemo() {
     }
   }, []);
   
-  const goToNextPage = () => {
-    bookRef.current?.pageFlip()?.flipNext();
-  };
-  
-  const goToPrevPage = () => {
-    bookRef.current?.pageFlip()?.flipPrev();
-  };
-  
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900 flex flex-col items-center justify-center p-4 md:p-8">
-      {/* Thông tin trạng thái */}
-      <div className="mb-8 text-center text-white">
-        <h1 className="text-3xl md:text-4xl font-bold mb-2 drop-shadow-md">
-          📖 Demo Sách Lật Trang
-        </h1>
-        <p className="text-gray-300">
-          Trang {currentPage + 1} / {totalPages}
-        </p>
-      </div>
+    <div className="relative w-full min-h-screen flex bg-transparent flex-col items-center justify-center p-4 md:p-8">
+      <Image
+        src="/images/showtime/flower-vintage-background.jpg"
+        alt="Background"
+        fill
+        className="object-cover object-center z-0 scale-105 transform blur-[6px] brightness-80 dark:brightness-30 transition-all duration-300"
+        priority
+      />
       
       {/* Khu vực sách */}
-      <div className="relative mb-8 flex justify-center items-center w-full max-w-4xl h-[600px]">
+      <div className="relative z-10 mb-8 flex justify-center items-center w-full max-w-4xl h-[600px]">
         {/* @ts-ignore */}
         <HTMLFlipBook
           ref={bookRef}
@@ -120,7 +124,7 @@ export default function FlipBookDemo() {
           maxHeight={600}
           drawShadow={true}
           flippingTime={1000}
-          usePortrait={false}
+          usePortrait={isMobile}
           startZIndex={0}
           autoSize={true}
           maxShadowOpacity={0.5}
@@ -128,11 +132,10 @@ export default function FlipBookDemo() {
           mobileScrollSupport={true}
           onFlip={onFlip}
           onInit={onInit}
-          className="shadow-2xl"
           style={{ margin: '0 auto' }}
         >
           {/* Bìa trước */}
-          <CoverPage key="cover-front">
+          <CoverPage id="album-digital" key="cover-front">
             <div className="text-center text-white">
               <div className="text-8xl mb-6">📚</div>
               <h2 className="text-5xl font-bold mb-4 drop-shadow-lg">
@@ -259,22 +262,8 @@ export default function FlipBookDemo() {
           </CoverPage>
         </HTMLFlipBook>
       </div>
-      
-      {/* Nút điều khiển */}
-      <div className="flex gap-4 z-10">
-        <button
-          onClick={goToPrevPage}
-          className="px-6 py-3 bg-orange-600 text-white rounded-lg font-semibold shadow-lg hover:bg-orange-700 hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          ← Trang Trước
-        </button>
-        <button
-          onClick={goToNextPage}
-          className="px-6 py-3 bg-orange-600 text-white rounded-lg font-semibold shadow-lg hover:bg-orange-700 hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          Trang Sau →
-        </button>
-      </div>
     </div>
   );
 }
+
+export default DigitalAlbum;

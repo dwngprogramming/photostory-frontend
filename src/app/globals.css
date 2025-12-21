@@ -26,6 +26,7 @@
   --shadow-dark: 0 4px 20px rgba(0, 0, 0, 0.5);
   --shadow-dark-lg: 0 10px 40px rgba(0, 0, 0, 0.6);
   --shadow-dark-xl: 0 20px 60px rgba(0, 0, 0, 0.7);
+  --shadow-glow: 0 0 20px rgba(251, 191, 36, 0.5);
   
   /* Animations */
   --animate-float: float 6s ease-in-out infinite;

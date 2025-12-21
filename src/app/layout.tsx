@@ -2,10 +2,11 @@ import type {Metadata} from "next";
 import {Inter, Playfair_Display} from "next/font/google";
 import "./globals.css";
 import React from "react";
-import {ThemeProvider} from "next-themes";
+import {ThemeProvider} from "@/contexts/theme-provider";
 import {Toaster} from "react-hot-toast";
 import {NextIntlClientProvider} from "next-intl";
 import {getMessages} from "next-intl/server";
+import "driver.js/dist/driver.css";
 
 // Khai báo Font
 const inter = Inter({

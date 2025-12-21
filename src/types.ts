@@ -79,3 +79,19 @@ export interface Stats {
   storageUsed: number; // in GB
   storageTotal: number; // in GB
 }
+
+export enum UnwrapPhase {
+  IDLE = 'IDLE',
+  LOADING = 'LOADING', // 0-1s
+  CURTAIN_CLOSE = 'CURTAIN_CLOSE', // 1-2s
+  INTRO_TEXT = 'INTRO_TEXT', // New phase: Text display
+  ICONS_FLOAT = 'ICONS_FLOAT', // 2-2.5s
+  RIBBON_EXPAND = 'RIBBON_EXPAND', // 2.5-3.5s
+  VERTICAL_SPLIT = 'VERTICAL_SPLIT', // 3.5-4s
+  CURTAIN_OPEN = 'CURTAIN_OPEN', // 4-5s
+  REVEALED = 'REVEALED' // 5s+
+}
+
+export interface AnimationProps {
+  phase: UnwrapPhase;
+}
