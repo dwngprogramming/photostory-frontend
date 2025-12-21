@@ -48,7 +48,7 @@ export default function Sidebar({ currentUser, isOpen, onCloseMobile }: SidebarP
       >
         {/* Header */}
         <div className="h-16 flex items-center justify-between px-6 border-b border-stone-100 dark:border-stone-800">
-          <Link href="/public" className="flex items-center gap-2" onClick={onCloseMobile}>
+          <Link href="/my-albums" className="flex items-center gap-2" onClick={onCloseMobile}>
             <Book className="w-8 h-8 text-amber-500" />
             <span className="text-xl font-bold font-serif text-stone-800 dark:text-stone-100">
               Photostory

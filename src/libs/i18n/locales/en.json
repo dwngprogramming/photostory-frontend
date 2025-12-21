@@ -127,6 +127,8 @@
         "description": "Unwrap magical moments in the album gifted by your loved one.",
         "enterCode": "Enter Code Here",
         "submit": "Unwrap Now",
+        "unwrapping": "Unwrapping...",
+        "albumReady": "Album is Ready!",
         "example": "Example code",
         "createNew": "Want to create one?",
         "signup": "Sign up now!"
