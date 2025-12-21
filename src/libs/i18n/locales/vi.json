@@ -127,6 +127,8 @@
         "description": "Khám phá những khoảnh khắc tuyệt đẹp trong album mà người thương đã dành tặng bạn.",
         "enterCode": "Nhập mã ở đây",
         "submit": "Mở Album Ngay",
+        "unwrapping": "Đang mở album...",
+        "albumReady": "Album sẵn sàng!",
         "example": "Code mẫu",
         "createNew": "Muốn tạo một album?",
         "signup": "Đăng ký ngay!"
