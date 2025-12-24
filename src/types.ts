@@ -95,3 +95,11 @@ export enum UnwrapPhase {
 export interface AnimationProps {
   phase: UnwrapPhase;
 }
+
+export interface Photo {
+  id: string;
+  url: string;
+  caption: string;
+  date: string;
+  orientation: 'landscape' | 'portrait' | 'square';
+}

@@ -101,3 +101,44 @@ html {
 :where(.dark) ::-webkit-scrollbar-thumb {
   background-color: #b45309;
 }
+
+/* Hiệu ứng chất liệu da sần (Leather Texture) */
+.album-skin {
+  background-color: #3e2723; /* Màu nâu da bò đậm */
+  background-image: radial-gradient(white, rgba(255, 255, 255, .2) 2px, transparent 3px),
+  radial-gradient(white, rgba(255, 255, 255, .15) 1px, transparent 2px),
+  radial-gradient(white, rgba(255, 255, 255, .1) 2px, transparent 3px);
+  background-size: 550px 550px, 350px 350px, 250px 250px;
+  background-position: 0 0, 40px 60px, 130px 270px;
+  /* Đổ bóng vào trong để tạo độ cong cho bìa */
+  box-shadow: inset 15px 0 20px rgba(0, 0, 0, 0.6), inset -2px 0 5px rgba(255, 255, 255, 0.1);
+}
+
+/* Hiệu ứng chữ ép kim vàng (Gold Foil) */
+.gold-foil {
+  color: #cfb53b; /* Vàng kim */
+  background: linear-gradient(to bottom, #cfb53b 0%, #fceabb 50%, #cfb53b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* Đổ bóng chữ để tạo độ lún/nổi */
+  filter: drop-shadow(0px 1px 0px rgba(0, 0, 0, 0.5));
+  font-family: 'Playfair Display', serif; /* Nên dùng font có chân sang trọng */
+}
+
+/* Khung viền trang trí */
+.gold-border {
+  border: 2px solid #cfb53b;
+  box-shadow: 0 0 5px rgba(207, 181, 59, 0.5), inset 0 0 5px rgba(207, 181, 59, 0.5);
+}
+
+.texture-leather {
+  background-image:
+    /* Gradient bóng tối 2 bên gáy sách (như cũ) */
+          linear-gradient(to right, rgba(0,0,0,0.6), rgba(255,255,255,0.1) 20%, rgba(0,0,0,0.4)),
+            /* Đường dẫn ảnh ĐÚNG (bắt đầu từ /images...) */
+          url('/images/showtime/album-cover/leather-cover-black.jpg');
+  
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: multiply; /* Hòa trộn màu nâu nền với ảnh da */
+}
