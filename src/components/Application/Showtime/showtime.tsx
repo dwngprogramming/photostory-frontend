@@ -91,7 +91,7 @@ export default function Showtime() {
             >
               <div className="flex items-center gap-2">
                 <Book className="w-8 h-8 text-amber-500"/>
-                <span className="text-xl font-bold  text-stone-100 font-serif">Photostory</span>
+                <span className="text-xl font-bold text-white dark:text-stone-200 font-serif">Photostory</span>
               </div>
             </motion.div>
             
