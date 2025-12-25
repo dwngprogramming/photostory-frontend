@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, Sun, Trees, Waves, Building2, Mountain, Palmtree, Coffee, Tractor, Moon, UtensilsCrossed } from 'lucide-react';
+import {Building2, Coffee, MapPin, Mountain, Palmtree, Sun, Tractor, Trees, UtensilsCrossed, Waves} from 'lucide-react';
 
 type LocationTheme = 'warm' | 'nature' | 'ocean' | 'urban' | 'mountain' | 'tropical' | 'cafe' | 'rural' | 'restaurant' | 'default';
 type BadgeSize = 'xs' | 'sm' | 'md' | 'lg';
@@ -36,7 +36,7 @@ const themeConfig = {
     glassTint: 'bg-sky-50/80',
     hoverTint: 'group-hover:bg-sky-100/90',
     borderColor: 'border-sky-200/50',
-    hoverBorder: 'group-hover:border-sky-300/70',
+    hoverBorder: 'group-hover:border-sky- 300/70',
   },
   urban: {
     icon: Building2,
