@@ -7,48 +7,60 @@ import {useAlbumTour} from "@/hooks/useAlbumTour";
 import PhotoStack from "@/components/Application/Showtime/PhotoStack";
 import {createPortal} from "react-dom";
 import {AnimatePresence, motion} from "framer-motion";
-import {Maximize2, X} from 'lucide-react';
+import {ArrowLeft, X} from 'lucide-react';
 import GlassPlayer from "@/components/Application/Showtime/GlassPlayer";
 import Location from "@/components/Application/Showtime/Location";
 
-// --- INTERFACES ---
+// --- Page Interface ---
 interface PageProps extends React.HTMLAttributes<HTMLDivElement> {
   number?: number;
+  side: "left" | "right";
   children: React.ReactNode;
   header?: string;
+  isModalOpen?: boolean;
 }
 
-// --- COMPONENTS ---
-
-// 1. Component Trang Bìa (CoverPage)
-// QUAN TRỌNG: Phải nhận ...props và truyền vào div gốc
 const CoverPage = React.forwardRef<HTMLDivElement, PageProps>(
-  ({children, className, ...props}, ref) => {
+  ({ side, children, className, ...props }, ref) => {
+    const isLeft = side === 'left';
+    
     return (
       <div
         ref={ref}
-        className={`texture-leather relative overflow-hidden rounded-r-lg ${className || ''}`}
+        // Logic: Nếu là trang trái thì bo góc trái, trang phải bo góc phải
+        className={`texture-leather relative overflow-hidden ${
+          isLeft ? 'rounded-l-lg border-r border-white/10' : 'rounded-r-lg border-l border-white/10'
+        } ${className || ''}`}
         data-density="hard"
         {...props}
       >
-        
-        {/* 1. Gáy sách bên trái (Gradient mờ) */}
+        {/* --- Hiệu ứng bóng gáy sách (Spine Gradient) --- */}
+        {/* Nếu là trang trái: Bóng nằm bên phải. Trang phải: Bóng nằm bên trái */}
         <div
-          className="absolute top-0 left-0 w-4 h-full bg-gradient-to-r from-white/20 to-transparent z-10 pointer-events-none mix-blend-overlay"></div>
+          className={`absolute top-0 w-4 h-full z-10 pointer-events-none mix-blend-overlay ${
+            isLeft
+              ? 'right-0 bg-gradient-to-l from-white/20 to-transparent'
+              : 'left-0 bg-gradient-to-r from-white/20 to-transparent'
+          }`}
+        ></div>
         
-        {/* 2. Rãnh gấp (Nơi bìa nối với gáy) */}
+        {/* --- Đường chỉ may giả lập (Stitch Line) --- */}
         <div
-          className="absolute top-0 left-3 w-[2px] h-full bg-black/40 shadow-[1px_0_1px_rgba(255,255,255,0.1)] z-10 pointer-events-none"></div>
+          className={`absolute top-0 h-full w-[2px] bg-black/40 z-10 pointer-events-none ${
+            isLeft ? 'left-3' : 'right-3'
+          }`}
+        ></div>
         
-        {/* Nội dung chính */}
-        <div className="h-full flex items-center justify-center p-8 pl-10 border-l border-white/10">
+        {/* --- Nội dung chính --- */}
+        {/* Padding thay đổi để nội dung không bị đè bởi gáy sách */}
+        <div className={`h-full flex items-center justify-center p-8 ${isLeft ? 'pr-10 pl-8' : 'pl-10 pr-8'}`}>
           <div className="w-full h-full border-[1px] border-[#cfb53b]/30 p-2 flex items-center justify-center">
             <div className="w-full h-full border-[2px] gold-border flex flex-col items-center justify-center relative">
+              {/* Các góc trang trí giữ nguyên vì nó đối xứng */}
               <div className="absolute top-2 left-2 text-[#cfb53b] opacity-80">╔</div>
               <div className="absolute top-2 right-2 text-[#cfb53b] opacity-80">╗</div>
               <div className="absolute bottom-2 left-2 text-[#cfb53b] opacity-80">╚</div>
               <div className="absolute bottom-2 right-2 text-[#cfb53b] opacity-80">╝</div>
-              
               {children}
             </div>
           </div>
@@ -57,72 +69,62 @@ const CoverPage = React.forwardRef<HTMLDivElement, PageProps>(
     );
   }
 );
-
 CoverPage.displayName = 'CoverPage';
 
-// 2. Component Trang Nội Dung (Page)
 const Page = React.forwardRef<HTMLDivElement, PageProps>(
-  ({number, children, header, className, ...props}, ref) => {
-    
-    const contentRef = React.useRef<HTMLDivElement | null>(null);
-    
-    // useEffect(() => {
-    //   const content = contentRef.current;
-    //   if (!content) return;
-    //   const stopPropagation = (e: Event) => e.stopPropagation();
-    //   const events = ['mousemove', 'touchmove', 'pointermove', 'mousedown', 'touchstart', 'pointerdown'];
-    //   events.forEach(event => content.addEventListener(event, stopPropagation));
-    //   return () => events.forEach(event => content.removeEventListener(event, stopPropagation));
-    // }, []);
+  ({ number, side, children, header, isModalOpen, className, ...props }, ref) => {
+    const isLeft = side === 'left';
     
     return (
       <div
         ref={ref}
-        className={`relative shadow-xl overflow-hidden ${className || ''}`}
-        {...props} // <--- QUAN TRỌNG
+        // Logic: Bo góc nhẹ cho trang giấy thường (nếu muốn) hoặc chỉ cần shadow
+        className={`relative shadow-xl overflow-hidden bg-white ${className || ''} ${
+          isModalOpen ? 'pointer-events-none' : ''
+        } ${isLeft ? 'rounded-l-sm' : 'rounded-r-sm'}`}
+        data-density="soft"
+        {...props}
       >
         <Image
           src="/images/showtime/page/normal-paper.jpg"
           alt="Background"
           fill
-          // ĐÃ KHÔI PHỤC LẠI ĐÚNG FILTER GỐC CỦA BẠN
           className="object-cover object-center -z-1 transform blur-[0px] brightness-100 dark:brightness-95 transition-all duration-300"
           priority
         />
+        
+        {/* --- Bóng đổ gáy sách (Spine Shadow) cho trang giấy --- */}
         <div
-          className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-stone-900/20 to-transparent pointer-events-none z-20 mix-blend-multiply"></div>
+          className={`absolute top-0 bottom-0 w-8 pointer-events-none z-20 mix-blend-multiply ${
+            isLeft
+              ? 'right-0 bg-gradient-to-l from-stone-900/20 to-transparent' // Trang trái: Bóng bên phải
+              : 'left-0 bg-gradient-to-r from-stone-900/20 to-transparent' // Trang phải: Bóng bên trái
+          }`}
+        ></div>
+        
+        {/* --- Viền mỏng cạnh ngoài (đối diện gáy sách) để tạo độ nổi --- */}
         <div
-          className="absolute right-0 top-0 bottom-0 w-1 bg-gradient-to-l from-stone-900/5 to-transparent pointer-events-none z-20"></div>
+          className={`absolute top-0 bottom-0 w-1 pointer-events-none z-20 ${
+            isLeft
+              ? 'left-0 bg-gradient-to-r from-stone-900/5 to-transparent'
+              : 'right-0 bg-gradient-to-l from-stone-900/5 to-transparent'
+          }`}
+        ></div>
+        
         <div className="h-full p-6">
-          <div
-            className="h-full flex flex-col"
-            onPointerDown={(e) => e.stopPropagation()}
-            onMouseDown={(e) => e.stopPropagation()}
-            onMouseMove={(e) => e.stopPropagation()}
-          >
-            {/* Header - ĐÃ CHỈNH SỬA LẠI MÀU SẮC VÀ ĐƯỜNG KẺ */}
+          <div className="h-full flex flex-col">
             {header && (
               <div className="flex justify-center mb-4">
-                <div className="
-                    text-center
-                    text-amber-600
-                    text-xs font-bold uppercase tracking-widest
-                    border-b border-amber-600/30
-                    pb-2
-                ">
+                <div className="text-center text-amber-600 text-xs font-bold uppercase tracking-widest border-b border-amber-600/30 pb-2">
                   {header}
                 </div>
               </div>
             )}
+            <div className="relative flex-1 custom-scrollbar">{children}</div>
             
-            {/* Content */}
-            <div className="relative flex-1 custom-scrollbar">
-              {children}
-            </div>
-            
-            {/* Page number */}
+            {/* Số trang thường nằm ở góc ngoài xa gáy sách */}
             {number && (
-              <div className="text-center text-gray-400 text-xs mt-3">
+              <div className={`text-gray-400 text-xs mt-3 flex ${isLeft ? 'justify-start' : 'justify-end'}`}>
                 {number}
               </div>
             )}
@@ -132,8 +134,8 @@ const Page = React.forwardRef<HTMLDivElement, PageProps>(
     );
   }
 );
-
 Page.displayName = 'Page';
+
 
 interface DigitalAlbumProps {
   phase: UnwrapPhase;
@@ -142,12 +144,17 @@ interface DigitalAlbumProps {
 // --- MAIN COMPONENT ---
 const DigitalAlbum = ({phase}: DigitalAlbumProps) => {
   const bookRef = useRef<any>(null);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [visualCurrentPage, setVisualCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const [isOpenFullPhotos, setIsOpenFullPhotos] = useState(false);
+  
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<'stack' | 'grid'>('stack');
+  const [currentIndex, setCurrentIndex] = useState(1);
+  
   const isMobile = useIsMobile();
-  const {startTour, closeTour} = useAlbumTour();
+  const {startTour} = useAlbumTour();
   const [mounted, setMounted] = useState(false);
+  const [xPosition, setXPosition] = useState(-200);
   const SAMPLE_PHOTOS: Photo[] = [
     {
       id: '1',
@@ -184,38 +191,82 @@ const DigitalAlbum = ({phase}: DigitalAlbumProps) => {
   }, []);
   
   useEffect(() => {
-    if (phase === UnwrapPhase.REVEALED && bookRef.current) {
-      startTour();
-    }
+    if (phase === UnwrapPhase.REVEALED && bookRef.current) startTour();
   }, [phase]);
   
-  // Sử dụng useCallback để tránh re-render không cần thiết
   const onFlip = useCallback((e: any) => {
-    setCurrentPage(e.data);
+    setVisualCurrentPage(e.data);
   }, []);
   
   const onInit = useCallback(() => {
-    if (bookRef.current) {
-      setTotalPages(bookRef.current.pageFlip().getPageCount());
-    }
+    if (bookRef.current) setTotalPages(bookRef.current.pageFlip().getPageCount());
   }, []);
+  
+  // Handle logic mở bìa bên trên từ đầu/đóng bìa bên dưới ở cuối sách bằng react-pageflip events
+  const onChangeState = useCallback((e: any) => {
+    // Nếu đang ở Bìa (0) mà bắt đầu lật -> Chắc chắn là Mở sách -> Ra giữa ngay
+    if (e.data === 'flipping' && visualCurrentPage === 0) {
+      setXPosition(0);
+    }
+    
+    // Nếu đang ở trang cuối cùng mà lật -> Chắc chắn là đóng bìa sau -> Ra giữa ngay
+    if (e.data === 'flipping' && totalPages > 0 && visualCurrentPage >= totalPages - 1) {
+      setXPosition(0);
+    }
+  }, [visualCurrentPage, totalPages]);
+  
+  // Handle logic đóng bìa bên trên sau khi lật ra/mở lại bìa bên dưới ở cuối sách
+  const handleCloseFromFrontCover = () => {
+    setXPosition(-200);
+  }
+  
+  const handleCloseFromBackCover = () => {
+    setXPosition(200);
+  }
+  
+  const openModal = () => {
+    setViewMode('stack');
+    setIsModalOpen(true);
+  };
+  
+  const handleSwipe = () => {
+    setCurrentIndex((prev) => {
+      let nextIndex = prev + 1;
+      if (nextIndex > SAMPLE_PHOTOS.length) nextIndex = 1;
+      return nextIndex;
+    });
+  }
+  
+  const translateBookAnimation = (translatePx: number): React.CSSProperties => {
+    // Mobile: Không trượt, giữ nguyên mặc định
+    if (isMobile) return {transition: 'transform 1s ease-in-out'};
+    
+    // Thời gian trượt khớp hoàn toàn với thời gian lật trang (1000ms)
+    // Dùng 'ease-in-out' để vận tốc lúc đầu và lúc cuối êm ái
+    const baseStyle: React.CSSProperties = {
+      transition: 'transform 750ms ease-in-out',
+    };
+    
+    return {
+      ...baseStyle,
+      transform: `translateX(${translatePx}px)`,
+    };
+  };
   
   return (
     <div
       className="relative w-full min-h-screen flex bg-transparent flex-col items-center overflow-hidden justify-center p-4 md:p-8">
-      <Image
-        src="/images/showtime/vintage-background.jpg"
-        alt="Background"
-        fill
-        // ĐÃ KHÔI PHỤC LẠI ĐÚNG FILTER GỐC CỦA BẠN
-        className="object-cover object-center z-0 scale-105 transform blur-[6px] brightness-80 dark:brightness-30 transition-all duration-300"
-        priority
-      />
+      <Image src="/images/showtime/vintage-background.jpg" alt="Background" fill
+             className="object-cover object-center z-0 scale-105 transform blur-[6px] brightness-80 dark:brightness-30 transition-all duration-300"
+             priority/>
       
-      {/* Khu vực sách */}
-      <div className="relative z-10 mb-8 flex justify-center items-center w-full max-w-4xl h-[600px]">
+      <div
+        className={`relative z-10 mb-8 flex justify-center items-center w-full max-w-4xl h-[600px] ${isModalOpen ? 'pointer-events-none' : ''}`}
+        style={translateBookAnimation(xPosition)}
+      >
         {/* @ts-ignore */}
         <HTMLFlipBook
+          key={isMobile ? 'mobile-view' : 'desktop-view'}
           ref={bookRef}
           width={400}
           height={550}
@@ -225,192 +276,160 @@ const DigitalAlbum = ({phase}: DigitalAlbumProps) => {
           minHeight={400}
           maxHeight={600}
           drawShadow={true}
-          flippingTime={1000}
+          flippingTime={750}
           usePortrait={isMobile}
           startZIndex={0}
           autoSize={true}
-          maxShadowOpacity={0.5}
+          maxShadowOpacity={0.1}
           showCover={true}
           mobileScrollSupport={true}
           onFlip={onFlip}
           onInit={onInit}
+          onChangeState={onChangeState}
           style={{margin: '0 auto'}}
         >
-          {/* Bìa trước */}
-          <CoverPage id="album-digital" key="cover-front">
+          <CoverPage id="album-digital" key="cover-front" side="left">
             <div className="text-center text-white">
-              <h2 className="text-5xl font-bold mb-4 drop-shadow-lg gold-foil">
-                Cuốn Sách
-              </h2>
-              <h3 className="text-3xl font-light mb-8 drop-shadow-md">
-                Của Tôi
-              </h3>
+              <h2 className="text-5xl font-bold mb-4 drop-shadow-lg gold-foil">Cuốn Sách</h2>
+              <h3 className="text-3xl font-light mb-8 drop-shadow-md">Của Tôi</h3>
             </div>
           </CoverPage>
           
-          {/* Trang 1 */}
-          <Page number={1} header="Cảm ơn em" key="page-1">
-            <div className="flex flex-col space-y-4">
-              <div className="flex flex-col items-center overflow-x-hidden justify-center min-h-0">
-                <PhotoStack photos={SAMPLE_PHOTOS}/>
-                <button
-                  onClick={() => setIsOpenFullPhotos(true)}
-                  className="flex items-center gap-2 text-xs font-semibold text-amber-600 hover:text-amber-500 transition-colors"
-                >
-                  See All <Maximize2 className="w-3 h-3"/>
-                </button>
-              </div>
+          {/* Introduction Pages */}
+          <Page key="french-flap-left" side="left">
+            <div
+              className="w-full h-full cursor-pointer"
+              onClick={handleCloseFromFrontCover}
+            />
+          </Page>
+          
+          <Page key="title-page" side="right">
+            <div
+              className="w-full h-full cursor-pointer"
+            />
+          </Page>
+          
+          <Page number={2} side="left" header="Cảm ơn em" key="page-2" isModalOpen={isModalOpen}>
+            <div className="flex flex-col space-y-6">
+              <PhotoStack
+                photos={SAMPLE_PHOTOS}
+                interactive={false}
+                onStackClick={openModal}
+              />
               <GlassPlayer title="New Song" artist="Dung Pham"/>
               <Location/>
             </div>
           </Page>
           
-          {/* Trang 2 */}
-          <Page number={2} header="CHAPTER ONE" key="page-2">
-            <div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">
-                Nội Dung Tiếp Theo
-              </h3>
-              <p className="text-gray-700 leading-relaxed text-justify text-sm mb-4">
-                Khi xây dựng ứng dụng dạng này, việc quản lý layout rất quan trọng.
-                Mỗi trang là một component riêng biệt nhưng phải tuân thủ kích thước chung của cuốn sách.
-              </p>
-              <div
-                className="w-full h-40 bg-gradient-to-br from-blue-200 to-cyan-300 rounded-lg flex items-center justify-center shadow-inner">
-                <span className="text-6xl">🌊</span>
-              </div>
-            </div>
+          <Page number={3} side="right" header="THIÊN NHIÊN" key="page-3">
+            <div>...</div>
+          </Page>
+          <Page number={4} side="left" header="BĂNG GIÁ" key="page-4">
+            <div>...</div>
+          </Page>
+          <Page number={5} side="right" header="NGHỆ THUẬT" key="page-5">
+            <div>...</div>
           </Page>
           
-          {/* Trang 3 */}
-          <Page number={3} header="THIÊN NHIÊN" key="page-3">
-            <div>
-              <div
-                className="w-full h-40 bg-gradient-to-br from-yellow-300 to-amber-400 rounded-lg mb-4 flex items-center justify-center shadow-inner">
-                <span className="text-6xl">🌾</span>
-              </div>
-              <p className="text-gray-700 leading-relaxed text-justify text-sm">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. In cursus mollis nibh,
-                non convallis ex convallis eu. Suspendisse potenti. Aenean vitae pellentesque erat.
-                Integer non tristique quam.
-              </p>
-            </div>
+          <Page key="blank-page" side="left">
+            <div
+              className="w-full h-full cursor-pointer"
+            />
           </Page>
           
-          {/* Trang 4 */}
-          <Page number={4} header="BĂNG GIÁ" key="page-4">
-            <div>
-              <div
-                className="w-full h-40 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-lg mb-4 flex items-center justify-center shadow-inner">
-                <span className="text-6xl">🧊</span>
-              </div>
-              <p className="text-gray-700 leading-relaxed text-justify text-sm">
-                Suspendisse rutrum, augue ac sollicitudin mollis, eros velit viverra metus,
-                a venenatis tellus tellus id magna. Việc thêm shadow (đổ bóng) giúp tăng tính chân thực
-                cho từng trang sách.
-              </p>
-            </div>
+          <Page key="french-flap-right" side="right">
+            <div
+              className="w-full h-full cursor-pointer"
+              onClick={handleCloseFromBackCover}
+            />
           </Page>
           
-          {/* Trang 5 */}
-          <Page number={5} header="NGHỆ THUẬT" key="page-5">
-            <div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">
-                Chương 2: Sáng Tạo
-              </h3>
-              <div className="space-y-3 text-sm">
-                <p className="text-gray-700 leading-relaxed text-justify">
-                  Sự sáng tạo không có giới hạn. Với CSS và React, bạn có thể tạo ra bất cứ thứ gì.
-                </p>
-                <div
-                  className="w-full h-32 bg-gradient-to-br from-purple-300 to-pink-400 rounded-lg flex items-center justify-center shadow-inner">
-                  <span className="text-5xl">🎨</span>
-                </div>
-              </div>
-            </div>
-          </Page>
-          
-          {/* Trang 6 */}
-          <Page number={6} header="RỪNG RẬM" key="page-6">
-            <div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">
-                Khám Phá
-              </h3>
-              <p className="text-gray-700 leading-relaxed text-justify text-sm mb-3">
-                Màu xanh của rừng già. Component này hỗ trợ tốt responsive trên mobile nếu cấu hình đúng.
-              </p>
-              <div
-                className="w-full h-40 bg-gradient-to-br from-green-300 to-emerald-500 rounded-lg flex items-center justify-center shadow-inner">
-                <span className="text-6xl">🌲</span>
-              </div>
-            </div>
-          </Page>
-          
-          {/* Bìa sau */}
-          <CoverPage key="cover-back">
-            <div className="text-center text-white">
-              <div className="text-8xl mb-6">🎉</div>
-              <h2 className="text-5xl font-bold mb-4 drop-shadow-lg">
-                Hết
-              </h2>
-              <div className="w-32 h-1 bg-white mx-auto mb-8 opacity-70"></div>
-              <p className="text-xl italic opacity-90">
-                Cảm ơn bạn đã đọc!
-              </p>
-              <p className="text-sm mt-4 opacity-70">
-                © 2025 - PureSound Design
-              </p>
-            </div>
+          <CoverPage key="cover-back" side="right">
+            <></>
           </CoverPage>
         </HTMLFlipBook>
       </div>
       
-      {/* Modal hiển thị tất cả ảnh */}
+      {/* --- MODAL --- */}
       {mounted && createPortal(
         <AnimatePresence>
-          {isOpenFullPhotos && (
+          {isModalOpen && (
             <motion.div
               initial={{opacity: 0}}
               animate={{opacity: 1}}
               exit={{opacity: 0}}
               className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-stone-900/80 backdrop-blur-sm"
-              onClick={() => setIsOpenFullPhotos(false)}
             >
-              <motion.div
-                initial={{scale: 0.9, opacity: 0}}
-                animate={{scale: 1, opacity: 1}}
-                exit={{scale: 0.9, opacity: 0}}
-                className="bg-stone-50 dark:bg-stone-900 p-6 rounded-lg shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto no-scrollbar"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-serif font-bold text-stone-800 dark:text-stone-100">Memory Lane</h2>
-                  <button
-                    onClick={() => setIsOpenFullPhotos(false)}
-                    className="p-2 rounded-full hover:bg-stone-200 dark:hover:bg-stone-800 transition-colors"
-                  >
-                    <X className="w-6 h-6 text-stone-500"/>
-                  </button>
-                </div>
+              <div className="w-full h-full flex items-center justify-center pointer-events-none">
+                {/* Nút Close: Đây là cách DUY NHẤT để đóng modal */}
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="absolute top-4 right-4 p-2 rounded-full bg-stone-800/50 hover:bg-stone-700 text-white transition-colors pointer-events-auto z-[120]"
+                >
+                  <X className="w-6 h-6"/>
+                </button>
                 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                  {SAMPLE_PHOTOS.map((photo) => (
-                    <div key={photo.id}
-                         className="bg-white p-3 shadow-md transform hover:rotate-1 hover:scale-105 transition-transform duration-300">
-                      <div className="aspect-square overflow-hidden mb-2 bg-stone-200">
-                        <img
-                          src={photo.url}
-                          alt={photo.caption}
-                          className="w-full h-full object-cover"
-                          draggable={false}
-                        />
-                      </div>
-                      <p className="text-center font-serif text-sm text-stone-600 italic">{photo.caption}</p>
-                      <p className="text-center text-xs text-stone-400 mt-1">{photo.date}</p>
-                    </div>
-                  ))}
+                <div className="pointer-events-auto w-full flex justify-center" onClick={(e) => e.stopPropagation()}>
+                  <AnimatePresence mode="wait">
+                    {viewMode === 'stack' ? (
+                      <motion.div
+                        key="stack-mode"
+                        initial={{scale: 0.8, opacity: 0}}
+                        animate={{scale: 1, opacity: 1}}
+                        exit={{scale: 1.2, opacity: 0}}
+                        className="flex flex-col items-center justify-center"
+                      >
+                        <div className="mb-16 text-white/80 text-center font-serif italic text-lg">
+                          Kéo sang trái/phải để xem ảnh. Nhấn vào ảnh trên cùng để hiển thị toàn bộ ảnh.
+                        </div>
+                        <div className="transform scale-120 md:scale-130">
+                          <PhotoStack
+                            photos={SAMPLE_PHOTOS}
+                            interactive={true}
+                            onTopCardClick={() => setViewMode('grid')}
+                            onSwipe={handleSwipe}
+                          />
+                        </div>
+                        <div className="mt-8 text-stone-300 text-sm">
+                          {currentIndex} / {SAMPLE_PHOTOS.length}
+                        </div>
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="grid-mode"
+                        initial={{scale: 0.95, opacity: 0}}
+                        animate={{scale: 1, opacity: 1}}
+                        exit={{scale: 0.95, opacity: 0}}
+                        className="bg-stone-50 dark:bg-stone-900 p-6 rounded-lg shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto no-scrollbar relative"
+                      >
+                        <div className="flex justify-between items-center mb-6">
+                          <div className="flex items-center gap-2">
+                            <button onClick={() => setViewMode('stack')}
+                                    className="p-1 rounded-full hover:bg-stone-200 dark:hover:bg-stone-800 transition-colors">
+                              <ArrowLeft className="w-5 h-5 text-stone-600 dark:text-stone-300"/>
+                            </button>
+                            <h2 className="text-2xl font-serif font-bold text-stone-800 dark:text-stone-100">Kỷ
+                              Niệm</h2>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                          {SAMPLE_PHOTOS.map((photo) => (
+                            <div key={photo.id}
+                                 className="bg-white p-3 shadow-md transform hover:rotate-1 hover:scale-105 transition-transform duration-300">
+                              <div className="aspect-square overflow-hidden mb-2 bg-stone-200">
+                                <img src={photo.url} alt={photo.caption} className="w-full h-full object-cover"
+                                     draggable={false}/>
+                              </div>
+                              <p className="text-center font-serif text-sm text-stone-600 italic">{photo.caption}</p>
+                              <p className="text-center text-xs text-stone-400 mt-1">{photo.date}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
-              </motion.div>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>,
