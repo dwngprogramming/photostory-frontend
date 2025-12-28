@@ -103,3 +103,61 @@ export interface Photo {
   date: string;
   orientation: 'landscape' | 'portrait' | 'square';
 }
+
+export interface UserPrincipal {
+  id: string;
+  username: string;
+  email: string;
+  token: string;
+}
+
+export interface UserResponse {
+  id: string;
+  username: string;
+  email: string;
+}
+
+export interface AlbumResponse {
+  id: string;
+  ownerId: string;
+  ownerName: string;
+  recipients: string[];
+
+  // Cover & Introduction
+  title: string;
+  description: string;
+
+  // Left french flip
+  frenchFlipNote: string;
+  avatarUrl?: string;
+
+  stories: StoryResponse[];
+}
+
+export interface StoryResponse {
+  id: string;
+  title: string;
+  eventDate: string;
+  displayOrderInDay?: number;
+  weather?: 'sunny' | 'cloudy' | 'rainy' | 'snowy' | 'clear-night';
+  content: string;
+  musicUrl?: string;
+  photos: PhotoResponse[];
+  location: LocationResponse[];
+}
+
+export interface PhotoResponse {
+  id: string;
+  mediaUrl: string;
+  mediaType: 'photo' | 'video';
+  orientation: 'landscape' | 'portrait' | 'square';
+  caption?: string;
+  displayOrder: number;
+}
+
+export interface LocationResponse {
+  id: string;
+  name: string;
+  mapUrl?: string;
+  displayOrder: number;
+}

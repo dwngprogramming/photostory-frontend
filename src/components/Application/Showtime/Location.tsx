@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import {MapPin} from "lucide-react";
 import {GoogleMapsIcon} from "@/components/Common/GoogleMapsIcon";
-import {GlassLocationBadge} from "@/components/Application/Showtime/GlassLocationBadge";
+import {GlassLocationBadge} from "@/components/Application/Showtime/Album/Plugin/GlassLocationBadge";
 
 const Location = () => {
   const locationRef = React.useRef<HTMLDivElement | null>(null);

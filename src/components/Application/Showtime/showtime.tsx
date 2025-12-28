@@ -73,7 +73,7 @@ export default function Showtime() {
         {showToggleAndLogo && (
           <>
             <motion.div
-              className="absolute top-6 right-6 z-[100]"
+              className="absolute top-6 right-6 z-100"
               initial={{opacity: 0, scale: 0.8}}
               animate={{opacity: 1, scale: 1}}
               exit={{opacity: 0, scale: 0.8}}
@@ -83,7 +83,7 @@ export default function Showtime() {
             </motion.div>
             
             <motion.div
-              className="absolute top-6 left-6 z-[100]"
+              className="absolute top-6 left-6 z-100"
               initial={{opacity: 0, scale: 0.8}}
               animate={{opacity: 1, scale: 1}}
               exit={{opacity: 0, scale: 0.8}}
@@ -96,7 +96,7 @@ export default function Showtime() {
             </motion.div>
             
             <motion.div
-              className="absolute bottom-6 left-1/2 -translate-x-1/2 z-[100]"
+              className="absolute bottom-6 left-1/2 -translate-x-1/2 z-100"
               initial={{opacity: 0, scale: 0.8}}
               animate={{opacity: 1, scale: 1}}
               exit={{opacity: 0, scale: 0.8}}
