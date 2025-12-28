@@ -1,10 +1,11 @@
-import {Photo} from "@/types";
-import React, {useRef, useState} from "react";
-import {AnimatePresence, PanInfo} from "framer-motion";
-import {motion} from "framer-motion";
+import SoundCloudIcon from "@/components/Common/SoundCloudIcon";
+import { PhotoResponse } from "@/types";
+import { AnimatePresence, motion, PanInfo } from "framer-motion";
+import { Music } from "lucide-react";
+import { useRef, useState } from "react";
 
 interface PhotoStackProps {
-  photos: Photo[];
+  photos: PhotoResponse[];
   interactive?: boolean;     // True: Drag được (trong Modal), False: Tĩnh (trên Sách)
   onStackClick?: () => void; // Click khi ở chế độ Tĩnh
   onTopCardClick?: () => void; // Click vào ảnh trên cùng khi ở chế độ Drag,
@@ -154,7 +155,7 @@ const PhotoStack = ({
             >
               <div className="w-full h-full overflow-hidden bg-stone-100 pointer-events-none">
                 <img
-                  src={photo.url}
+                  src={photo.mediaUrl}
                   alt={photo.caption}
                   className="w-full h-full object-cover select-none filter hover:brightness-110 transition-all"
                   draggable={false}
