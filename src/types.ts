@@ -130,8 +130,16 @@ export interface AlbumResponse {
   // Left french flip
   frenchFlipNote: string;
   avatarUrl?: string;
+  
+  // Preface
+  preface?: string;
+  highlightPhotoUrl?: string;
 
+  // Stories
   stories: StoryResponse[];
+  
+  // Afterword
+  afterword?: string;
 }
 
 export interface StoryResponse {
