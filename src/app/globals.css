@@ -18,6 +18,7 @@
   /* Fonts: Mapping biến CSS từ Next.js vào Tailwind */
   --font-serif: var(--font-playfair), serif;
   --font-sans: var(--font-inter), sans-serif;
+  --font-story: var(--font-merriweather), serif;
   
   /* Box Shadows */
   --shadow-soft: 0 4px 20px rgba(245, 158, 11, 0.08);
@@ -58,6 +59,8 @@
     scrollbar-width: none;
   }
 }
+
+@plugin "@tailwindcss/typography";
 
 /* Scrollbar Style - Viết CSS thuần, v4 sẽ tự gộp */
 html {

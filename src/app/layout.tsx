@@ -1,5 +1,5 @@
 import type {Metadata} from "next";
-import {Inter, Playfair_Display} from "next/font/google";
+import {Inter, Merriweather, Playfair_Display} from "next/font/google";
 import "./globals.css";
 import React from "react";
 import {ThemeProvider} from "@/contexts/theme-provider";
@@ -21,6 +21,14 @@ const playfair = Playfair_Display({
   display: 'swap',
 });
 
+const merriweather = Merriweather({
+  subsets: ['vietnamese'], // BẮT BUỘC để hiển thị tiếng Việt đẹp
+  weight: ['300', '400', '700', '900'], // Lấy đủ các độ đậm
+  style: ['normal', 'italic'],
+  variable: '--font-merriweather', // Tên biến để dùng bên CSS
+  display: 'swap',
+});
+
 export const metadata: Metadata = {
   title: "Photostory - Preserve Your Memories",
   description: "Create & Preserve your photo-story moments.",
@@ -35,7 +43,7 @@ export default async function RootLayout({
   const messages = await getMessages();
   
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable} antialiased`} suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${playfair.variable} ${merriweather.variable} antialiased`} suppressHydrationWarning>
       <body>
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider

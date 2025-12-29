@@ -43,7 +43,7 @@ const AlbumPage = React.forwardRef<HTMLDivElement, AlbumPageProps>(
           }`} />
 
         {/* Main Content */}
-        <div className="h-full p-6 relative z-30 flex flex-col">
+        <div className="h-full p-8 relative z-30 flex flex-col">
           {header && (
             <div className="flex justify-center mb-4">
               <div className="text-center text-amber-600 text-xs font-bold uppercase tracking-widest border-b border-amber-600/30 pb-2">
