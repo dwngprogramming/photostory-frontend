@@ -13,7 +13,7 @@ const AlbumCover = React.forwardRef<HTMLDivElement, AlbumCoverProps>(
       <div
         ref={ref}
         className={`texture-leather relative overflow-hidden ${
-          isLeft ? 'rounded-l-lg border-r' : 'rounded-r-lg border-l'
+          isLeft ? 'rounded-l-lg' : 'rounded-r-lg'
         } ${className || ''}`}
         data-density="hard"
         {...props}
