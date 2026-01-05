@@ -8,11 +8,11 @@ import { useScrollIndicator } from '@/hooks/useScrollIndicator';
 
 interface ScrollableMarkdownProps {
   content: string;
-  maxHeight: number; // Nhận vào số (pixel)
+  height: number; // Nhận vào số (pixel)
   className?: string;
 }
 
-const ScrollableMarkdown: React.FC<ScrollableMarkdownProps> = ({ content, maxHeight, className = '' }) => {
+const ScrollableMarkdown: React.FC<ScrollableMarkdownProps> = ({ content, height, className = '' }) => {
   const {
     containerRef,
     hasOverflow,
@@ -28,7 +28,7 @@ const ScrollableMarkdown: React.FC<ScrollableMarkdownProps> = ({ content, maxHei
       <div
         ref={containerRef} // Luôn phải gắn ref để đo đạc
         onScroll={handleScroll}
-        style={{ maxHeight: `${maxHeight}px` }}
+        style={{ height: `${height}px` }}
         className={`
           prose prose-sm font-story overflow-y-auto no-scrollbar
           text-slate-700 text-left leading-loose tracking-wide mx-auto

@@ -1,8 +1,6 @@
-import SoundCloudIcon from "@/components/Common/SoundCloudIcon";
-import { PhotoResponse } from "@/types";
-import { AnimatePresence, motion, PanInfo } from "framer-motion";
-import { Music } from "lucide-react";
-import { useRef, useState } from "react";
+import {PhotoResponse} from "@/types";
+import {AnimatePresence, motion, PanInfo} from "framer-motion";
+import {useEffect, useRef, useState} from "react";
 
 interface PhotoStackProps {
   photos: PhotoResponse[];
@@ -27,6 +25,14 @@ const PhotoStack = ({
   
   // Ref để phân biệt giữa Drag và Click
   const isDraggingRef = useRef(false);
+  
+  // Cập nhật lại photos nếu initialPhotos thay đổi
+  useEffect(() => {
+    // Chỉ cập nhật nếu initialPhotos thực sự có dữ liệu khác biệt
+    if (initialPhotos && initialPhotos.length > 0) {
+      setPhotos(initialPhotos);
+    }
+  }, [initialPhotos]);
   
   const moveTopCardToBottom = () => {
     setPhotos((prevPhotos) => {

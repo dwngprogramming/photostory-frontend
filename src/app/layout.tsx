@@ -3,10 +3,11 @@ import {Inter, Merriweather, Playfair_Display} from "next/font/google";
 import "./globals.css";
 import React from "react";
 import {ThemeProvider} from "@/contexts/theme-provider";
-import {Toaster} from "react-hot-toast";
 import {NextIntlClientProvider} from "next-intl";
 import {getMessages} from "next-intl/server";
 import "driver.js/dist/driver.css";
+import AppToaster from "@/components/Common/AppToaster";
+import ReactQueryProvider from "@/contexts/react-query-provider";
 
 // Khai báo Font
 const inter = Inter({
@@ -35,36 +36,40 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({
-                                     children,
-                                   }: Readonly<{
+                                           children,
+                                         }: Readonly<{
   children: React.ReactNode;
 }>) {
   
   const messages = await getMessages();
   
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable} ${merriweather.variable} antialiased`} suppressHydrationWarning>
-      <body>
-        <NextIntlClientProvider messages={messages}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-          >
-            <Toaster
-              position="top-center"
-              toastOptions={{
-                className: 'dark:bg-stone-800 dark:text-white',
-                style: {
-                  background: 'var(--toast-bg)',
-                  color: 'var(--toast-color)',
-                },
-              }}
-            />
-              {children}
-          </ThemeProvider>
-        </NextIntlClientProvider>
-      </body>
+    <html lang="en" className={`${inter.variable} ${playfair.variable} ${merriweather.variable} antialiased`}
+          suppressHydrationWarning>
+    <body>
+    <NextIntlClientProvider messages={messages}>
+      <ReactQueryProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+        >
+          <AppToaster/>
+          {/*<Toaster*/}
+          {/*  position="top-center"*/}
+          {/*  toastOptions={{*/}
+          {/*    className: 'dark:bg-stone-800 dark:text-white',*/}
+          {/*    style: {*/}
+          {/*      background: 'var(--toast-bg)',*/}
+          {/*      color: 'var(--toast-color)',*/}
+          {/*    },*/}
+          {/*  }}*/}
+          {/*/>*/}
+          {children}
+        </ThemeProvider>
+      </ReactQueryProvider>
+    </NextIntlClientProvider>
+    </body>
     </html>
   );
 }

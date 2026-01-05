@@ -2,8 +2,13 @@ import React, {useEffect} from "react";
 import {MapPin} from "lucide-react";
 import {GoogleMapsIcon} from "@/components/Common/GoogleMapsIcon";
 import {GlassLocationBadge} from "@/components/Application/Showtime/Album/Plugin/GlassLocationBadge";
+import {LocationResponse} from "@/types";
 
-const Location = () => {
+interface LocationProps {
+  locations: LocationResponse[];
+}
+
+const Location = ({locations}: LocationProps) => {
   const locationRef = React.useRef<HTMLDivElement | null>(null);
   
   useEffect(() => {
@@ -28,7 +33,14 @@ const Location = () => {
         </div>
       </div>
       <div>
-        <GlassLocationBadge location="Phước Hải, Bà Rịa - Vũng Tàu" theme="ocean" size="sm"/>
+        {locations.length > 0 && locations.map((loc, index) => (
+          <GlassLocationBadge
+            key={index}
+            location={loc.name}
+            theme={loc.locationTheme}
+            size="sm"
+          />
+        ))}
       </div>
     </div>
   );

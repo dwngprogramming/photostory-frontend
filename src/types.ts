@@ -1,4 +1,5 @@
 import React from 'react';
+import {LocationTheme} from "@/components/Application/Showtime/Album/Plugin/GlassLocationBadge";
 
 export interface NavLink {
   label: string;
@@ -82,14 +83,16 @@ export interface Stats {
 
 export enum UnwrapPhase {
   IDLE = 'IDLE',
-  LOADING = 'LOADING', // 0-1s
-  CURTAIN_CLOSE = 'CURTAIN_CLOSE', // 1-2s
-  INTRO_TEXT = 'INTRO_TEXT', // New phase: Text display
-  ICONS_FLOAT = 'ICONS_FLOAT', // 2-2.5s
-  RIBBON_EXPAND = 'RIBBON_EXPAND', // 2.5-3.5s
-  VERTICAL_SPLIT = 'VERTICAL_SPLIT', // 3.5-4s
-  CURTAIN_OPEN = 'CURTAIN_OPEN', // 4-5s
-  REVEALED = 'REVEALED' // 5s+
+  LOADING = 'LOADING',
+  CURTAIN_CLOSE = 'CURTAIN_CLOSE',
+  PREPARING_ALBUM = 'PREPARING_ALBUM',
+  SILENCE = 'SILENCE',
+  INTRO_TEXT = 'INTRO_TEXT',
+  ICONS_FLOAT = 'ICONS_FLOAT',
+  RIBBON_EXPAND = 'RIBBON_EXPAND',
+  VERTICAL_SPLIT = 'VERTICAL_SPLIT',
+  CURTAIN_OPEN = 'CURTAIN_OPEN',
+  REVEALED = 'REVEALED'
 }
 
 export interface AnimationProps {
@@ -104,6 +107,18 @@ export interface Photo {
   orientation: 'landscape' | 'portrait' | 'square';
 }
 
+export interface ShowtimeDataResponse {
+  albumId: string;
+  token: string;
+  exp: number;
+}
+
+export interface ApiResponse<T> {
+  status: number;
+  message: string;
+  data?: T;
+}
+
 export interface UserPrincipal {
   id: string;
   username: string;
@@ -115,13 +130,19 @@ export interface UserResponse {
   id: string;
   username: string;
   email: string;
+  fullName: string;
+  dob?: string;
+  gender: 'male | female | other';
+  avatar?: string;
 }
 
 export interface AlbumResponse {
   id: string;
   ownerId: string;
   ownerName: string;
+  savedDate: string;
   recipients: string[];
+  themeSongUrl?: string;
 
   // Cover & Introduction
   title: string;
@@ -129,11 +150,16 @@ export interface AlbumResponse {
 
   // Left french flip
   frenchFlipNote: string;
+  frenchFlipPlace?: string;
   avatarUrl?: string;
+  avatarGender?: 'male' | 'female' | 'other';
   
   // Preface
   preface?: string;
   highlightPhotoUrl?: string;
+  
+  // Table of Contents
+  tableOfContents: TOCResponse[];
 
   // Stories
   stories: StoryResponse[];
@@ -142,17 +168,26 @@ export interface AlbumResponse {
   afterword?: string;
 }
 
+export interface TOCResponse {
+  storyTitle: string;
+  eventDate: string;
+  displayOrderInDay: number;
+  page: number;
+}
+
 export interface StoryResponse {
   id: string;
   title: string;
   eventDate: string;
   displayOrderInDay?: number;
-  weather?: 'sunny' | 'cloudy' | 'rainy' | 'snowy' | 'clear-night';
+  weather?: WeatherType;
   content: string;
   musicUrl?: string;
   photos: PhotoResponse[];
-  location: LocationResponse[];
+  locations: LocationResponse[];
 }
+
+export type WeatherType = 'sunny' | 'cloudy' | 'rainy' | 'snowy' | 'clear_night';
 
 export interface PhotoResponse {
   id: string;
@@ -166,6 +201,7 @@ export interface PhotoResponse {
 export interface LocationResponse {
   id: string;
   name: string;
+  locationTheme: LocationTheme;
   mapUrl?: string;
   displayOrder: number;
 }
