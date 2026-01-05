@@ -1,6 +1,25 @@
 import {Book, Globe, Heart} from "lucide-react";
+import {useLocale} from "use-intl";
 
-export const StartFrenchFlap = () => {
+interface FrenchFlapProps {
+  avatarUrl?: string;
+  avatarGender?: "male" | "female" | "other";
+  recipients: string[];
+  frenchFlipNote: string;
+  frenchFlipPlace?: string;
+  savedDate: string;
+}
+
+const avatars = {
+  male: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvZRzCOTmTpG-0zKoHeoNr8J-LeI_ihfZO3Q&s",
+  female: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQY7K6ZcX1q2u6kCk0gO8g8bJ3bF5ZlY5N4bg&s",
+  other: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1j3Z6bX4F0g8bJ3bF5ZlY5N4bg&s",
+}
+
+export const StartFrenchFlap = ({avatarUrl, avatarGender, recipients, frenchFlipNote, frenchFlipPlace, savedDate}: FrenchFlapProps) => {
+  const locale = useLocale();
+  const joinRecipients = new Intl.ListFormat('vi', { style: 'long', type: 'conjunction' }).format(recipients);
+  
   return (
     <div
       className={`
@@ -16,16 +35,16 @@ export const StartFrenchFlap = () => {
         <div>
           <img
             alt="Avatar"
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvZRzCOTmTpG-0zKoHeoNr8J-LeI_ihfZO3Q&s"
+            src={avatarUrl ? avatarUrl : (avatarGender && avatars[avatarGender as keyof typeof avatars])}
             width={100}
             height={100}
             className="rounded-full mx-auto"
           />
-          <p className="text-2xl font-serif italic my-6 text-amber-300">Dear Minso,</p>
-          <p className="text-[13px] text-stone-300">Cuốn album này là món quà từ Dũng Phạm gửi tới Minso. Chúc em luôn cảm thấy hạnh phúc!</p>
+          <p className="text-2xl font-serif italic my-6 text-amber-300">Dear{` ${joinRecipients}`},</p>
+          <p className="text-[13px] text-stone-300">{frenchFlipNote}</p>
         </div>
 
-        <p className="text-[13px] text-stone-300 italic">Biên Hòa, 26/12/2025.</p>
+        <p className="text-[13px] text-stone-300 italic">{frenchFlipPlace && `${frenchFlipPlace}, `}{new Date(savedDate).toLocaleDateString(locale)}.</p>
       </div>
     </div>
   );

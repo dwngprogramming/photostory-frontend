@@ -133,6 +133,22 @@
         "createNew": "Muốn tạo một album?",
         "signup": "Đăng ký ngay!"
       }
+    },
+    "Showtime": {
+      "weather": {
+        "sunny": "Nắng đẹp",
+        "rainy": "Mưa rào",
+        "cloudy": "Nhiều mây",
+        "snowy": "Tuyết lạnh",
+        "clear_night": "Đêm quang đãng"
+      },
+      "album": {
+        "toc": {
+          "title": "Những câu chuyện kể",
+          "preface": "Đôi lời xin chào ~",
+          "afterword": "Sau cùng thì..."
+        }
+      }
     }
   }
 }
