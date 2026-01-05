@@ -1,7 +1,7 @@
 import React from 'react';
 import {Building2, Coffee, MapPin, Mountain, Palmtree, Sun, Tractor, Trees, UtensilsCrossed, Waves} from 'lucide-react';
 
-type LocationTheme = 'warm' | 'nature' | 'ocean' | 'urban' | 'mountain' | 'tropical' | 'cafe' | 'rural' | 'restaurant' | 'default';
+export type LocationTheme = 'warm' | 'nature' | 'ocean' | 'urban' | 'mountain' | 'tropical' | 'cafe' | 'rural' | 'restaurant' | 'standard';
 type BadgeSize = 'xs' | 'sm' | 'md' | 'lg';
 
 interface GlassLocationBadgeProps {
@@ -92,7 +92,7 @@ const themeConfig = {
     borderColor: 'border-red-200/50',
     hoverBorder: 'group-hover:border-red-300/70',
   },
-  default: {
+  standard: {
     icon: MapPin,
     iconColor: 'text-rose-600',
     badgeText: 'text-rose-800',
@@ -136,7 +136,7 @@ const sizeConfig = {
 
 export const GlassLocationBadge: React.FC<GlassLocationBadgeProps> = ({
                                                                         location,
-                                                                        theme: selectedTheme = 'default',
+                                                                        theme: selectedTheme = 'standard',
                                                                         size = 'md'
                                                                       }) => {
   const containerRef = React.useRef<HTMLDivElement | null>(null);

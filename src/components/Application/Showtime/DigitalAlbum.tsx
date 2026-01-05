@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import HTMLFlipBook from 'react-pageflip';
 import Image from "next/image";
 import {useIsMobile} from "@/hooks/useIsMobile";
-import {PhotoResponse, UnwrapPhase} from "@/types";
+import {AlbumResponse, UnwrapPhase} from "@/types";
 import {useAlbumTour} from "@/hooks/useAlbumTour";
 import PhotoStack from "@/components/Application/Showtime/Album/Plugin/PhotoStack";
 import GlassPlayer from "@/components/Application/Showtime/Album/Plugin/GlassPlayer";
@@ -15,13 +15,18 @@ import StoryPiece from "@/components/Application/Showtime/Album/Page/StoryPiece"
 import PrefacePiece from "@/components/Application/Showtime/Album/Page/PrefacePiece";
 import HighlightImagePiece from "@/components/Application/Showtime/Album/Page/HighlightImagePiece";
 import AfterworkPiece from "@/components/Application/Showtime/Album/Page/AfterworkPiece";
+import {useLocale, useTranslations} from 'next-intl';
+import {format, parseISO} from 'date-fns';
+import {vi, enUS} from 'date-fns/locale';
 
 interface DigitalAlbumProps {
+  album: AlbumResponse;
   phase: UnwrapPhase;
 }
 
-const DigitalAlbum = ({phase}: DigitalAlbumProps) => {
+const DigitalAlbum = ({album, phase}: DigitalAlbumProps) => {
   // Đổi tên ref cho chuẩn
+  const t = useTranslations("App.Showtime.album");
   const albumRef = useRef<any>(null);
   
   const [visualCurrentPage, setVisualCurrentPage] = useState(0);
@@ -32,80 +37,23 @@ const DigitalAlbum = ({phase}: DigitalAlbumProps) => {
   
   const isMobile = useIsMobile();
   const {startTour} = useAlbumTour();
+  const locale = useLocale();
+  const lastChapter = album.tableOfContents[album.tableOfContents.length - 1];
+  const lastPageNumber = lastChapter.page;
   
-  const SAMPLE_PHOTOS: PhotoResponse[] = [
+  const fullTOC = [
     {
-      id: '1',
-      mediaUrl: 'https://picsum.photos/400/400?random=1',
-      mediaType: 'photo',
-      caption: 'Coffee mornings',
-      orientation: 'square',
-      displayOrder: 1
+      page: 1,
+      storyTitle: t('toc.preface'),
+      eventDate: '0001-01-01',
     },
+    ...album.tableOfContents,
     {
-      id: '2',
-      mediaUrl: 'https://picsum.photos/400/300?random=2',
-      mediaType: 'photo',
-      caption: 'Mountain hiking',
-      orientation: 'landscape',
-      displayOrder: 2
-    },
-    {
-      id: '3',
-      mediaUrl: 'https://picsum.photos/300/400?random=3',
-      mediaType: 'photo',
-      caption: 'City lights',
-      orientation: 'portrait',
-      displayOrder: 3
-    },
-    {
-      id: '4',
-      mediaUrl: 'https://picsum.photos/400/400?random=4',
-      mediaType: 'photo',
-      caption: 'Street food',
-      orientation: 'square',
-      displayOrder: 4
-    },
+      page: lastPageNumber + 2,
+      storyTitle: t('toc.afterword'),
+      eventDate: '0001-01-01',
+    }
   ];
-  
-  const content: string = `
-**Xin chào bạn Hiếu Vũ,**
-
-Mình muốn dành tặng bạn cuốn sách nhỏ này như một món quà kỷ niệm cho những khoảnh khắc đặc biệt mà chúng ta đã chia sẻ cùng nhau. Mỗi trang trong cuốn sách này đều chứa đựng những câu chuyện, hình ảnh và kỷ niệm mà mình hy vọng sẽ mang lại nụ cười và niềm vui cho bạn.
-
-Cảm ơn bạn đã luôn bên cạnh mình, ủng hộ và tạo nên những kỷ niệm đáng nhớ. Mình rất trân trọng tình bạn của chúng ta và mong rằng cuốn sách này sẽ là một phần nhỏ trong hành trình tuyệt vời mà chúng ta đang cùng nhau trải qua.
-
-Chúc bạn luôn hạnh phúc, thành công và tràn đầy năng lượng tích cực trong cuộc sống!
-
-Thân ái,
-Dung Pham
-`
-  
-  const preface: string = `
-**Xin chào, Dung Pham đây ~**
-
-Cuốn sách này được tạo ra như một món quà kỷ niệm dành tặng cho người đặc biệt. Mỗi trang sách đều chứa đựng những câu chuyện, hình ảnh và kỷ niệm đáng nhớ mà chúng ta đã cùng nhau trải qua.
-
-Mình hy vọng rằng khi bạn lật từng trang sách, bạn sẽ cảm nhận được tình cảm và sự trân trọng mà mình dành cho bạn. Cuốn sách này không chỉ là một tập hợp các kỷ niệm, mà còn là minh chứng cho tình bạn và những khoảnh khắc tuyệt vời mà chúng ta đã chia sẻ.
-
-Chúc bạn có những giây phút vui vẻ khi khám phá cuốn sách này!
-
-Thân ái,
-Dung Pham
-`;
-  
-  const afterWork: string = `
-**Cảm ơn bạn đã dành thời gian để xem cuốn sách này!**
-
-Mình hy vọng rằng những câu chuyện và hình ảnh trong cuốn sách đã mang lại cho bạn niềm vui và những kỷ niệm đẹp. Mỗi trang sách đều chứa đựng những khoảnh khắc đặc biệt mà mình rất trân trọng.
-
-Nếu bạn có bất kỳ phản hồi hoặc muốn chia sẻ thêm những kỷ niệm khác, đừng ngần ngại liên hệ với mình. Mình rất mong được nghe từ bạn!
-
-Chúc bạn luôn hạnh phúc và thành công trong cuộc sống!
-
-Thân ái,
-Dung Pham
-`;
   
   useEffect(() => {
     setMounted(true);
@@ -162,7 +110,7 @@ Dung Pham
         {/* @ts-ignore */}
         <HTMLFlipBook
           key={isMobile ? 'mobile-view' : 'desktop-view'}
-          ref={albumRef} // Sử dụng ref đã đổi tên
+          ref={albumRef}
           width={400} height={550}
           size="stretch" minWidth={300} maxWidth={500} minHeight={400} maxHeight={600}
           drawShadow={true} flippingTime={750}
@@ -174,8 +122,7 @@ Dung Pham
           {/* --- BÌA TRƯỚC --- */}
           <AlbumCover side="left">
             <div className="text-center text-white">
-              <h2 className="text-5xl font-bold mb-4 drop-shadow-lg gold-foil">Cuốn Sách</h2>
-              <h3 className="text-3xl font-light mb-8 drop-shadow-md">Của Tôi</h3>
+              <h2 className="text-5xl font-bold mb-4 drop-shadow-lg gold-foil">{album.title}</h2>
             </div>
           </AlbumCover>
           
@@ -183,17 +130,28 @@ Dung Pham
           <AlbumPage
             key="start-with-flap"
             side="left"
-            flap={<StartFrenchFlap/>}
+            flap={
+              <StartFrenchFlap
+                avatarUrl={album.avatarUrl}
+                avatarGender={album.avatarGender}
+                recipients={album.recipients}
+                frenchFlipNote={album.frenchFlipNote}
+                frenchFlipPlace={album.frenchFlipPlace}
+                savedDate={album.savedDate}
+              />
+            }
             onCloseCover={handleCloseFromFrontCover}
           >
             <div className="w-full h-full cursor-pointer"/>
           </AlbumPage>
           
-          <AlbumPage side="right">
+          <AlbumPage
+            key="introduction-page"
+            side="right"
+          >
             <div className="relative w-full h-full flex flex-col justify-center items-center space-y-4">
-              <p className="text-4xl text-center text-stone-900 font-serif font-bold">Người đầu tiên</p>
-              <p className="text-center text-stone-600">Dành tặng đến người đầu tiên một món quà nhỏ. Mong bạn sẽ thích
-                ~</p>
+              <p className="text-4xl text-center text-stone-900 font-serif font-bold">{album.title}</p>
+              <p className="text-center text-stone-600">{album.description}</p>
               
               <p className="absolute bottom-0 text-stone-600 text-xs text-center">
                 {`© ${new Date().getFullYear()} Photostory`}
@@ -204,43 +162,31 @@ Dung Pham
           {/* Trang Mục lục */}
           <AlbumPage side="left" key="table-of-contents">
             <div>
-              <p className="text-2xl text-center text-stone-900 font-serif font-bold mb-6">Những câu chuyện kể</p>
+              <p className="text-2xl text-center text-stone-900 font-serif font-bold mb-6">{t('toc.title')}</p>
               <div className="flex flex-col space-y-6">
-                
-                {/* --- ITEM 1: Cảm ơn em --- */}
-                <div className="flex items-center">
-                  {/* Cụm Tiêu đề + Ngày */}
-                  <div className="flex flex-col shrink-0">
-                    <span className="font-serif font-semibold text-stone-900 text-lg leading-tight">Cảm ơn em</span>
-                    <span className="font-sans text-[11px] text-stone-500 mt-1 tracking-wide">14/02/2023</span>
+                {fullTOC.map((toc) => (
+                  <div key={toc.page} className="flex items-center">
+                    {/* Cụm Tiêu đề + Ngày */}
+                    <div className="flex flex-col shrink-0">
+                      <span
+                        className="font-serif font-semibold text-stone-900 text-lg leading-tight">{toc.storyTitle}</span>
+                      {toc.eventDate !== '0001-01-01' && (
+                        <span className="font-sans text-[11px] text-stone-500 mt-1 tracking-wide">
+                          {locale === 'vi'
+                            ? format(parseISO(toc.eventDate), 'dd/MM/yyyy', {locale: vi}) // VN: 15/10/2025
+                            : format(parseISO(toc.eventDate), 'MMM d, yyyy', {locale: enUS}) // EN: Oct 15, 2025
+                          }
+                        </span>
+                      )}
+                    </div>
+                    
+                    {/* Dấu chấm nối (Leader dots) */}
+                    <span className="flex-1 mx-3 mb-1.25 border-b-2 border-dotted border-stone-300"></span>
+                    
+                    {/* Số trang */}
+                    <span className="font-semibold text-md text-stone-900">{toc.page}</span>
                   </div>
-                  
-                  {/* Dấu chấm nối (Leader dots) */}
-                  <span className="flex-1 mx-3 mb-1.25 border-b-2 border-dotted border-stone-300"></span>
-                  
-                  {/* Số trang */}
-                  <span className="font-semibold text-md text-stone-900">1</span>
-                </div>
-                
-                {/* --- ITEM 2: Băng giá --- */}
-                <div className="flex items-center">
-                  <div className="flex flex-col shrink-0">
-                    <span className="font-serif font-semibold text-stone-900 text-lg leading-tight">Băng giá</span>
-                    <span className="font-sans text-[11px] text-stone-500 mt-1 tracking-wide">15/11/2023</span>
-                  </div>
-                  <span className="flex-1 mx-3 mb-1.25 border-b-2 border-dotted border-stone-300"></span>
-                  <span className="font-semibold text-md text-stone-900">3</span>
-                </div>
-                
-                {/* --- ITEM 3: Nghệ thuật --- */}
-                <div className="flex items-center">
-                  <div className="flex flex-col shrink-0">
-                    <span className="font-serif font-semibold text-stone-900 text-lg leading-tight">Nghệ thuật</span>
-                    <span className="font-sans text-[11px] text-stone-500 mt-1 tracking-wide">01/01/2024</span>
-                  </div>
-                  <span className="flex-1 mx-3 mb-1.25 border-b-2 border-dotted border-stone-300"></span>
-                  <span className="font-semibold text-md text-stone-900">4</span>
-                </div>
+                ))}
               </div>
             </div>
           </AlbumPage>
@@ -249,11 +195,11 @@ Dung Pham
             <div className="w-full h-full cursor-pointer"></div>
           </AlbumPage>
           
-          <AlbumPage side="left">
-            <PrefacePiece preface={preface}/>
+          <AlbumPage number={1} side="left">
+            <PrefacePiece preface={album.preface || ''}/>
           </AlbumPage>
           
-          <AlbumPage side="right">
+          <AlbumPage number={2} side="right">
             <HighlightImagePiece
               imageSrc="https://picsum.photos/600/600?random=5"
               orientation="square"
@@ -262,35 +208,31 @@ Dung Pham
           
           {/* --- TRANG NỘI DUNG CHÍNH --- */}
           <AlbumPage
-            number={1} side="left" header="Cảm ơn em"
+            number={3} side="left" header={album.stories[0].title}
             isInteractive={!isModalOpen}
           >
             <div className="flex flex-col space-y-6">
               <PhotoStack
-                photos={SAMPLE_PHOTOS}
+                photos={album.stories[0].photos}
                 interactive={false}
                 onStackClick={() => setIsModalOpen(true)}
               />
-              <GlassPlayer title="New Song" artist="Dung Pham"/>
-              <Location/>
+              <GlassPlayer storyMusicUrl={album.stories[0].musicUrl}/>
+              <Location locations={album.stories[0].locations}/>
             </div>
           </AlbumPage>
           
-          <AlbumPage number={2} side="right" header="Cảm ơn em">
-            <StoryPiece content={content}/>
-          </AlbumPage>
-          
-          <AlbumPage number={3} side="left" header="BĂNG GIÁ">
-            <div>...</div>
-          </AlbumPage>
-          <AlbumPage number={4} side="right" header="NGHỆ THUẬT">
-            <div>...</div>
+          <AlbumPage number={4} side="right" header={album.stories[0].title}>
+            <StoryPiece story={album.stories[0]}/>
           </AlbumPage>
           
           {/* --- TRANG KẾT (CÓ FLAP) --- */}
-          <AlbumPage side="left">
-            <AfterworkPiece afterword={afterWork}/>
-          </AlbumPage>
+          {album.afterword && (
+            <AlbumPage number={5} side="left">
+              <AfterworkPiece afterword={album.afterword}/>
+            </AlbumPage>
+          )}
+          
           <AlbumPage
             side="right"
             flap={<EndFrenchFlap/>}
@@ -312,7 +254,7 @@ Dung Pham
           <AlbumPhotoModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
-            photos={SAMPLE_PHOTOS}
+            photos={album.stories[0].photos}
           />
         )
       }

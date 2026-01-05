@@ -1,18 +1,16 @@
-import React, {useState, useMemo, useEffect} from 'react';
-import {Play, Pause, Music} from 'lucide-react';
+import React, {useEffect, useMemo, useState} from 'react';
+import {Music, Pause, Play} from 'lucide-react';
 import SoundCloudIcon from "@/components/Common/SoundCloudIcon";
 
 interface GlassPlayerProps {
-  title: string;
-  artist: string;
+  storyMusicUrl?: string;
   initialProgress?: number;
 }
 
 const GlassPlayer: React.FC<GlassPlayerProps> = ({
-                                                          title,
-                                                          artist,
-                                                          initialProgress = 0
-                                                        }) => {
+                                                   storyMusicUrl,
+                                                   initialProgress = 0
+                                                 }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(initialProgress);
   const glassPlayerRef = React.useRef<HTMLDivElement | null>(null);
@@ -23,6 +21,11 @@ const GlassPlayer: React.FC<GlassPlayerProps> = ({
     () => Array.from({length: BAR_COUNT}, () => Math.floor(Math.random() * 75) + 25),
     []
   );
+  
+  const track = {
+    title: 'Sunny Days',
+    artist: 'Lofi Beats'
+  }
   
   useEffect(() => {
     const glassPlayer = glassPlayerRef.current;
@@ -105,10 +108,10 @@ const GlassPlayer: React.FC<GlassPlayerProps> = ({
           
           <div className="flex flex-col justify-center flex-grow min-w-0 gap-1 pt-1.25 pb-1.75">
             <div className="flex items-baseline space-x-2 truncate px-1">
-              <span className="font-serif font-bold text-stone-800 text-sm tracking-wide">{title}</span>
+              <span className="font-serif font-bold text-stone-800 text-sm tracking-wide">{track.title}</span>
               <span className="text-stone-300 text-xs">|</span>
               <span className="font-sans text-stone-500 text-[10px] uppercase tracking-wider font-semibold">
-                {artist}
+                {track.artist}
               </span>
             </div>
             

@@ -133,6 +133,22 @@
         "createNew": "Want to create one?",
         "signup": "Sign up now!"
       }
+    },
+    "Showtime": {
+      "weather": {
+        "sunny": "Sunny",
+        "rainy": "Rainy",
+        "cloudy": "Cloudy",
+        "snowy": "Snowy",
+        "clear_night": "Clear Night"
+      },
+      "album": {
+        "toc": {
+          "title": "Some Funny Stories",
+          "preface": "Say hello there ~",
+          "afterword": "After all..."
+        }
+      }
     }
   }
 }

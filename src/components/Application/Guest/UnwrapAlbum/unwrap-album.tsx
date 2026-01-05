@@ -11,6 +11,7 @@ import {motion} from 'framer-motion';
 import {useTheme} from "next-themes";
 import {useRouter} from "next/navigation";
 import Curtains from "@/components/Application/Showtime/Curtains";
+import {useGetShowtimeData} from "@/hooks/api/useAlbums";
 
 const UnwrapAlbum = () => {
   const [code, setCode] = useState('');
@@ -21,6 +22,7 @@ const UnwrapAlbum = () => {
   const t = useTranslations('App.Guest.unwrap');
   const {resolvedTheme} = useTheme();
   const navigation = useRouter();
+  const {data: showtime, isLoading} = useGetShowtimeData(code);
   
   const clearCode = () => {
     setCode('');

@@ -3,7 +3,11 @@ import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
 import React from "react";
 
-const AfterWord = ({afterword}: {afterword: string}) => {
+interface AfterWordProps {
+  afterword: string;
+}
+
+const AfterWord = ({afterword}: AfterWordProps) => {
   return (
     <div>
       <p className="text-2xl text-center text-stone-900 font-serif font-bold mb-6">Sau cùng thì...</p>
