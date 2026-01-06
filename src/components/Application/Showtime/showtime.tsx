@@ -24,7 +24,7 @@ export default function Showtime() {
   const id = params.id as string;
   const token = searchParams.get('token') as string;
   const startTimeRef = useRef(Date.now());
-  const {data: album, isError, isLoading} = useGetAlbumById(id);
+  const {data: album, isError, isLoading} = useGetAlbumById(id, token);
   
   // Validate album existence (In PREPARING_ALBUM phase)
   useEffect(() => {
@@ -35,22 +35,19 @@ export default function Showtime() {
       return;
     }
     
-    const checkReady = () => {
-      const now = Date.now();
-      const timeElapsed = now - startTimeRef.current;
-      const minTime = 2000; // Tối thiểu 2 giây loading
-      
-      if (timeElapsed >= minTime && !isLoading && album) {
-        setPhase(UnwrapPhase.SILENCE);
-      } else {
-        if (!isLoading && album) {
-          // Data xong nhưng chưa đủ giờ -> Set timeout bù giờ
-          setTimeout(() => setPhase(UnwrapPhase.SILENCE), minTime - timeElapsed);
-        }
-      }
-    };
+    if (isLoading || !album) return;
     
-    checkReady();
+    const now = Date.now();
+    const timeElapsed = now - startTimeRef.current;
+    const minTime = 2000;
+    const remainingDelay = Math.max(0, minTime - timeElapsed);
+    
+    const timer = setTimeout(() => {
+      // Re-check phase để đảm bảo không nhảy phase sai nếu user đã điều hướng đi chỗ khác
+      setPhase(UnwrapPhase.SILENCE);
+    }, remainingDelay);
+    
+    return () => clearTimeout(timer);
   }, [phase, isLoading, album, isError, id, token, router]);
   
   // SILENCE -> INTRO
