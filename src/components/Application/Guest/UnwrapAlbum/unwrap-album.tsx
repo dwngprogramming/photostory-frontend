@@ -1,7 +1,7 @@
 "use client";
 
-import React, {useEffect, useState} from 'react';
-import {AlertCircle, Book, CheckCircle, PackageOpen, Sparkles, X} from 'lucide-react';
+import React, {useEffect, useRef, useState} from 'react';
+import {Book, PackageOpen, Sparkles, X} from 'lucide-react';
 import FloatingDecorations from '@/components/Application/Guest/UnwrapAlbum/FloatingDecorations';
 import ThemeToggle from '@/components/Common/ThemeToggle';
 import Link from "next/link";
@@ -11,26 +11,33 @@ import {motion} from 'framer-motion';
 import {useTheme} from "next-themes";
 import {useRouter} from "next/navigation";
 import Curtains from "@/components/Application/Showtime/Curtains";
-import {useGetShowtimeData} from "@/hooks/api/useAlbums";
+import {useGetUnwrapAlbum} from "@/hooks/api/useAlbums";
+import {toast} from "sonner";
 
 const UnwrapAlbum = () => {
   const [code, setCode] = useState('');
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [message, setMessage] = useState('');
+  const [submittedCode, setSubmittedCode] = useState('');
   const [phase, setPhase] = useState<UnwrapPhase>(UnwrapPhase.IDLE);
   const tCommon = useTranslations('Common');
   const t = useTranslations('App.Guest.unwrap');
   const {resolvedTheme} = useTheme();
   const navigation = useRouter();
-  const {data: showtime, isLoading} = useGetShowtimeData(code);
+  const {data: showtimeAccess, isLoading, isError} = useGetUnwrapAlbum(submittedCode, {
+    enabled: phase === UnwrapPhase.LOADING && code.trim().length > 0,
+  });
   
   const clearCode = () => {
     setCode('');
   };
   
   const startUnwrap = () => {
-    if (phase === UnwrapPhase.IDLE && status !== 'loading') {
-      setPhase(UnwrapPhase.LOADING); // Chỉ cần set phase, phần còn lại để useEffect lo
+    if (!code.trim()) {
+      toast.error(t('notEmpty', {code: "Code"}));
+      return;
+    }
+    setSubmittedCode(code.trim());
+    if (phase === UnwrapPhase.IDLE) {
+      setPhase(UnwrapPhase.LOADING);
     }
   };
   
@@ -38,42 +45,52 @@ const UnwrapAlbum = () => {
     if (e.key === 'Enter') startUnwrap();
   };
   
-  // useEffect xử lý logic chính (Chia làm 2 luồng rõ ràng)
+  const startTime = useRef<number>(Date.now()); // Lưu thời điểm bắt đầu render/gọi API
+  
   useEffect(() => {
-    let timer: NodeJS.Timeout;
+    console.log('Unwrap Phase changed to:', phase);
+  }, [phase]);
+  
+  useEffect(() => {
+    if (phase !== UnwrapPhase.LOADING) return;
     
-    // --- CASE A: Đang Loading (Check Code) ---
-    if (phase === UnwrapPhase.LOADING) {
-      timer = setTimeout(() => {
-        // Logic check code nằm ở đây
-        if (code.trim().toUpperCase() === 'FROM-DUNGPHAM-WITH-LOVE') {
-          // Code đúng -> Chuyển sang đóng màn
+    // Lỗi: Chuyển về IDLE ngay lập tức
+    if (isError) {
+      setPhase(UnwrapPhase.IDLE);
+      return;
+    }
+    
+    if (!isLoading && showtimeAccess) {
+      const currentTime = Date.now();
+      const timeElapsed = currentTime - startTime.current;
+      const remainingDelay = Math.max(0, 1500 - timeElapsed);
+      
+      const timer = setTimeout(() => {
+        if (showtimeAccess.resourceId && showtimeAccess.token) {
           setPhase(UnwrapPhase.CURTAIN_CLOSE);
-        } else {
-          // Code sai -> Báo lỗi & Reset
-          setStatus('error');
-          setMessage("Invalid code. Please try again.");
-          setPhase(UnwrapPhase.IDLE);
         }
-      }, 1500);
+      }, remainingDelay);
+      
+      return () => clearTimeout(timer);
     }
-    
-    // --- CASE B: Đang Đóng màn (Redirect) ---
-    else if (phase === UnwrapPhase.CURTAIN_CLOSE) {
-      timer = setTimeout(() => {
-        // Animation xong -> Chuyển trang
-        const response = { albumId: "mock-album-id-123", tokenView: "123456" };
-        const queryParams = new URLSearchParams();
-        queryParams.set('token', response.tokenView);
-        
-        navigation.push(`/showtime/${response.albumId}?${queryParams}`);
+  }, [isLoading, isError, showtimeAccess, phase]);
+  
+  useEffect(() => {
+    if (phase === UnwrapPhase.CURTAIN_CLOSE) {
+      if (!showtimeAccess?.resourceId || !showtimeAccess?.token) {
+        toast.error(t('unexpectedError'));
+        setPhase(UnwrapPhase.IDLE);
+        return;
+      }
+      
+      const timer = setTimeout(() => {
+        const queryParams = new URLSearchParams({token: showtimeAccess.token});
+        navigation.push(`/showtime/${showtimeAccess.resourceId}?${queryParams}`);
       }, 1100);
+      
+      return () => clearTimeout(timer);
     }
-    
-    // Cleanup chung cho cả 2 trường hợp
-    return () => clearTimeout(timer);
-    
-  }, [phase, code, navigation]);
+  }, [phase, navigation, showtimeAccess]);
   
   return (
     <>
@@ -139,11 +156,11 @@ const UnwrapAlbum = () => {
                     value={code}
                     onChange={(e) => {
                       setCode(e.target.value);
-                      if (status !== 'loading') setStatus('idle');
+                      if (phase !== UnwrapPhase.LOADING) setPhase(UnwrapPhase.IDLE);
                     }}
                     onKeyDown={handleKeyDown}
                     placeholder={`${t('enterCode')}`}
-                    disabled={status === 'loading' || status === 'success'}
+                    disabled={phase !== UnwrapPhase.IDLE}
                     className="w-full h-12 md:h-14 px-6 md:px-8 bg-white/90 dark:bg-stone-900/90 backdrop-blur-md border-2 border-stone-200 dark:border-stone-700 rounded-2xl font-sans text-md md:text-lg text-stone-800 dark:text-stone-100 text-center placeholder:text-stone-400 dark:placeholder:text-stone-500 placeholder:uppercase placeholder:tracking-wide focus:outline-none focus:border-amber-400 dark:focus:border-amber-600 focus:ring-4 focus:ring-amber-100/50 dark:focus:ring-amber-900/30 shadow-lg dark:shadow-dark disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-300 ease-out"
                   />
                   
@@ -156,23 +173,6 @@ const UnwrapAlbum = () => {
                     </button>
                   )}
                 </div>
-                
-                {/* Status Messages */}
-                {status === 'success' && (
-                  <div
-                    className="p-4 rounded-xl bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800/50 flex items-center gap-3 text-green-700 dark:text-green-300 animate-fade-in-up">
-                    <CheckCircle className="w-5 h-5 flex-shrink-0"/>
-                    <p className="text-sm md:text-base font-medium">{message}</p>
-                  </div>
-                )}
-                
-                {status === 'error' && (
-                  <div
-                    className="p-4 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/50 flex items-center gap-3 text-red-700 dark:text-red-300 animate-shake">
-                    <AlertCircle className="w-5 h-5 flex-shrink-0"/>
-                    <p className="text-sm md:text-base font-medium">{message}</p>
-                  </div>
-                )}
                 
                 <p className="text-sm text-stone-500 dark:text-stone-400 text-center animate-fade-in">
                   {t('example')}: <span

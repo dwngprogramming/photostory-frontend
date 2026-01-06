@@ -131,7 +131,9 @@
         "albumReady": "Album is Ready!",
         "example": "Example code",
         "createNew": "Want to create one?",
-        "signup": "Sign up now!"
+        "signup": "Sign up now!",
+        "notEmpty": "{code} cannot be empty.",
+        "unexpectedError": "An unexpected error occurred. Please try again later."
       }
     },
     "Showtime": {

@@ -4,7 +4,7 @@ import "./globals.css";
 import React from "react";
 import {ThemeProvider} from "@/contexts/theme-provider";
 import {NextIntlClientProvider} from "next-intl";
-import {getMessages} from "next-intl/server";
+import {getLocale, getMessages} from "next-intl/server";
 import "driver.js/dist/driver.css";
 import AppToaster from "@/components/Common/AppToaster";
 import ReactQueryProvider from "@/contexts/react-query-provider";
@@ -42,9 +42,10 @@ export default async function RootLayout({
 }>) {
   
   const messages = await getMessages();
+  const locale = await getLocale();
   
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable} ${merriweather.variable} antialiased`}
+    <html lang={`${locale}`} className={`${inter.variable} ${playfair.variable} ${merriweather.variable} antialiased`}
           suppressHydrationWarning>
     <body>
     <NextIntlClientProvider messages={messages}>
