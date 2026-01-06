@@ -107,12 +107,6 @@ export interface Photo {
   orientation: 'landscape' | 'portrait' | 'square';
 }
 
-export interface ShowtimeDataResponse {
-  albumId: string;
-  token: string;
-  exp: number;
-}
-
 export interface ApiResponse<T> {
   status: number;
   message: string;
@@ -205,3 +199,12 @@ export interface LocationResponse {
   mapUrl?: string;
   displayOrder: number;
 }
+
+export interface SharingResponse {
+  resourceId: string;
+  type: SharingType;
+  token: string;
+  exp: number;
+}
+
+export type SharingType = 'album' | 'photo' | 'video';

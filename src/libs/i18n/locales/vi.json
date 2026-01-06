@@ -131,7 +131,9 @@
         "albumReady": "Album sẵn sàng!",
         "example": "Code mẫu",
         "createNew": "Muốn tạo một album?",
-        "signup": "Đăng ký ngay!"
+        "signup": "Đăng ký ngay!",
+        "notEmpty": "{code} không được để trống.",
+        "unexpectedError": "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau."
       }
     },
     "Showtime": {
