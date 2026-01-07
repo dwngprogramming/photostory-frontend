@@ -5,7 +5,7 @@ import {useIsMobile} from "@/hooks/useIsMobile";
 import {AlbumResponse, UnwrapPhase} from "@/types";
 import {useAlbumTour} from "@/hooks/useAlbumTour";
 import PhotoStack from "@/components/Application/Showtime/Album/Plugin/PhotoStack";
-import GlassPlayer from "@/components/Application/Showtime/Album/Plugin/GlassPlayer";
+import StoryMusic from "@/components/Application/Showtime/Album/Plugin/StoryMusic";
 import Location from "@/components/Application/Showtime/Location";
 import AlbumCover from '@/components/Application/Showtime/Album/Page/AlbumCover';
 import AlbumPage from '@/components/Application/Showtime/Album/Page/AlbumPage';
@@ -18,6 +18,8 @@ import AfterworkPiece from "@/components/Application/Showtime/Album/Page/Afterwo
 import {useLocale, useTranslations} from 'next-intl';
 import {format, parseISO} from 'date-fns';
 import {vi, enUS} from 'date-fns/locale';
+import {useAppDispatch} from "@/libs/redux/hook";
+import {playThemeSong} from "@/libs/redux/features/audioSlice";
 
 interface DigitalAlbumProps {
   album: AlbumResponse;
@@ -40,6 +42,7 @@ const DigitalAlbum = ({album, phase}: DigitalAlbumProps) => {
   const locale = useLocale();
   const lastChapter = album.tableOfContents[album.tableOfContents.length - 1];
   const lastPageNumber = lastChapter.page;
+  const dispatch = useAppDispatch();
   
   const fullTOC = [
     {
@@ -64,6 +67,12 @@ const DigitalAlbum = ({album, phase}: DigitalAlbumProps) => {
   }, [phase]);
   
   const onFlip = useCallback((e: any) => setVisualCurrentPage(e.data), []);
+  
+  useEffect(() => {
+    console.log('Visual Current Page:', visualCurrentPage);
+    console.log('Total Pages:', totalPages);
+    console.log('Index', totalPages - 1);
+  }, [visualCurrentPage, totalPages]);
   
   const onInit = useCallback(() => {
     if (albumRef.current) setTotalPages(albumRef.current.pageFlip().getPageCount());
@@ -104,7 +113,7 @@ const DigitalAlbum = ({album, phase}: DigitalAlbumProps) => {
       />
       
       <div
-        className={`relative z-10 mb-8 flex justify-center items-center w-full max-w-4xl h-150 ${isModalOpen ? 'pointer-events-none' : ''}`}
+        className={`relative z-10 flex justify-center items-center w-full max-w-4xl h-150 ${isModalOpen ? 'pointer-events-none' : ''}`}
         style={getAlbumStyle()}
       >
         {/* @ts-ignore */}
@@ -120,7 +129,7 @@ const DigitalAlbum = ({album, phase}: DigitalAlbumProps) => {
           style={{margin: '0 auto'}}
         >
           {/* --- BÌA TRƯỚC --- */}
-          <AlbumCover side="left">
+          <AlbumCover side="left" onClick={() => dispatch(playThemeSong())}>
             <div className="text-center text-white">
               <h2 className="text-5xl font-bold mb-4 drop-shadow-lg gold-foil">{album.title}</h2>
             </div>
@@ -217,7 +226,7 @@ const DigitalAlbum = ({album, phase}: DigitalAlbumProps) => {
                 interactive={false}
                 onStackClick={() => setIsModalOpen(true)}
               />
-              <GlassPlayer storyMusicUrl={album.stories[0].musicUrl}/>
+              <StoryMusic storyMusicUrl={album.stories[0].musicUrl}/>
               <Location locations={album.stories[0].locations}/>
             </div>
           </AlbumPage>

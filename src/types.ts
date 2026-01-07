@@ -208,3 +208,14 @@ export interface SharingResponse {
 }
 
 export type SharingType = 'album' | 'photo' | 'video';
+
+export type AudioAlbumMode = "theme" | "story";
+
+export interface AudioState {
+  currentUrl: string | null;
+  themeUrl: string | null;
+  isPlaying: boolean;
+  volume: number;
+  isLoading: boolean;
+  mode: AudioAlbumMode;
+}
