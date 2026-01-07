@@ -1,155 +1,228 @@
-import React, {useEffect, useMemo, useState} from 'react';
-import {Music, Pause, Play} from 'lucide-react';
-import SoundCloudIcon from "@/components/Common/SoundCloudIcon";
+import {Cloud, Heart, Loader2, Music, Music2, Pause, Play, Sparkles, Star, Zap} from "lucide-react";
+import React, {useEffect, useMemo, useState} from "react";
+import {useAppDispatch, useAppSelector} from "@/libs/redux/hook";
+import {initThemeSong, pauseAudio, playAudio, playStorySong, playThemeSong} from "@/libs/redux/features/audioSlice";
 
 interface GlassPlayerProps {
-  storyMusicUrl?: string;
-  initialProgress?: number;
+  musicUrl: string;
+  isThemeMusic: boolean;
+  size?: 'sm' | 'md';
 }
 
-const GlassPlayer: React.FC<GlassPlayerProps> = ({
-                                                   storyMusicUrl,
-                                                   initialProgress = 0
-                                                 }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [progress, setProgress] = useState(initialProgress);
-  const glassPlayerRef = React.useRef<HTMLDivElement | null>(null);
-  
-  const BAR_COUNT = 32;
-  
-  const barHeights = useMemo(
-    () => Array.from({length: BAR_COUNT}, () => Math.floor(Math.random() * 75) + 25),
-    []
-  );
-  
-  const track = {
-    title: 'Sunny Days',
-    artist: 'Lofi Beats'
-  }
+interface SongInfo {
+  title: string;
+  artist: string;
+}
+
+const GlassPlayer = ({musicUrl, isThemeMusic, size = "md"}: GlassPlayerProps) => {
+  const dispatch = useAppDispatch();
+  const {isPlaying, mode, themeUrl, currentUrl, isLoading} = useAppSelector(state => state.audio);
+  const [songInfo, setSongInfo] = useState<SongInfo>({title: 'Unknown Title', artist: 'Unknown Artist'});
   
   useEffect(() => {
-    const glassPlayer = glassPlayerRef.current;
-    if (!glassPlayer) return;
-    const stopPropagation = (e: Event) => e.stopPropagation();
-    const events = ['mousemove', 'touchmove', 'pointermove', 'mousedown', 'touchstart', 'pointerdown'];
-    events.forEach(event => glassPlayer.addEventListener(event, stopPropagation));
-    return () => events.forEach(event => glassPlayer.removeEventListener(event, stopPropagation));
-  }, []);
-  
-  useEffect(() => {
-    let interval: number | undefined;
-    if (isPlaying) {
-      interval = window.setInterval(() => {
-        setProgress(prev => {
-          if (prev >= 100) {
-            setIsPlaying(false);
-            return 0;
-          }
-          return prev + 0.25;
-        });
-      }, 50);
-    }
-    return () => {
-      if (interval) clearInterval(interval);
+    const fetchSongInfo = async () => {
+      if (musicUrl) {
+        const res = await fetch(`/api/soundcloud?url=${encodeURIComponent(musicUrl)}`);
+        const data = await res.json();
+        if (data.title) {
+          setSongInfo({
+            title: data.title,
+            artist: data.artist // Dữ liệu này giờ đây được lấy từ cái API xịn kia
+          });
+        }
+      }
     };
-  }, [isPlaying]);
+    
+    fetchSongInfo();
+  }, [musicUrl]);
   
-  const handleSeek = (index: number) => {
-    const newProgress = ((index + 1) / BAR_COUNT) * 100;
-    setProgress(newProgress);
+  useEffect(() => {
+    if (isThemeMusic && musicUrl !== '') {
+      dispatch(initThemeSong(musicUrl));
+    }
+  }, [musicUrl]);
+  
+  const isThisPlayerActive = useMemo(() => {
+    if (isThemeMusic) {
+      return mode === 'theme' && currentUrl === themeUrl;
+    } else {
+      return mode === 'story' && currentUrl === musicUrl;
+    }
+  }, [isThemeMusic, mode, currentUrl, musicUrl]);
+  
+  const isBuffering = isThisPlayerActive && isLoading;
+  const isRunning = isThisPlayerActive && isPlaying;
+  
+  const handleToggle = () => {
+    if (isThisPlayerActive) {
+      // Nếu đang là chính mình -> Toggle Play/Pause
+      if (isPlaying) {
+        dispatch(pauseAudio());
+      } else {
+        dispatch(playAudio());
+      }
+    } else {
+      // Nếu đang là bài khác -> Chuyển sang bài này
+      if (isThemeMusic) {
+        dispatch(playThemeSong());
+      } else if (musicUrl) {
+        dispatch(playStorySong(musicUrl));
+      }
+    }
   };
   
-  return (
-    <div ref={glassPlayerRef}>
-      <div className="flex justify-between items-center mb-2">
-         <span
-           className="inline-flex justify-center items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-600 border border-orange-200">
-           <Music size={14}/> Music
-         </span>
-        <div className="flex justify-center items-center text-[11px] gap-1 text-stone-400 dark:text-stone-500">
-          <p>Powered by</p>
-          <div className="flex justify-center items-center gap-1"><SoundCloudIcon/> SoundCloud</div>
-        </div>
-      </div>
+  // --- CONFIG ICONS ---
+  const floatingIcons = useMemo(() => {
+    const iconTypes = [Music, Music2, Heart, Star, Sparkles, Cloud, Zap];
+    
+    // CẤU HÌNH LƯỚI
+    const rows = 4;
+    const cols = 6;
+    
+    const gridSlots = [];
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        gridSlots.push({r, c});
+      }
+    }
+    
+    for (let i = gridSlots.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [gridSlots[i], gridSlots[j]] = [gridSlots[j], gridSlots[i]];
+    }
+    
+    return gridSlots.map((slot, i) => {
+      const IconComponent = iconTypes[Math.floor(Math.random() * iconTypes.length)];
       
-      <div className="group relative w-full select-none">
-        {/* Glass Layer */}
-        <div
-          className="absolute inset-0 rounded-3xl bg-white/70 backdrop-blur-[22px] backdrop-saturate-150 border border-stone-400/80 transition-all duration-500 group-hover:bg-white/80 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-white/55 via-white/15 to-white/10 opacity-95"/>
-          <div
-            className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-95"/>
-          {/* inner glow */}
-          <div
-            className="absolute inset-4 rounded-2xl shadow-[inset_0_0_18px_rgba(255,255,255,0.55)] pointer-events-none"/>
-          {/* outer halo */}
-          <div
-            className="absolute -inset-6 rounded-[32px] bg-gradient-to-br from-white/25 via-amber-100/60 to-orange-200/35 group-hover:bg-gradient-to-br group-hover:from-white/45 group-hover:via-amber-200/30 group-hover:to-orange-300/25 blur-3xl opacity-80 pointer-events-none"/>
-          {/* accent blob */}
-          <div
-            className="absolute -bottom-12 -right-10 w-28 h-28 bg-orange-400/45 rounded-full blur-3xl pointer-events-none transition-opacity duration-700 opacity-0 group-hover:opacity-100"/>
+      const cellWidth = 100 / cols;
+      const cellHeight = 100 / rows;
+      
+      const basePathLeft = slot.c * cellWidth;
+      const basePathTop = slot.r * cellHeight;
+      
+      const randomLeft = basePathLeft + Math.random() * cellWidth - 5;
+      const randomTop = basePathTop + Math.random() * cellHeight - 5;
+      
+      return {
+        id: i,
+        Component: IconComponent,
+        top: `${randomTop}%`,
+        left: `${randomLeft}%`,
+        size: Math.floor(Math.random() * 10) + 10,
+        duration: `${Math.floor(Math.random() * 3) + 4}s`,
+        delay: `${Math.random() * 2}s`,
+        color: ['text-orange-300', 'text-amber-200', 'text-pink-200', 'text-white/40'][Math.floor(Math.random() * 4)],
+        rotation: Math.floor(Math.random() * 360),
+        animType: Math.random() > 0.5 ? 'animate-bounce' : 'animate-pulse'
+      };
+    });
+  }, []);
+  return (
+    <div className={`group relative ${isThemeMusic ? "max-w-[250px]" : "w-full"} select-none ${size === 'md' ? 'h-14' : 'h-10'}`}>
+      
+      {/* === GLASS LAYER (Đã sửa để Glow bên trong) === */}
+      <div
+        className={`absolute inset-0 rounded-full ${size === 'md' ? 'bg-white/60' : 'bg-white/70'} backdrop-blur-[20px] backdrop-saturate-150 overflow-hidden z-0 transition-all duration-700 ease-in-out
+          ${isRunning
+          // KHI PLAY: Dùng 'inset' để tạo sáng bên trong + viền cam
+          ? 'border border-orange-400/60 shadow-[inset_0_0_30px_rgba(251,146,60,0.5),inset_0_0_10px_rgba(255,255,255,0.3)]'
+          : 'border border-white/50 shadow-lg'
+        }`}
+      >
+        
+        {/* Breathing Background (Tăng độ ấm khi play) */}
+        <div className={`absolute inset-0 bg-gradient-to-r transition-all duration-1000
+             ${isRunning
+          // Gradient ấm hơn, sáng hơn khi play
+          ? 'from-orange-200/30 via-orange-100/20 to-amber-200/30 opacity-100'
+          // Gradient lạnh mặc định
+          : 'from-orange-50/50 via-white/20 to-amber-50/50 opacity-50'
+        }`}
+        />
+        
+        {/* === FLOATING ICONS === */}
+        <div className="absolute inset-0 pointer-events-none">
+          {floatingIcons.map((icon) => (
+            <div
+              key={icon.id}
+              className={`absolute opacity-50 ${icon.color} ${icon.animType}`}
+              style={{
+                top: icon.top,
+                left: icon.left,
+                animationDuration: icon.duration,
+                animationDelay: icon.delay,
+                transform: `rotate(${icon.rotation}deg)`,
+              }}
+            >
+              <icon.Component size={icon.size}/>
+            </div>
+          ))}
         </div>
         
-        {/* Content */}
-        <div className="relative z-10 h-full flex items-center px-5 gap-5">
-          <button
-            onClick={() => setIsPlaying(!isPlaying)}
-            className="relative flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 text-white flex items-center justify-center shadow-lg shadow-orange-200 transition-all duration-300 hover:scale-105 hover:shadow-orange-300 active:scale-95 group/btn"
-            aria-label={isPlaying ? 'Pause' : 'Play'}
-          >
-            <div
-              className="absolute inset-x-0 top-0 h-1/2 rounded-t-full bg-gradient-to-b from-white/30 to-transparent pointer-events-none"/>
-            {isPlaying ? (
-              <Pause className="w-4 h-4 fill-current drop-shadow-sm"/>
-            ) : (
-              <Play className="w-4 h-4 fill-current ml-1 drop-shadow-sm -translate-x-[2px]"/>
-            )}
-          </button>
-          
-          <div className="flex flex-col justify-center flex-grow min-w-0 gap-1 pt-1.25 pb-1.75">
-            <div className="flex items-baseline space-x-2 truncate px-1">
-              <span className="font-serif font-bold text-stone-800 text-sm tracking-wide">{track.title}</span>
-              <span className="text-stone-300 text-xs">|</span>
-              <span className="font-sans text-stone-500 text-[10px] uppercase tracking-wider font-semibold">
-                {track.artist}
+        {/* Inner Highlight (Giữ nguyên để tạo độ khối) */}
+        <div
+          className="absolute inset-0 rounded-full shadow-[inset_0_1px_1px_rgba(255,255,255,0.8),inset_0_-1px_1px_rgba(0,0,0,0.05)] pointer-events-none"/>
+      </div>
+      
+      {/* === CONTENT === */}
+      <div className="relative z-10 h-full flex items-center px-2 pr-4 space-x-5">
+        
+        {/* Play Button */}
+        <button
+          onClick={handleToggle}
+          className={`group/btn relative flex-shrink-0 ${size === 'md' ? 'w-10 h-10' : 'w-7  h-7'} rounded-full bg-gradient-to-br from-amber-400 to-orange-500 text-white flex items-center justify-center shadow-[0_4px_12px_-2px_rgba(249,115,22,0.4)] transition-all duration-300 hover:scale-105 active:scale-95 ml-1`}
+        >
+          <div className="absolute inset-0 rounded-full border border-white/20"/>
+          <div
+            className="absolute inset-x-0 top-0 h-1/2 rounded-t-full bg-gradient-to-b from-white/40 to-transparent pointer-events-none"/>
+          {isBuffering ? (
+            // 1. Trường hợp đang Load: Hiện Spinner xoay
+            <Loader2 className={`${size === 'md' ? 'w-5 h-5' : 'w-3 h-3'} animate-spin text-white drop-shadow-sm`} />
+          ) : isRunning ? (
+            // 2. Trường hợp đang Chạy: Hiện Pause
+            <Pause className={`${size === 'md' ? 'w-5 h-5' : 'w-3 h-3'} fill-current drop-shadow-sm`}/>
+          ) : (
+            // 3. Trường hợp đang Dừng: Hiện Play
+            <Play className={`${size === 'md' ? 'w-5 h-5' : 'w-3 h-3'} fill-current ml-0.5 drop-shadow-sm`}/>
+          )}
+        </button>
+        
+        {/* Info Area */}
+        <div className="flex flex-col justify-center min-w-0 flex-grow space-y-0.5">
+          <div className="flex justify-between items-baseline w-full">
+               <span
+                 className={`block font-serif font-bold text-stone-800 ${size === 'md' ? 'text-lg' : 'text-base'} leading-tight truncate drop-shadow-sm`}>
+                {songInfo.title}
               </span>
-            </div>
             
-            <div
-              className="flex items-end justify-between h-5 w-full gap-[3px] cursor-pointer"
-              role="slider"
-              aria-valuenow={progress}
-              aria-label="Seek track"
-            >
-              {barHeights.map((height, index) => {
-                const progressPercent = ((index + 1) / BAR_COUNT) * 100;
-                const isPast = progress >= progressPercent;
-                
-                return (
-                  <div
-                    key={index}
-                    onClick={e => {
-                      e.stopPropagation();
-                      handleSeek(index);
-                    }}
-                    className="group/bar relative flex-1 min-w-[2px] rounded-full transition-all duration-300 ease-out hover:scale-y-110 origin-bottom"
-                    style={{height: `${height}%`}}
-                  >
-                    <div className="absolute inset-0 rounded-full bg-stone-300/40 transition-colors duration-300"/>
-                    <div
-                      className={`absolute inset-0 rounded-full bg-gradient-to-t from-orange-500 to-amber-400 shadow-[0_2px_8px_rgba(245,158,11,0.3)] transition-opacity duration-200 ${
-                        isPast ? 'opacity-100' : 'opacity-0'
-                      }`}
-                    />
-                  </div>
-                );
-              })}
-            </div>
+            {/* Music Bar (Trang trí) */}
+            {size === 'md' &&
+                <div
+                    className={`flex gap-0.5 items-end h-3 transition-opacity duration-300 ${isPlaying ? 'opacity-90' : 'opacity-50'}`}>
+                    <div className={`w-0.5 rounded-full bg-orange-400/80 transition-all duration-500
+                  ${isPlaying ? 'h-3 animate-pulse' : 'h-1'}`}></div>
+                    <div className={`w-0.5 rounded-full bg-orange-400/80 transition-all duration-300 delay-75
+                  ${isPlaying ? 'h-2 animate-pulse' : 'h-1'}`}></div>
+                    <div className={`w-0.5 rounded-full bg-orange-400/80 transition-all duration-700 delay-150
+                  ${isPlaying ? 'h-3 animate-pulse' : 'h-1'}`}></div>
+                </div>
+            }
+          </div>
+          
+          <div className="flex justify-between items-center w-full">
+            <span
+              className={`block font-sans text-stone-500 ${size === 'md' ? 'text-xs' : 'text-[11px]'} font-bold tracking-wider truncate`}>
+                {songInfo.artist}
+            </span>
+            {size === 'sm' && <span
+              className="inline-flex items-center gap-0.5 px-1 rounded-full bg-yellow-200/60 border border-yellow-400/80 ml-4">
+              <p className="text-black text-[10px]">Bài chủ đề</p>
+            </span>}
           </div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default GlassPlayer;

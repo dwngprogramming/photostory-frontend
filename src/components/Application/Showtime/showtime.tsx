@@ -14,6 +14,7 @@ import {Book} from "lucide-react";
 import {useTranslations} from "next-intl";
 import {useGetAlbumById} from "@/hooks/api/useAlbums";
 import PreparingAlbum from "@/components/Application/Showtime/PreparingAlbum";
+import GlassPlayer from "@/components/Application/Showtime/Album/Plugin/GlassPlayer";
 
 export default function Showtime() {
   const params = useParams();
@@ -135,7 +136,7 @@ export default function Showtime() {
             {showToggleAndLogo && (
               <>
                 <motion.div
-                  className="absolute top-6 right-6 z-100"
+                  className="absolute top-4 right-6 z-100"
                   initial={{opacity: 0, scale: 0.8}}
                   animate={{opacity: 1, scale: 1}}
                   exit={{opacity: 0, scale: 0.8}}
@@ -145,7 +146,21 @@ export default function Showtime() {
                 </motion.div>
                 
                 <motion.div
-                  className="absolute top-6 left-6 z-100"
+                  className="absolute top-16 md:top-3 left-1/2 -translate-x-1/2 z-[100]"
+                  initial={{opacity: 0, scale: 0.8}}
+                  animate={{opacity: 1, scale: 1}}
+                  exit={{opacity: 0, scale: 0.8}}
+                  transition={{duration: 0.5, delay: 1}}
+                >
+                  <GlassPlayer
+                    size="sm"
+                    isThemeMusic
+                    musicUrl="https://soundcloud.com/mikeysahara/ng-i-u-ti-n-juky-san-ft-b-i-tr"
+                  />
+                </motion.div>
+                
+                <motion.div
+                  className="absolute top-4 left-6 z-100"
                   initial={{opacity: 0, scale: 0.8}}
                   animate={{opacity: 1, scale: 1}}
                   exit={{opacity: 0, scale: 0.8}}
@@ -158,7 +173,7 @@ export default function Showtime() {
                 </motion.div>
                 
                 <motion.div
-                  className="absolute bottom-6 left-1/2 -translate-x-1/2 z-100"
+                  className="absolute bottom-4 left-1/2 -translate-x-1/2 z-100"
                   initial={{opacity: 0, scale: 0.8}}
                   animate={{opacity: 1, scale: 1}}
                   exit={{opacity: 0, scale: 0.8}}

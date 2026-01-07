@@ -8,6 +8,8 @@ import {getLocale, getMessages} from "next-intl/server";
 import "driver.js/dist/driver.css";
 import AppToaster from "@/components/Common/AppToaster";
 import ReactQueryProvider from "@/contexts/react-query-provider";
+import GlobalAudioPlayer from "@/components/Application/Showtime/Album/Plugin/GlobalPlayerControl";
+import StoreProvider from "@/contexts/redux-provider";
 
 // Khai báo Font
 const inter = Inter({
@@ -55,18 +57,21 @@ export default async function RootLayout({
           defaultTheme="system"
           enableSystem
         >
-          <AppToaster/>
-          {/*<Toaster*/}
-          {/*  position="top-center"*/}
-          {/*  toastOptions={{*/}
-          {/*    className: 'dark:bg-stone-800 dark:text-white',*/}
-          {/*    style: {*/}
-          {/*      background: 'var(--toast-bg)',*/}
-          {/*      color: 'var(--toast-color)',*/}
-          {/*    },*/}
-          {/*  }}*/}
-          {/*/>*/}
-          {children}
+          <StoreProvider>
+            <AppToaster/>
+            {/*<Toaster*/}
+            {/*  position="top-center"*/}
+            {/*  toastOptions={{*/}
+            {/*    className: 'dark:bg-stone-800 dark:text-white',*/}
+            {/*    style: {*/}
+            {/*      background: 'var(--toast-bg)',*/}
+            {/*      color: 'var(--toast-color)',*/}
+            {/*    },*/}
+            {/*  }}*/}
+            {/*/>*/}
+            {children}
+            <GlobalAudioPlayer/>
+          </StoreProvider>
         </ThemeProvider>
       </ReactQueryProvider>
     </NextIntlClientProvider>
