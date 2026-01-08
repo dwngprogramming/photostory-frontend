@@ -43,7 +43,7 @@ const DigitalAlbum = ({album, phase}: DigitalAlbumProps) => {
   const lastChapter = album.tableOfContents[album.tableOfContents.length - 1];
   const lastPageNumber = lastChapter.page;
   const dispatch = useAppDispatch();
-  const {isThemeSongPlayed, currentUrl} = useAppSelector(state => state.audio);
+  const {isThemeSongPlayed} = useAppSelector(state => state.audio);
   
   const fullTOC = [
     {
@@ -130,12 +130,7 @@ const DigitalAlbum = ({album, phase}: DigitalAlbumProps) => {
           style={{margin: '0 auto'}}
         >
           {/* --- BÌA TRƯỚC --- */}
-          <AlbumCover side="left" onClick={() => {
-            if (isThemeSongPlayed) return;
-            else {
-              dispatch(playThemeSong());
-            }
-          }}>
+          <AlbumCover side="left" onClick={() => dispatch(playThemeSong())}>
             <div className="text-center text-white">
               <h2 className="text-5xl font-bold mb-4 drop-shadow-lg gold-foil">{album.title}</h2>
             </div>
