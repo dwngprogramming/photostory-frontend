@@ -18,7 +18,7 @@ import AfterworkPiece from "@/components/Application/Showtime/Album/Page/Afterwo
 import {useLocale, useTranslations} from 'next-intl';
 import {format, parseISO} from 'date-fns';
 import {vi, enUS} from 'date-fns/locale';
-import {useAppDispatch} from "@/libs/redux/hook";
+import {useAppDispatch, useAppSelector} from "@/libs/redux/hook";
 import {playThemeSong} from "@/libs/redux/features/audioSlice";
 
 interface DigitalAlbumProps {
@@ -43,6 +43,7 @@ const DigitalAlbum = ({album, phase}: DigitalAlbumProps) => {
   const lastChapter = album.tableOfContents[album.tableOfContents.length - 1];
   const lastPageNumber = lastChapter.page;
   const dispatch = useAppDispatch();
+  const {isThemeSongPlayed, currentUrl} = useAppSelector(state => state.audio);
   
   const fullTOC = [
     {
@@ -129,7 +130,12 @@ const DigitalAlbum = ({album, phase}: DigitalAlbumProps) => {
           style={{margin: '0 auto'}}
         >
           {/* --- BÌA TRƯỚC --- */}
-          <AlbumCover side="left" onClick={() => dispatch(playThemeSong())}>
+          <AlbumCover side="left" onClick={() => {
+            if (isThemeSongPlayed) return;
+            else {
+              dispatch(playThemeSong());
+            }
+          }}>
             <div className="text-center text-white">
               <h2 className="text-5xl font-bold mb-4 drop-shadow-lg gold-foil">{album.title}</h2>
             </div>
@@ -216,24 +222,31 @@ const DigitalAlbum = ({album, phase}: DigitalAlbumProps) => {
           </AlbumPage>
           
           {/* --- TRANG NỘI DUNG CHÍNH --- */}
-          <AlbumPage
-            number={3} side="left" header={album.stories[0].title}
-            isInteractive={!isModalOpen}
-          >
-            <div className="flex flex-col space-y-6">
-              <PhotoStack
-                photos={album.stories[0].photos}
-                interactive={false}
-                onStackClick={() => setIsModalOpen(true)}
-              />
-              <StoryMusic storyMusicUrl={album.stories[0].musicUrl}/>
-              <Location locations={album.stories[0].locations}/>
-            </div>
-          </AlbumPage>
-          
-          <AlbumPage number={4} side="right" header={album.stories[0].title}>
-            <StoryPiece story={album.stories[0]}/>
-          </AlbumPage>
+          {album.stories.map((story, index) => [
+              <AlbumPage
+                key={index * 2 + 3}
+                number={index * 2 + 3} side="left" header={story.title}
+                isInteractive={!isModalOpen}
+              >
+                <div className="flex flex-col space-y-6">
+                  <PhotoStack
+                    photos={story.photos}
+                    interactive={false}
+                    onStackClick={() => setIsModalOpen(true)}
+                  />
+                  <StoryMusic storyMusicUrl={story.musicUrl}/>
+                  <Location locations={story.locations}/>
+                </div>
+              </AlbumPage>,
+              
+              <AlbumPage
+                key={index * 2 + 4}
+                number={index * 2 + 4}
+                side="right"
+                header={story.title}>
+                <StoryPiece story={story}/>
+              </AlbumPage>
+          ])}
           
           {/* --- TRANG KẾT (CÓ FLAP) --- */}
           {album.afterword && (
