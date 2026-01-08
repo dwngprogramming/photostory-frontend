@@ -218,4 +218,5 @@ export interface AudioState {
   volume: number;
   isLoading: boolean;
   mode: AudioAlbumMode;
+  isThemeSongPlayed: boolean;
 }
