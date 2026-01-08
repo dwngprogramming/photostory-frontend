@@ -8,6 +8,7 @@ const initState: AudioState = {
   mode: "theme",
   volume: 0.5,
   isLoading: false,
+  isThemeSongPlayed: false,
 }
 
 const audioSlice = createSlice({
@@ -25,11 +26,13 @@ const audioSlice = createSlice({
         state.mode = "theme";
       }
     },
+    
     playThemeSong: (state) => {
       if (state.themeUrl) {
         state.currentUrl = state.themeUrl;
         state.mode = "theme";
         state.isPlaying = true;
+        state.isThemeSongPlayed = true;
         state.isLoading = true;
       }
     },
