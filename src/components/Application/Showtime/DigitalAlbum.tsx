@@ -106,10 +106,6 @@ const DigitalAlbum = ({album, phase}: DigitalAlbumProps) => {
     };
   };
   
-  useEffect(() => {
-     console.log('isTourOpen now: ', isTourOpen);
-  }, [isTourOpen]);
-  
   return (
     <div className="relative w-full min-h-screen flex flex-col items-center justify-center p-4 md:p-8 overflow-hidden">
       <Image
