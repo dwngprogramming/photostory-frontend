@@ -38,7 +38,7 @@ const DigitalAlbum = ({album, phase}: DigitalAlbumProps) => {
   const [mounted, setMounted] = useState(false);
   
   const isMobile = useIsMobile();
-  const {startTour} = useAlbumTour();
+  const {startTour, isTourOpen} = useAlbumTour();
   const locale = useLocale();
   const lastChapter = album.tableOfContents[album.tableOfContents.length - 1];
   const lastPageNumber = lastChapter.page;
@@ -96,7 +96,10 @@ const DigitalAlbum = ({album, phase}: DigitalAlbumProps) => {
   }
   
   const getAlbumStyle = (): React.CSSProperties => {
-    if (isMobile) return {transition: 'transform 1s ease-in-out'};
+    if (isMobile) return {
+      transition: 'transform 1s ease-in-out',
+    };
+    
     return {
       transition: 'transform 750ms ease-in-out',
       transform: `translateX(${xPosition}px)`,
@@ -116,6 +119,37 @@ const DigitalAlbum = ({album, phase}: DigitalAlbumProps) => {
       <div
         className={`relative z-10 flex justify-center items-center w-full max-w-4xl h-150 ${isModalOpen ? 'pointer-events-none' : ''}`}
         style={getAlbumStyle()}
+        onClickCapture={(e) => {
+          if (isTourOpen) {
+            e.stopPropagation();
+            e.preventDefault();
+          }
+        }}
+        // Quan trọng với react-pageflip (vì nó dùng mousedown/touch để kéo)
+        onMouseDownCapture={(e) => {
+          if (isTourOpen) {
+            e.stopPropagation();
+            e.preventDefault();
+          }
+        }}
+        onMouseMoveCapture={(e) => {
+          if (isTourOpen) {
+            e.stopPropagation();
+            e.preventDefault();
+          }
+        }}
+        onTouchStartCapture={(e) => {
+          if (isTourOpen) {
+            e.stopPropagation();
+            e.preventDefault();
+          }
+        }}
+        onTouchMoveCapture={(e) => {
+          if (isTourOpen) {
+            e.stopPropagation();
+            e.preventDefault();
+          }
+        }}
       >
         {/* @ts-ignore */}
         <HTMLFlipBook
@@ -127,10 +161,12 @@ const DigitalAlbum = ({album, phase}: DigitalAlbumProps) => {
           usePortrait={isMobile} startZIndex={0} autoSize={true} maxShadowOpacity={0.1}
           showCover={true} mobileScrollSupport={true}
           onFlip={onFlip} onInit={onInit} onChangeState={onChangeState}
+          useMouseEvents={!isTourOpen}
+          clickEventForward={!isTourOpen}
           style={{margin: '0 auto'}}
         >
           {/* --- BÌA TRƯỚC --- */}
-          <AlbumCover side="left" onClick={() => dispatch(playThemeSong())}>
+          <AlbumCover id="album-digital" side="left" onClick={() => dispatch(playThemeSong())}>
             <div className="text-center text-white">
               <h2 className="text-5xl font-bold mb-4 drop-shadow-lg gold-foil">{album.title}</h2>
             </div>

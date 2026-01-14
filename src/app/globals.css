@@ -145,3 +145,11 @@ html {
   background-position: center;
   background-blend-mode: multiply; /* Hòa trộn màu nâu nền với ảnh da */
 }
+
+body.driver-active .driver-active-element * {
+  pointer-events: none !important;
+}
+
+.driver-popover {
+  pointer-events: auto;
+}

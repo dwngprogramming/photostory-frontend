@@ -10,6 +10,24 @@ export const TOUR_STEPS: DriveStep[] = [
     },
   },
   {
+    element: '#theme-music-player',
+    popover: {
+      title: 'Nhạc nền phát ở đây ~',
+      description: 'Sử dụng trình phát nhạc này để điều khiển nhạc nền của album. Bạn có thể xem tên bài hát, tên tác giả, tạm dừng hoặc tiếp tục phát ở đây.',
+      side: 'bottom',
+      align: 'center',
+    }
+  },
+  {
+    element: "#theme-toggle",
+    popover: {
+      title: 'Bạn thích giao diện sáng hay tối?',
+      description: 'Sử dụng nút chuyển đổi này để thay đổi giữa chế độ sáng và tối của giao diện album. Giao diện tối có lẽ sẽ "deep" hơn cho trải nghiệm đọc đó ~',
+      side: 'bottom',
+      align: 'center',
+    }
+  },
+  {
     element: '#album-digital',
     popover: {
       title: 'Lật sang trang tiếp theo',

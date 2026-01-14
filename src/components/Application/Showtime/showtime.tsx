@@ -136,6 +136,7 @@ export default function Showtime() {
             {showToggleAndLogo && (
               <>
                 <motion.div
+                  id="theme-toggle"
                   className="absolute top-4 right-6 z-100"
                   initial={{opacity: 0, scale: 0.8}}
                   animate={{opacity: 1, scale: 1}}
@@ -146,6 +147,7 @@ export default function Showtime() {
                 </motion.div>
                 
                 <motion.div
+                  id="theme-music-player"
                   className="absolute top-16 md:top-3 left-1/2 -translate-x-1/2 z-[100]"
                   initial={{opacity: 0, scale: 0.8}}
                   animate={{opacity: 1, scale: 1}}
