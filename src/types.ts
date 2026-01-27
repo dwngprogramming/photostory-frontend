@@ -120,6 +120,11 @@ export interface UserPrincipal {
   token: string;
 }
 
+export interface VerifyPinRequest {
+  code: string;
+  pin: string;
+}
+
 export interface UserResponse {
   id: string;
   username: string;
@@ -201,10 +206,12 @@ export interface LocationResponse {
 }
 
 export interface SharingResponse {
-  resourceId: string;
-  type: SharingType;
-  token: string;
-  exp: number;
+  requiredPin?: boolean;
+  publicSharingKey?: string;
+  resourceId?: string;
+  type?: SharingType;
+  token?: string;
+  exp?: number;
 }
 
 export type SharingType = 'album' | 'photo' | 'video';

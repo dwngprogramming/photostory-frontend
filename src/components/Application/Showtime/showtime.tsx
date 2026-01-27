@@ -12,9 +12,10 @@ import FloatingIcons from "@/components/Application/Showtime/FloatingIcons";
 import RibbonEffects from "@/components/Application/Showtime/RibbonEffect";
 import {Book} from "lucide-react";
 import {useTranslations} from "next-intl";
-import {useGetAlbumById} from "@/hooks/api/useAlbums";
+import {useGetPermissionAlbum, useGetPublicAlbum} from "@/hooks/api/useAlbums";
 import PreparingAlbum from "@/components/Application/Showtime/PreparingAlbum";
 import GlassPlayer from "@/components/Application/Showtime/Album/Plugin/GlassPlayer";
+import {useAppSelector} from "@/libs/redux/hook";
 
 export default function Showtime() {
   const params = useParams();
@@ -23,19 +24,35 @@ export default function Showtime() {
   const [phase, setPhase] = useState<UnwrapPhase>(UnwrapPhase.PREPARING_ALBUM);
   const t = useTranslations('Common');
   const id = params.id as string;
-  const token = searchParams.get('token') as string;
+  const key = searchParams.get("key")?.toString();
+  const {token} = useAppSelector(state => state.permissionResource);
   const startTimeRef = useRef(Date.now());
-  const {data: album, isError, isLoading} = useGetAlbumById(id, token);
+  
+  const {data: publicAlbum, isError: isPublicError, isLoading: isPublicLoading} = useGetPublicAlbum(key);
+  const {data: permissionAlbum, isError: isPermissionError, isLoading: isPermissionLoading} = useGetPermissionAlbum(id);
+  
+  const isLoading = isPublicLoading || isPermissionLoading;
+  const isError = isPublicError || isPermissionError;
+  const album = publicAlbum ?? permissionAlbum ?? null;
+  
+  const isValidPublic = !!(key && publicAlbum);
+  const isValidPrivate = !!(id && token && permissionAlbum);
+  
+  useEffect(() => {
+    if (!isLoading && !isError && !isValidPublic && !isValidPrivate) {
+      router.replace('/unwrap');
+    }
+  }, [isLoading, isError, isValidPublic, isValidPrivate, router]);
   
   // Validate album existence (In PREPARING_ALBUM phase)
   useEffect(() => {
     if (phase !== UnwrapPhase.PREPARING_ALBUM) return;
     
-    if (isError || (!id || !token)) {
+    if (isError) {
       router.replace('/unwrap');
       return;
     }
-    
+
     if (isLoading || !album) return;
     
     const now = Date.now();
@@ -49,7 +66,7 @@ export default function Showtime() {
     }, remainingDelay);
     
     return () => clearTimeout(timer);
-  }, [phase, isLoading, album, isError, id, token, router]);
+  }, [phase, isLoading, album, isError, router]);
   
   // SILENCE -> INTRO
   useEffect(() => {
