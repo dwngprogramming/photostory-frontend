@@ -133,7 +133,13 @@
         "createNew": "Want to create one?",
         "signup": "Sign up now!",
         "notEmpty": "{code} cannot be empty.",
-        "unexpectedError": "An unexpected error occurred. Please try again later."
+        "unexpectedError": "An unexpected error occurred. Please try again later.",
+        "pin": {
+          "title": "Enter Album PIN",
+          "description": "This album is protected with a PIN. Please enter the 6-digit PIN to access the album.",
+          "placeholder": "Enter PIN here",
+          "submit": "Submit PIN"
+        }
       }
     },
     "Showtime": {

@@ -2,29 +2,53 @@
 
 import React, {useEffect, useRef, useState} from 'react';
 import {Book, PackageOpen, Sparkles, X} from 'lucide-react';
-import FloatingDecorations from '@/components/Application/Guest/UnwrapAlbum/FloatingDecorations';
+import FloatingDecorations from '@/components/Application/AlbumPermission/Guest/UnwrapAlbum/FloatingDecorations';
 import ThemeToggle from '@/components/Common/ThemeToggle';
 import Link from "next/link";
 import {useTranslations} from "next-intl";
-import {UnwrapPhase} from "@/types";
+import {SharingResponse, UnwrapPhase} from "@/types";
 import {motion} from 'framer-motion';
 import {useTheme} from "next-themes";
 import {useRouter} from "next/navigation";
 import Curtains from "@/components/Application/Showtime/Curtains";
-import {useGetUnwrapAlbum} from "@/hooks/api/useAlbums";
+import {useGetUnwrapAlbum, useUnwrapAlbumWithPin} from "@/hooks/api/useAlbums";
 import {toast} from "sonner";
+import PinInputModal from "@/components/Application/AlbumPermission/Guest/UnwrapAlbum/PinInputModal";
+import {useQueryClient} from "@tanstack/react-query";
+import {useAppDispatch} from "@/libs/redux/hook";
+import {setPermissionResource} from "@/libs/redux/features/permissionResourceSlice";
 
 const UnwrapAlbum = () => {
   const [code, setCode] = useState('');
   const [submittedCode, setSubmittedCode] = useState('');
+  const [isPinModalOpen, setIsPinModalOpen] = useState(false);
   const [phase, setPhase] = useState<UnwrapPhase>(UnwrapPhase.IDLE);
   const tCommon = useTranslations('Common');
   const t = useTranslations('App.Guest.unwrap');
   const {resolvedTheme} = useTheme();
   const navigation = useRouter();
-  const {data: showtimeAccess, isLoading, isError} = useGetUnwrapAlbum(submittedCode, {
-    enabled: phase === UnwrapPhase.LOADING && code.trim().length > 0,
+  const queryClient = useQueryClient();
+  const dispatch = useAppDispatch();
+  
+  const {
+    data: checkData,
+    isLoading: isCheckingCode,
+    isError: isCheckError
+  } = useGetUnwrapAlbum(submittedCode, {
+    enabled: !!submittedCode && phase === UnwrapPhase.LOADING && !isPinModalOpen,
+    retry: false
   });
+  
+  const {
+    mutate: verifyPin,
+    isPending: isVerifyingPin
+  } = useUnwrapAlbumWithPin({
+    // Xử lý kết quả ngay tại đây, không cần useEffect
+    onSuccess: (data: SharingResponse) => handleSuccess(data)
+    // Error handle in axios interceptor
+  });
+  
+  const startTime = useRef<number>(0);
   
   const clearCode = () => {
     setCode('');
@@ -35,62 +59,97 @@ const UnwrapAlbum = () => {
       toast.error(t('notEmpty', {code: "Code"}));
       return;
     }
-    setSubmittedCode(code.trim());
-    if (phase === UnwrapPhase.IDLE) {
-      setPhase(UnwrapPhase.LOADING);
+    const cleanCode = code.trim();
+    queryClient.removeQueries({queryKey: ['unwrap-album-if-public', cleanCode]});
+    
+    setSubmittedCode(cleanCode);
+    setPhase(UnwrapPhase.LOADING);
+    startTime.current = Date.now();
+  };
+  
+  const handlePinSubmit = (pin: string) => {
+    startTime.current = Date.now();
+    verifyPin({code: submittedCode, pin});
+  };
+  
+  // Kiểm tra code và Album là Public
+  useEffect(() => {
+    if (phase !== UnwrapPhase.LOADING) return;
+    
+    if (isCheckingCode) return;
+    
+    if (!isCheckingCode && checkData) {
+      if (checkData.requiredPin) {
+        setPhase(UnwrapPhase.IDLE);
+        setIsPinModalOpen(true);
+      } else {
+        handleSuccess(checkData);
+      }
+    } else if (isCheckError) {
+      setPhase(UnwrapPhase.IDLE);
+      setSubmittedCode('');
+    }
+  }, [phase, checkData, isCheckingCode, isCheckError]);
+  
+  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+  
+  const loadingDataAndAnimation = async (data: SharingResponse) => {
+    // Xử lý chung cho cả Code (Public) và PIN (Private)
+    const timeElapsed = Date.now() - startTime.current;
+    const loadingDelay = Math.max(0, 1000 - timeElapsed);
+    
+    await delay(loadingDelay);
+    
+    // After waiting, close pin modal if open
+    setIsPinModalOpen(false);
+    
+    const isPublicValid = !!data?.publicSharingKey;
+    const isPrivateValid = !!(data?.resourceId && data?.token);
+    
+    // Verify data (not Public and not Private => Error)
+    if (!isPublicValid && !isPrivateValid) {
+      toast.error(t('unexpectedError'));
+      setPhase(UnwrapPhase.IDLE);
+      setSubmittedCode('');
+      return;
+    }
+    
+    // 4. Bắt đầu đóng màn
+    setPhase(UnwrapPhase.CURTAIN_CLOSE);
+    
+    // Animation: Curtain Close (1.1s)
+    await delay(1100);
+  }
+  
+  const handleSuccess = async (data: SharingResponse) => {
+    if (data) {
+      if (data.publicSharingKey) await handlePublicAccess(data);
+      else await handlePermissionAccess(data);
     }
   };
+  
+  const handlePublicAccess = async (data: SharingResponse) => {
+    await loadingDataAndAnimation(data);
+    const queryParams = new URLSearchParams({key: data.publicSharingKey || ''});
+    navigation.push(`/showtime?${queryParams.toString()}`);
+  }
+  
+  const handlePermissionAccess = async (data: SharingResponse) => {
+    await loadingDataAndAnimation(data);
+    if (data) {
+      dispatch(setPermissionResource({
+        resourceId: data.resourceId || '',
+        type: data.type || null,
+        token: data.token || '',
+        exp: data.exp || -1
+      }))
+    }
+    navigation.push(`/showtime/${data.resourceId}`);
+  }
   
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') startUnwrap();
   };
-  
-  const startTime = useRef<number>(Date.now()); // Lưu thời điểm bắt đầu render/gọi API
-  
-  useEffect(() => {
-    console.log('Unwrap Phase changed to:', phase);
-  }, [phase]);
-  
-  useEffect(() => {
-    if (phase !== UnwrapPhase.LOADING) return;
-    
-    // Lỗi: Chuyển về IDLE ngay lập tức
-    if (isError) {
-      setPhase(UnwrapPhase.IDLE);
-      return;
-    }
-    
-    if (!isLoading && showtimeAccess) {
-      const currentTime = Date.now();
-      const timeElapsed = currentTime - startTime.current;
-      const remainingDelay = Math.max(0, 1500 - timeElapsed);
-      
-      const timer = setTimeout(() => {
-        if (showtimeAccess.resourceId && showtimeAccess.token) {
-          setPhase(UnwrapPhase.CURTAIN_CLOSE);
-        }
-      }, remainingDelay);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [isLoading, isError, showtimeAccess, phase]);
-  
-  useEffect(() => {
-    if (phase === UnwrapPhase.CURTAIN_CLOSE) {
-      if (!showtimeAccess?.resourceId || !showtimeAccess?.token) {
-        toast.error(t('unexpectedError'));
-        setPhase(UnwrapPhase.IDLE);
-        return;
-      }
-      
-      const timer = setTimeout(() => {
-        const queryParams = new URLSearchParams({token: showtimeAccess.token});
-        navigation.push(`/showtime/${showtimeAccess.resourceId}?${queryParams}`);
-      }, 1100);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [phase, navigation, showtimeAccess]);
   
   return (
     <>
@@ -154,6 +213,8 @@ const UnwrapAlbum = () => {
                   <input
                     type="text"
                     value={code}
+                    min={5}
+                    max={20}
                     onChange={(e) => {
                       setCode(e.target.value);
                       if (phase !== UnwrapPhase.LOADING) setPhase(UnwrapPhase.IDLE);
@@ -227,6 +288,13 @@ const UnwrapAlbum = () => {
         
         </div>
       </motion.div>
+      
+      <PinInputModal
+        isOpen={isPinModalOpen}
+        isLoading={isVerifyingPin}
+        onClose={() => setIsPinModalOpen(false)}
+        onSubmit={handlePinSubmit}
+      />
       
       {/* Layer 1: Curtains (Handles closing animation over the UI) */}
       <Curtains phase={phase}/>

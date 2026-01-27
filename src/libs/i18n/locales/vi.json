@@ -133,7 +133,13 @@
         "createNew": "Muốn tạo một album?",
         "signup": "Đăng ký ngay!",
         "notEmpty": "{code} không được để trống.",
-        "unexpectedError": "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau."
+        "unexpectedError": "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau.",
+        "pin": {
+          "title": "Nhập mã PIN của Album",
+          "description": "Album này được bảo vệ bằng mã PIN. Vui lòng nhập mã PIN gồm 6 chữ số để tiếp tục.",
+          "placeholder": "Nhập mã PIN ở đây",
+          "submit": "Xác nhận PIN"
+        }
       }
     },
     "Showtime": {
