@@ -135,10 +135,38 @@ export interface UserResponse {
   avatar?: string;
 }
 
+export enum RelationshipType {
+  lover = 'lover',
+  boyfriend = 'boyfriend',
+  girlfriend = 'girlfriend',
+  partner = 'partner',
+  husband = 'husband',
+  wife = 'wife',
+  child = 'child',
+  children = 'children',
+  son = 'son',
+  daughter = 'daughter',
+  friend = 'friend',
+  family = 'family',
+  colleague = 'colleague',
+  parent = 'parent',
+  father = 'father',
+  mother = 'mother',
+  brother = 'brother',
+  sister = 'sister',
+  sibling = 'sibling',
+  friend_group = 'friend_group',
+  best_friend = 'best_friend',
+  myself = 'myself'
+}
+
 export interface AlbumResponse {
   id: string;
   ownerId: string;
   ownerName: string;
+  relationship: RelationshipType;
+  customRelationship?: string;
+  customRelationshipLocale?: 'vi' | 'en';
   savedDate: string;
   recipients: string[];
   themeSongUrl?: string;
