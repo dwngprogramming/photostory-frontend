@@ -1,8 +1,11 @@
 import {UnwrapPhase} from "@/types";
 import {Loader2} from "lucide-react";
 import {AnimatePresence, motion} from "framer-motion";
+import {useTranslations} from "next-intl";
 
 const PreparingAlbum = ({phase}: { phase: UnwrapPhase }) => {
+  const t = useTranslations('App.Showtime.animation.prepare');
+  
   // Chỉ hiển thị khi đang ở phase PREPARING_ALBUM
   if (phase !== UnwrapPhase.PREPARING_ALBUM) return null;
   
@@ -25,11 +28,11 @@ const PreparingAlbum = ({phase}: { phase: UnwrapPhase }) => {
           {/* Text áp dụng style bạn yêu cầu */}
           <div className="text-center space-y-2">
             <h2 className="text-2xl md:text-4xl font-serif font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-700 via-amber-900 to-amber-700 dark:from-amber-200 dark:via-amber-100 dark:to-amber-200 drop-shadow-sm dark:drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] tracking-wide leading-tight">
-              Chuẩn bị Album
+              {t('title')}
             </h2>
             
             <p className="font-sans text-sm md:text-base text-amber-800/60 dark:text-amber-400/60 tracking-widest uppercase">
-              Album đang được chuẩn bị, bạn vui lòng đợi một chút nha ~
+              {t('description')}
             </p>
           </div>
         </motion.div>

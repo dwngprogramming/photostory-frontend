@@ -16,6 +16,7 @@ import {useGetPermissionAlbum, useGetPublicAlbum} from "@/hooks/api/useAlbums";
 import PreparingAlbum from "@/components/Application/Showtime/PreparingAlbum";
 import GlassPlayer from "@/components/Application/Showtime/Album/Plugin/GlassPlayer";
 import {useAppSelector} from "@/libs/redux/hook";
+import {toast} from "sonner";
 
 export default function Showtime() {
   const params = useParams();
@@ -40,6 +41,9 @@ export default function Showtime() {
   
   useEffect(() => {
     if (!isLoading && !isError && !isValidPublic && !isValidPrivate) {
+      if (!key && !(id && token)) {
+        toast.error(t('cannotAccess'));
+      }
       router.replace('/unwrap');
     }
   }, [isLoading, isError, isValidPublic, isValidPrivate, router]);
@@ -84,10 +88,10 @@ export default function Showtime() {
     let timer: ReturnType<typeof setTimeout>;
     
     if (phase === UnwrapPhase.INTRO_TEXT) {
-      // Phase New -> 3: Intro Text (Display for ~2.5s total to give ample reading time)
+      // Phase New -> 3: Intro Text (Display for ~3.5s total to give ample reading time)
       timer = setTimeout(() => {
         setPhase(UnwrapPhase.ICONS_FLOAT);
-      }, 2500);
+      }, 3500);
     } else if (phase === UnwrapPhase.ICONS_FLOAT) {
       // Phase 3 -> 4: Icons Float (0.5s duration)
       // Slight delay to let the user settle into the "darkness" before magic starts
@@ -95,10 +99,10 @@ export default function Showtime() {
         setPhase(UnwrapPhase.RIBBON_EXPAND);
       }, 500);
     } else if (phase === UnwrapPhase.RIBBON_EXPAND) {
-      // Phase 4 -> 5: Ribbon Expand (1.75s animation duration)
+      // Phase 4 -> 5: Ribbon Expand (2s animation duration)
       timer = setTimeout(() => {
         setPhase(UnwrapPhase.VERTICAL_SPLIT);
-      }, 1950);
+      }, 2000);
     } else if (phase === UnwrapPhase.VERTICAL_SPLIT) {
       // Phase 5 -> 6: Vertical Line (1.75s animation duration)
       // Pause for effect (2600ms)
@@ -134,13 +138,19 @@ export default function Showtime() {
           />
       }
       
-      {phase !== UnwrapPhase.PREPARING_ALBUM && phase !== UnwrapPhase.SILENCE && (
+      {album && phase !== UnwrapPhase.PREPARING_ALBUM && phase !== UnwrapPhase.SILENCE && (
         <>
           {/* LAYER 1: The Curtains (Starts closed, then opens) */}
           <Curtains phase={phase}/>
           
           {/* LAYER 2: Intro Text (New Phase) */}
-          <IntroText phase={phase}/>
+          <IntroText
+            phase={phase}
+            owner={album.ownerName}
+            relationship={t('relationship.lover')}
+            customRelationship={album.customRelationship}
+            customRelationshipLocale={album.customRelationshipLocale}
+          />
           
           {/* LAYER 3: Floating Icons */}
           <FloatingIcons phase={phase}/>
