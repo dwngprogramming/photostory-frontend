@@ -5,7 +5,32 @@
     "signup": "Đăng ký",
     "openMenu": "Mở menu",
     "closeMenu": "Đóng menu",
-    "copyright": "© {year} Photostory. Tạo ra với ❤\uFE0F của Dũng Phạm để lưu giữ kỷ niệm."
+    "copyright": "© {year} Photostory. Tạo ra với ❤\uFE0F của Dũng Phạm để lưu giữ kỷ niệm.",
+    "cannotAccess": "Không thể truy cập. Vui lòng nhập lại mã code.",
+    "relationship" : {
+      "lover": "người yêu",
+      "boyfriend": "bạn trai",
+      "girlfriend": "bạn gái",
+      "partner": "đối tác",
+      "husband": "chồng",
+      "wife": "vợ",
+      "child": "con",
+      "children": "tụi con",
+      "son": "con trai",
+      "daughter": "con gái",
+      "friend": "bạn",
+      "family":  "gia đình",
+      "colleague": "đồng nghiệp",
+      "parent": "bố mẹ",
+      "father": "bố",
+      "mother": "mẹ",
+      "sibling": "anh chị em",
+      "brother": "anh trai",
+      "sister": "chị gái",
+      "friend_group": "nhóm bạn",
+      "best_friend": "bạn thân",
+      "myself": "chính mình"
+    }
   },
   "Landing": {
     "features": "Tính năng",
@@ -133,10 +158,26 @@
         "createNew": "Muốn tạo một album?",
         "signup": "Đăng ký ngay!",
         "notEmpty": "{code} không được để trống.",
-        "unexpectedError": "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau."
+        "unexpectedError": "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau.",
+        "pin": {
+          "title": "Nhập mã PIN của Album",
+          "description": "Album này được bảo vệ bằng mã PIN. Vui lòng nhập mã PIN gồm 6 chữ số để tiếp tục.",
+          "placeholder": "Nhập mã PIN ở đây",
+          "submit": "Xác nhận PIN"
+        }
       }
     },
     "Showtime": {
+      "animation": {
+        "prepare": {
+          "title": "Chuẩn bị Album...",
+          "description": "Album đang được chuẩn bị, bạn vui lòng đợi một chút nha ~"
+        },
+        "introText": {
+          "line1": "Một album đặc biệt, ",
+          "line2": "được tạo ra bởi {relationship} của bạn, {author}"
+        }
+      },
       "weather": {
         "sunny": "Nắng đẹp",
         "rainy": "Mưa rào",

@@ -5,7 +5,32 @@
     "signup": "Sign Up",
     "openMenu": "Open Menu",
     "closeMenu": "Close Menu",
-    "copyright": "© {year} Photostory. Made with ❤\uFE0F by Dung Pham for preserving memories."
+    "copyright": "© {year} Photostory. Made with ❤\uFE0F by Dung Pham for preserving memories.",
+    "cannotAccess": "Cannot access. Please enter code again.",
+    "relationship" : {
+      "lover": "lover",
+      "boyfriend": "boyfriend",
+      "girlfriend": "girlfriend",
+      "partner": "partner",
+      "husband": "husband",
+      "wife": "wife",
+      "child": "child",
+      "children": "children",
+      "son": "son",
+      "daughter": "daughter",
+      "friend": "friend",
+      "family":  "family",
+      "colleague": "colleague",
+      "parent": "parent",
+      "father": "father",
+      "mother": "mother",
+      "sibling": "sibling",
+      "brother": "brother",
+      "sister": "sister",
+      "friend_group": "friend group",
+      "best_friend": "best friend",
+      "myself": "myself"
+    }
   },
   "Landing": {
     "features": "Features",
@@ -133,10 +158,26 @@
         "createNew": "Want to create one?",
         "signup": "Sign up now!",
         "notEmpty": "{code} cannot be empty.",
-        "unexpectedError": "An unexpected error occurred. Please try again later."
+        "unexpectedError": "An unexpected error occurred. Please try again later.",
+        "pin": {
+          "title": "Enter Album PIN",
+          "description": "This album is protected with a PIN. Please enter the 6-digit PIN to access the album.",
+          "placeholder": "Enter PIN here",
+          "submit": "Submit PIN"
+        }
       }
     },
     "Showtime": {
+      "animation": {
+        "prepare": {
+          "title": "Preparing Album...",
+          "description": "Setting up your beautiful photo-story experience. Please wait a moment ~"
+        },
+        "introText": {
+          "line1": "This is a special album, ",
+          "line2": "created by your {relationship}, {author}"
+        }
+      },
       "weather": {
         "sunny": "Sunny",
         "rainy": "Rainy",

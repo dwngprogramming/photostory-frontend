@@ -12,9 +12,11 @@ import FloatingIcons from "@/components/Application/Showtime/FloatingIcons";
 import RibbonEffects from "@/components/Application/Showtime/RibbonEffect";
 import {Book} from "lucide-react";
 import {useTranslations} from "next-intl";
-import {useGetAlbumById} from "@/hooks/api/useAlbums";
+import {useGetPermissionAlbum, useGetPublicAlbum} from "@/hooks/api/useAlbums";
 import PreparingAlbum from "@/components/Application/Showtime/PreparingAlbum";
 import GlassPlayer from "@/components/Application/Showtime/Album/Plugin/GlassPlayer";
+import {useAppSelector} from "@/libs/redux/hook";
+import {toast} from "sonner";
 
 export default function Showtime() {
   const params = useParams();
@@ -23,19 +25,38 @@ export default function Showtime() {
   const [phase, setPhase] = useState<UnwrapPhase>(UnwrapPhase.PREPARING_ALBUM);
   const t = useTranslations('Common');
   const id = params.id as string;
-  const token = searchParams.get('token') as string;
+  const key = searchParams.get("key")?.toString();
+  const {token} = useAppSelector(state => state.permissionResource);
   const startTimeRef = useRef(Date.now());
-  const {data: album, isError, isLoading} = useGetAlbumById(id, token);
+  
+  const {data: publicAlbum, isError: isPublicError, isLoading: isPublicLoading} = useGetPublicAlbum(key);
+  const {data: permissionAlbum, isError: isPermissionError, isLoading: isPermissionLoading} = useGetPermissionAlbum(id);
+  
+  const isLoading = isPublicLoading || isPermissionLoading;
+  const isError = isPublicError || isPermissionError;
+  const album = publicAlbum ?? permissionAlbum ?? null;
+  
+  const isValidPublic = !!(key && publicAlbum);
+  const isValidPrivate = !!(id && token && permissionAlbum);
+  
+  useEffect(() => {
+    if (!isLoading && !isError && !isValidPublic && !isValidPrivate) {
+      if (!key && !(id && token)) {
+        toast.error(t('cannotAccess'));
+      }
+      router.replace('/unwrap');
+    }
+  }, [isLoading, isError, isValidPublic, isValidPrivate, router]);
   
   // Validate album existence (In PREPARING_ALBUM phase)
   useEffect(() => {
     if (phase !== UnwrapPhase.PREPARING_ALBUM) return;
     
-    if (isError || (!id || !token)) {
+    if (isError) {
       router.replace('/unwrap');
       return;
     }
-    
+
     if (isLoading || !album) return;
     
     const now = Date.now();
@@ -49,7 +70,7 @@ export default function Showtime() {
     }, remainingDelay);
     
     return () => clearTimeout(timer);
-  }, [phase, isLoading, album, isError, id, token, router]);
+  }, [phase, isLoading, album, isError, router]);
   
   // SILENCE -> INTRO
   useEffect(() => {
@@ -67,10 +88,10 @@ export default function Showtime() {
     let timer: ReturnType<typeof setTimeout>;
     
     if (phase === UnwrapPhase.INTRO_TEXT) {
-      // Phase New -> 3: Intro Text (Display for ~2.5s total to give ample reading time)
+      // Phase New -> 3: Intro Text (Display for ~3.5s total to give ample reading time)
       timer = setTimeout(() => {
         setPhase(UnwrapPhase.ICONS_FLOAT);
-      }, 2500);
+      }, 3500);
     } else if (phase === UnwrapPhase.ICONS_FLOAT) {
       // Phase 3 -> 4: Icons Float (0.5s duration)
       // Slight delay to let the user settle into the "darkness" before magic starts
@@ -78,10 +99,10 @@ export default function Showtime() {
         setPhase(UnwrapPhase.RIBBON_EXPAND);
       }, 500);
     } else if (phase === UnwrapPhase.RIBBON_EXPAND) {
-      // Phase 4 -> 5: Ribbon Expand (1.75s animation duration)
+      // Phase 4 -> 5: Ribbon Expand (2s animation duration)
       timer = setTimeout(() => {
         setPhase(UnwrapPhase.VERTICAL_SPLIT);
-      }, 1950);
+      }, 2000);
     } else if (phase === UnwrapPhase.VERTICAL_SPLIT) {
       // Phase 5 -> 6: Vertical Line (1.75s animation duration)
       // Pause for effect (2600ms)
@@ -117,13 +138,19 @@ export default function Showtime() {
           />
       }
       
-      {phase !== UnwrapPhase.PREPARING_ALBUM && phase !== UnwrapPhase.SILENCE && (
+      {album && phase !== UnwrapPhase.PREPARING_ALBUM && phase !== UnwrapPhase.SILENCE && (
         <>
           {/* LAYER 1: The Curtains (Starts closed, then opens) */}
           <Curtains phase={phase}/>
           
           {/* LAYER 2: Intro Text (New Phase) */}
-          <IntroText phase={phase}/>
+          <IntroText
+            phase={phase}
+            owner={album.ownerName}
+            relationship={t('relationship.lover')}
+            customRelationship={album.customRelationship}
+            customRelationshipLocale={album.customRelationshipLocale}
+          />
           
           {/* LAYER 3: Floating Icons */}
           <FloatingIcons phase={phase}/>
