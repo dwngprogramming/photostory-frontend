@@ -238,6 +238,9 @@ const UnwrapAlbum = () => {
                 <p className="text-sm text-stone-500 dark:text-stone-400 text-center animate-fade-in">
                   {t('example')}: <span
                   className="font-mono bg-stone-100 dark:bg-stone-800 px-1.5 py-0.5 rounded">FROM-DUNGPHAM-WITH-LOVE</span>
+                </p>
+                
+                <p className="text-sm text-stone-500 dark:text-stone-400 text-center animate-fade-in mt-2">
                   Password (Private Album): <span className="font-mono bg-stone-100 dark:bg-stone-800 px-1.5 py-0.5 rounded">123456</span>
                 </p>
                 
