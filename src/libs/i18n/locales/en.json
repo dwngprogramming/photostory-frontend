@@ -159,6 +159,7 @@
         "signup": "Sign up now!",
         "notEmpty": "{code} cannot be empty.",
         "unexpectedError": "An unexpected error occurred. Please try again later.",
+        "codeLength": "Code must be at least 5 characters and at most 30 characters!",
         "pin": {
           "title": "Enter Album PIN",
           "description": "This album is protected with a PIN. Please enter the 6-digit PIN to access the album.",

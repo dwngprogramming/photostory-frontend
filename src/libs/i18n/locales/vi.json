@@ -159,6 +159,7 @@
         "signup": "Đăng ký ngay!",
         "notEmpty": "{code} không được để trống.",
         "unexpectedError": "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại sau.",
+        "codeLength": "Mã code phải có ít nhất 5 ký tự và tối đa 30 ký tự!",
         "pin": {
           "title": "Nhập mã PIN của Album",
           "description": "Album này được bảo vệ bằng mã PIN. Vui lòng nhập mã PIN gồm 6 chữ số để tiếp tục.",

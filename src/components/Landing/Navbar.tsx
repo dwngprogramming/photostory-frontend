@@ -106,11 +106,11 @@ const Navbar = ({navLinks}: {navLinks: NavLink[]}) => {
               <hr className="border-stone-200 dark:border-stone-800"/>
               <a href="#"
                  className="text-lg font-medium text-stone-800 dark:text-stone-100 hover:text-amber-500 dark:hover:text-amber-400">
-                Login
+                {tCommon('login')}
               </a>
               <button
                 className="bg-amber-500 text-white px-6 py-3 rounded-lg hover:bg-amber-600 transition-all duration-200 font-semibold shadow-sm w-full">
-                Get Started
+                {tLanding('getStarted')}
               </button>
             </div>
           </div>
