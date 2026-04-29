@@ -1,14 +1,16 @@
 "use client"
 
-import {useEffect, useLayoutEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {Book, Menu, X} from "lucide-react";
 import {NavLink} from "@/types";
 import ThemeToggle from "@/components/Common/ThemeToggle";
 import {useTranslations} from "next-intl";
+import {useDemoNotify} from "@/contexts/demo-notify-provider";
 
-const Navbar = ({navLinks}: {navLinks: NavLink[]}) => {
+const Navbar = ({navLinks}: { navLinks: NavLink[] }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const {openDemoModal} = useDemoNotify();
   const tLanding = useTranslations('Landing');
   const tCommon = useTranslations('Common');
   const navbarRef = useRef<HTMLDivElement>(null);
@@ -52,13 +54,15 @@ const Navbar = ({navLinks}: {navLinks: NavLink[]}) => {
         
         {/* Desktop Actions */}
         <div className="hidden md:flex items-center gap-4">
-          <a href="#"
-             className="text-stone-600 dark:text-stone-300 hover:text-amber-500 dark:hover:text-amber-400 transition-colors duration-200 font-medium"
+          <button
+            onClick={openDemoModal}
+            className="text-stone-600 px-2 dark:text-stone-300 hover:text-amber-500 dark:hover:text-amber-400 transition-colors duration-200 font-medium"
           >
             {tCommon('login')}
-          </a>
+          </button>
           <ThemeToggle/>
           <button
+            onClick={openDemoModal}
             className="bg-amber-500 text-white px-6 py-2.5 rounded-lg hover:bg-amber-600 hover:scale-105 transition-all duration-200 font-semibold shadow-sm focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 focus:outline-none">
             {tLanding('getStarted')}
           </button>
@@ -111,6 +115,7 @@ const Navbar = ({navLinks}: {navLinks: NavLink[]}) => {
                 {tCommon('login')}
               </a>
               <button
+                onClick={openDemoModal}
                 className="bg-amber-500 text-white px-6 py-3 rounded-lg hover:bg-amber-600 transition-all duration-200 font-semibold shadow-sm w-full">
                 {tLanding('getStarted')}
               </button>

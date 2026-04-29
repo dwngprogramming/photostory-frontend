@@ -6,10 +6,12 @@ import {useScrollAnimation} from '@/hooks/useScrollAnimation';
 import {ArrowRight, Play} from 'lucide-react';
 import {useTranslations} from "next-intl";
 import {Link} from "@/libs/i18n/navigation";
+import {useDemoNotify} from "@/contexts/demo-notify-provider";
 
 const Hero = () => {
   const {ref, inView} = useScrollAnimation({initialInView: true})
   const t = useTranslations('Landing');
+  const {openDemoModal} = useDemoNotify();
   
   return (
     <section id="hero"
@@ -35,6 +37,7 @@ const Hero = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
             <button
+              onClick={openDemoModal}
               className="bg-amber-500 text-white px-8 py-4 rounded-xl font-semibold hover:bg-amber-600 hover:scale-105 shadow-md hover:shadow-soft-lg transition-all duration-200 flex items-center justify-center gap-2">
               {t('startFree')} <ArrowRight className="w-5 h-5"/>
             </button>
