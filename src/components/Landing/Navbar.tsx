@@ -1,6 +1,6 @@
 "use client"
 
-import {useEffect, useState} from "react";
+import {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Book, Menu, X} from "lucide-react";
 import {NavLink} from "@/types";
 import ThemeToggle from "@/components/Common/ThemeToggle";
@@ -11,6 +11,7 @@ const Navbar = ({navLinks}: {navLinks: NavLink[]}) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const tLanding = useTranslations('Landing');
   const tCommon = useTranslations('Common');
+  const navbarRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
     const handleScroll = () => {
@@ -22,6 +23,7 @@ const Navbar = ({navLinks}: {navLinks: NavLink[]}) => {
   
   return (
     <nav
+      ref={navbarRef}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 h-16 md:h-20 flex items-center ${
         isScrolled
           ? 'bg-white/90 dark:bg-stone-950/90 backdrop-blur-md shadow-sm border-b border-stone-200 dark:border-stone-800'
@@ -106,11 +108,11 @@ const Navbar = ({navLinks}: {navLinks: NavLink[]}) => {
               <hr className="border-stone-200 dark:border-stone-800"/>
               <a href="#"
                  className="text-lg font-medium text-stone-800 dark:text-stone-100 hover:text-amber-500 dark:hover:text-amber-400">
-                Login
+                {tCommon('login')}
               </a>
               <button
                 className="bg-amber-500 text-white px-6 py-3 rounded-lg hover:bg-amber-600 transition-all duration-200 font-semibold shadow-sm w-full">
-                Get Started
+                {tLanding('getStarted')}
               </button>
             </div>
           </div>
