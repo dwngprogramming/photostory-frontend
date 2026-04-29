@@ -33,7 +33,7 @@
     },
     "noticeBar": {
       "nowDemoOnly": {
-        "message": "Trang web của chúng tôi hiện đang trong quá trình xây dựng. Trong thời gian chờ đợi, chúng tôi mời bạn khám phá bản demo để trải nghiệm các tính năng của photo-story. Cảm ơn vì sự quan tâm của bạn dành cho trang web này.",
+        "message": "Trang web của chúng tôi hiện đang trong quá trình xây dựng. Trong thời gian chờ đợi, mời bạn khám phá bản demo để trải nghiệm các tính năng của photo-story. Cảm ơn vì sự quan tâm của bạn.",
         "linkText": "Xem Demo"
       }
     }
