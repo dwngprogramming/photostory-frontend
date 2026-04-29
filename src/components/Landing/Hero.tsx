@@ -8,12 +8,12 @@ import {useTranslations} from "next-intl";
 import {Link} from "@/libs/i18n/navigation";
 
 const Hero = () => {
-  const {ref, inView} = useScrollAnimation();
+  const {ref, inView} = useScrollAnimation({initialInView: true})
   const t = useTranslations('Landing');
   
   return (
     <section id="hero"
-             className="relative pt-32 pb-20 md:pb-32 px-4 overflow-hidden bg-gradient-to-br from-amber-50 via-orange-50 to-stone-50 dark:from-stone-900 dark:via-stone-900 dark:to-stone-950 transition-colors duration-300">
+             className="relative pt-12 pb-20 md:pb-32 px-4 overflow-hidden bg-linear-to-br from-amber-50 via-orange-50 to-stone-50 dark:from-stone-900 dark:via-stone-900 dark:to-stone-950 transition-colors duration-300">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24 lg:gap-20 items-center">
         
         {/* Left Column */}

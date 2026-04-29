@@ -33,6 +33,7 @@ export interface UseScrollAnimationOptions {
   threshold?: number;
   triggerOnce?: boolean;
   delay?: number;
+  initialInView?: boolean;
 }
 
 export interface User {

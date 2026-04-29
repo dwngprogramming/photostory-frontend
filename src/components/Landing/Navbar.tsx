@@ -1,6 +1,6 @@
 "use client"
 
-import {useEffect, useState} from "react";
+import {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Book, Menu, X} from "lucide-react";
 import {NavLink} from "@/types";
 import ThemeToggle from "@/components/Common/ThemeToggle";
@@ -11,6 +11,7 @@ const Navbar = ({navLinks}: {navLinks: NavLink[]}) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const tLanding = useTranslations('Landing');
   const tCommon = useTranslations('Common');
+  const navbarRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
     const handleScroll = () => {
@@ -22,6 +23,7 @@ const Navbar = ({navLinks}: {navLinks: NavLink[]}) => {
   
   return (
     <nav
+      ref={navbarRef}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 h-16 md:h-20 flex items-center ${
         isScrolled
           ? 'bg-white/90 dark:bg-stone-950/90 backdrop-blur-md shadow-sm border-b border-stone-200 dark:border-stone-800'

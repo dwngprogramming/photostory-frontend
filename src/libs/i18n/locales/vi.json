@@ -30,6 +30,12 @@
       "friend_group": "nhóm bạn",
       "best_friend": "bạn thân",
       "myself": "chính mình"
+    },
+    "noticeBar": {
+      "nowDemoOnly": {
+        "message": "Trang web của chúng tôi hiện đang trong quá trình xây dựng. Trong thời gian chờ đợi, chúng tôi mời bạn khám phá bản demo để trải nghiệm các tính năng của photo-story. Cảm ơn vì sự quan tâm của bạn dành cho trang web này.",
+        "linkText": "Xem Demo"
+      }
     }
   },
   "Landing": {

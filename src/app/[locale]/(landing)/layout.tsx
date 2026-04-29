@@ -3,6 +3,7 @@ import {FooterSection, NavLink} from "@/types";
 import Navbar from "@/components/Landing/Navbar";
 import Footer from "@/components/Landing/Footer";
 import {useTranslations} from "next-intl";
+import NoticeBar from "@/components/Common/NoticeBar";
 
 export default function LandingLayout({children}: { children: React.ReactNode }) {
   const t = useTranslations('Landing');
@@ -43,7 +44,10 @@ export default function LandingLayout({children}: { children: React.ReactNode })
       <div
         className="min-h-screen flex flex-col font-sans selection:bg-amber-200 dark:selection:bg-amber-900 selection:text-amber-900 dark:selection:text-amber-100">
         <Navbar navLinks={navLinks}/>
-        <main className="flex-grow">
+        <div className="sticky top-16 md:top-20 z-40">
+          <NoticeBar page="landing"/>
+        </div>
+        <main className="grow pt-16 md:pt-20">
           {children}
         </main>
         <Footer footerSections={footerSections}/>
