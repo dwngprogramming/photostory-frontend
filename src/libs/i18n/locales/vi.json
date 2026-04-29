@@ -5,6 +5,7 @@
     "signup": "Đăng ký",
     "openMenu": "Mở menu",
     "closeMenu": "Đóng menu",
+    "watchLater": "Để sau",
     "copyright": "© {year} Photostory. Tạo ra với ❤\uFE0F của Dũng Phạm để lưu giữ kỷ niệm.",
     "cannotAccess": "Không thể truy cập. Vui lòng nhập lại mã code.",
     "relationship" : {
@@ -33,7 +34,8 @@
     },
     "noticeBar": {
       "nowDemoOnly": {
-        "message": "Trang web của chúng tôi hiện đang trong quá trình xây dựng. Trong thời gian chờ đợi, mời bạn khám phá bản demo để trải nghiệm các tính năng của photo-story. Cảm ơn vì sự quan tâm của bạn.",
+        "title": "Tính năng đang phát triển",
+        "message": "Trang web của chúng tôi hiện đang trong quá trình phát triển. Trong thời gian chờ đợi, mời bạn khám phá bản demo để trải nghiệm các tính năng của photo-story. Cảm ơn vì sự quan tâm của bạn.",
         "linkText": "Xem Demo"
       }
     }
