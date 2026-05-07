@@ -1,27 +1,60 @@
 import React, {useEffect, useState} from "react";
 import {useTheme} from "next-themes";
 import {Moon, Sun} from "lucide-react";
+import {twMerge} from "tailwind-merge";
+import {clsx} from "clsx";
 
-const ThemeToggle: React.FC = () => {
-  // Thay đổi logic: dùng setTheme của next-themes
+interface ThemeToggleProps {
+  className?: string;
+}
+
+const ThemeToggle: React.FC<ThemeToggleProps> = ({ className }) => {
   const {theme, setTheme} = useTheme();
   const [mounted, setMounted] = useState(false);
   
   // Hydration fix
   useEffect(() => setMounted(true), []);
-  if (!mounted) return <div className="w-10 h-10"/>;
+  if (!mounted) return <div className={twMerge("text-base w-[3.5em] h-[2em] shrink-0", className)}/>;
+  
+  const isDark = theme === 'dark';
   
   return (
     <button
-      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      className="w-10 h-10 cursor-pointer rounded-lg bg-stone-200 dark:bg-stone-700 text-stone-600 dark:text-stone-300 hover:bg-stone-300 dark:hover:bg-stone-600 transition-all duration-200 flex items-center justify-center focus:ring-2 focus:ring-amber-400 focus:outline-none"
-      aria-label="Toggle theme"
-    >
-      {theme === 'dark' ? (
-        <Sun className="w-5 h-5"/>
-      ) : (
-        <Moon className="w-5 h-5"/>
+      onClick={() => setTheme(isDark ? 'light' : 'dark')}
+      className={twMerge(
+        "text-base relative flex items-center w-[3.5em] h-[2em] shrink-0 rounded-full bg-stone-300 dark:bg-stone-700 p-[0.25em] transition-colors duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-inner",
+        className
       )}
+      aria-label="Toggle theme"
+      role="switch"
+      aria-checked={isDark}
+    >
+      {/* Background Icons */}
+      <div className="flex justify-between items-center w-full h-full px-[0.125em] z-0">
+        <Sun className="w-[1em] h-[1em] text-stone-500/70 dark:text-stone-400/70" />
+        <Moon className="w-[1em] h-[1em] text-stone-500/70 dark:text-stone-400/70" />
+      </div>
+      
+      {/* Sliding Thumb */}
+      <div
+        className={clsx(
+          "absolute top-[0.25em] left-[0.25em] w-[1.5em] h-[1.5em] rounded-full shadow-[0_2px_5px_rgba(0,0,0,0.15)] dark:shadow-none transition-transform duration-300 ease-in-out flex items-center justify-center z-10",
+          isDark ? "translate-x-[1.5em] bg-stone-800" : "translate-x-0 bg-white"
+        )}
+      >
+        <Sun 
+          className={clsx(
+            "absolute w-[1em] h-[1em] text-amber-500 transition-all duration-300",
+            isDark ? "opacity-0 -rotate-90 scale-50" : "opacity-100 rotate-0 scale-100"
+          )} 
+        />
+        <Moon 
+          className={clsx(
+            "absolute w-[1em] h-[1em] text-amber-300 transition-all duration-300",
+            isDark ? "opacity-100 rotate-0 scale-100" : "opacity-0 rotate-90 scale-50"
+          )} 
+        />
+      </div>
     </button>
   );
 };
