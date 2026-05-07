@@ -11,7 +11,7 @@ import {useTranslations} from "next-intl";
 
 export default function Landing() {
   const tEverything = useTranslations('Landing.everythingYouNeed');
-  const tCreateYourAlbum = useTranslations('Landing.createYourAlbum');
+  const tCreateYourAlbum = useTranslations('Landing.createYourAlbum')
   
   const features: Feature[] = [
     {

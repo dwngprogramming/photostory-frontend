@@ -1,5 +1,5 @@
 import axios, {AxiosInstance, CreateAxiosDefaults} from "axios";
-import Cookies from 'js-cookie';
+import {getLocale} from "@/utils/getLocale";
 
 const BASE_API_URL = process.env.NEXT_PUBLIC_API_V1_URL;
 
@@ -32,7 +32,7 @@ const createAxiosClient = (options: CreateAxiosDefaults = {}): AxiosInstance => 
     (config) => {
       if (typeof window !== 'undefined') {
         // Add locale for every request
-        const currentLocale = Cookies.get('NEXT_LOCALE') || 'vi';
+        const currentLocale = getLocale() || 'vi';
         if (config.headers) {
           config.headers['Accept-Language'] = currentLocale;
         }

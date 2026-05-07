@@ -1,7 +1,7 @@
 import {generalErrorMessage, publicAxiosInstance} from "@/libs/axios/axiosInstance";
 import axios, {AxiosRequestConfig} from "axios";
 import {toast} from "sonner";
-import Cookies from "js-cookie";
+import {getLocale} from "@/utils/getLocale";
 
 publicAxiosInstance.interceptors.request.use(
   (config) => {
@@ -22,7 +22,7 @@ publicAxiosInstance.interceptors.response.use(
   (error) => {
     let locale = 'vi'; // Default
     if (typeof window !== 'undefined') {
-      locale = document.documentElement.lang || Cookies.get('NEXT_LOCALE') || 'vi';
+      locale = document.documentElement.lang || getLocale() || 'vi';
     }
     
     const t = generalErrorMessage[locale] || generalErrorMessage['vi'];

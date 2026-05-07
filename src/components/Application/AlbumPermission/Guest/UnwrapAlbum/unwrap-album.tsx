@@ -4,6 +4,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {Book, PackageOpen, Sparkles, X} from 'lucide-react';
 import FloatingDecorations from '@/components/Application/AlbumPermission/Guest/UnwrapAlbum/FloatingDecorations';
 import ThemeToggle from '@/components/Common/ThemeToggle';
+import LanguageToggle from '@/components/Common/LanguageToggle';
 import Link from "next/link";
 import {useTranslations} from "next-intl";
 import {SharingResponse, UnwrapPhase} from "@/types";
@@ -55,6 +56,11 @@ const UnwrapAlbum = () => {
   };
   
   const startUnwrap = () => {
+    if (code.length < 5 || code.length > 30) {
+      toast.error(t('codeLength'));
+      return;
+    }
+    
     if (!code.trim()) {
       toast.error(t('notEmpty', {code: "Code"}));
       return;
@@ -165,12 +171,13 @@ const UnwrapAlbum = () => {
         transition={{duration: 1, ease: "easeInOut"}}
       >
         <div
-          className="min-h-screen w-full relative overflow-hidden bg-gradient-to-br from-amber-50 via-orange-50 to-stone-50 dark:from-stone-900 dark:via-stone-900 dark:to-stone-950 transition-colors duration-500">
+          className="min-h-screen w-full relative overflow-hidden bg-linear-to-br from-amber-50 via-orange-50 to-stone-50 dark:from-stone-900 dark:via-stone-900 dark:to-stone-950 transition-colors duration-500">
           
           {/* DECORATIVE BACKGROUND LAYER */}
           <FloatingDecorations/>
           
-          <div className="fixed top-6 right-6 z-50">
+          <div className="fixed top-6 right-6 z-50 flex items-center gap-3">
+            <LanguageToggle />
             <ThemeToggle/>
           </div>
           
@@ -213,8 +220,8 @@ const UnwrapAlbum = () => {
                   <input
                     type="text"
                     value={code}
-                    min={5}
-                    max={20}
+                    minLength={5}
+                    maxLength={30}
                     onChange={(e) => {
                       setCode(e.target.value);
                       if (phase !== UnwrapPhase.LOADING) setPhase(UnwrapPhase.IDLE);

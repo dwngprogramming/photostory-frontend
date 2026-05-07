@@ -3,6 +3,8 @@ import {FooterSection, NavLink} from "@/types";
 import Navbar from "@/components/Landing/Navbar";
 import Footer from "@/components/Landing/Footer";
 import {useTranslations} from "next-intl";
+import NoticeBar from "@/components/Common/NoticeBar";
+import {DemoNotifyProvider} from "@/contexts/demo-notify-provider";
 
 export default function LandingLayout({children}: { children: React.ReactNode }) {
   const t = useTranslations('Landing');
@@ -40,14 +42,19 @@ export default function LandingLayout({children}: { children: React.ReactNode })
   
   return (
     <div className="bg-stone-50 dark:bg-stone-950 text-stone-800 dark:text-stone-100 transition-colors duration-300">
-      <div
-        className="min-h-screen flex flex-col font-sans selection:bg-amber-200 dark:selection:bg-amber-900 selection:text-amber-900 dark:selection:text-amber-100">
-        <Navbar navLinks={navLinks}/>
-        <main className="flex-grow">
-          {children}
-        </main>
-        <Footer footerSections={footerSections}/>
-      </div>
+      <DemoNotifyProvider>
+        <div
+          className="min-h-screen flex flex-col font-sans selection:bg-amber-200 dark:selection:bg-amber-900 selection:text-amber-900 dark:selection:text-amber-100">
+          <Navbar navLinks={navLinks}/>
+          <div className="sticky top-16 md:top-20 z-40">
+            <NoticeBar page="landing"/>
+          </div>
+          <main className="grow pt-16 md:pt-20">
+            {children}
+          </main>
+          <Footer footerSections={footerSections}/>
+        </div>
+      </DemoNotifyProvider>
     </div>
   )
 }
