@@ -163,6 +163,7 @@
         "unwrapping": "Unwrapping...",
         "albumReady": "Album is Ready!",
         "example": "Example code",
+        "exPin": "Example PIN",
         "createNew": "Want to create one?",
         "signup": "Sign up now!",
         "notEmpty": "{code} cannot be empty.",
