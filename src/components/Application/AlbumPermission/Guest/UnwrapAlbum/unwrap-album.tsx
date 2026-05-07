@@ -4,6 +4,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {Book, PackageOpen, Sparkles, X} from 'lucide-react';
 import FloatingDecorations from '@/components/Application/AlbumPermission/Guest/UnwrapAlbum/FloatingDecorations';
 import ThemeToggle from '@/components/Common/ThemeToggle';
+import LanguageToggle from '@/components/Common/LanguageToggle';
 import Link from "next/link";
 import {useTranslations} from "next-intl";
 import {SharingResponse, UnwrapPhase} from "@/types";
@@ -175,7 +176,8 @@ const UnwrapAlbum = () => {
           {/* DECORATIVE BACKGROUND LAYER */}
           <FloatingDecorations/>
           
-          <div className="fixed top-6 right-6 z-50">
+          <div className="fixed top-6 right-6 z-50 flex items-center gap-3">
+            <LanguageToggle />
             <ThemeToggle/>
           </div>
           
