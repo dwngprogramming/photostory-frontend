@@ -5,7 +5,6 @@ const handleProxy = createMiddleware(routing);
 
 // Export default function (Chuẩn Next.js Proxy)
 export default function proxy(req: any) {
-  console.log('Current URL Locale:', req.nextUrl.locale);
   return handleProxy(req);
 }
 
