@@ -12,7 +12,7 @@ export function DemoNotifyProvider({children}: { children: React.ReactNode }) {
   
   const handleDemo = () => {
     setIsOpen(false);
-    router.push("/unwrap");
+    router.push("/demo/unwrap");
   };
   
   return (

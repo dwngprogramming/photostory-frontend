@@ -44,7 +44,7 @@ export default function Showtime() {
       if (!key && !(id && token)) {
         toast.error(t('cannotAccess'));
       }
-      router.replace('/unwrap');
+      router.replace('/demo/unwrap');
     }
   }, [isLoading, isError, isValidPublic, isValidPrivate, router]);
   
@@ -53,7 +53,7 @@ export default function Showtime() {
     if (phase !== UnwrapPhase.PREPARING_ALBUM) return;
     
     if (isError) {
-      router.replace('/unwrap');
+      router.replace('/demo/unwrap');
       return;
     }
 

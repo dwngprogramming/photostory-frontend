@@ -19,7 +19,7 @@ import {useQueryClient} from "@tanstack/react-query";
 import {useAppDispatch} from "@/libs/redux/hook";
 import {setPermissionResource} from "@/libs/redux/features/permissionResourceSlice";
 
-const UnwrapAlbum = () => {
+const DemoUnwrapAlbum = () => {
   const [code, setCode] = useState('');
   const [submittedCode, setSubmittedCode] = useState('');
   const [isPinModalOpen, setIsPinModalOpen] = useState(false);
@@ -242,6 +242,15 @@ const UnwrapAlbum = () => {
                   )}
                 </div>
                 
+                <p className="text-sm text-stone-500 dark:text-stone-400 text-center animate-fade-in">
+                  {t('example')}: <span
+                  className="font-mono bg-stone-100 dark:bg-stone-800 px-1.5 py-0.5 rounded">FROM-DUNGPHAM-WITH-LOVE</span>
+                </p>
+                
+                <p className="text-sm text-stone-500 dark:text-stone-400 text-center animate-fade-in mt-2">
+                  {t('exPin')}: <span className="font-mono bg-stone-100 dark:bg-stone-800 px-1.5 py-0.5 rounded">123456</span>
+                </p>
+                
                 <button
                   onClick={startUnwrap}
                   disabled={phase !== UnwrapPhase.IDLE}
@@ -265,14 +274,6 @@ const UnwrapAlbum = () => {
                       )
                   }
                 </button>
-                
-                <p className="text-center text-sm md:text-base text-stone-600 dark:text-stone-300">
-                  {t('createNew')}
-                  <Link href="#"
-                        className="ml-1 text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 font-medium underline underline-offset-4 transition-colors">
-                    {t('signup')}
-                  </Link>
-                </p>
               
               </div>
               
@@ -304,4 +305,4 @@ const UnwrapAlbum = () => {
   );
 };
 
-export default UnwrapAlbum;
+export default DemoUnwrapAlbum;
