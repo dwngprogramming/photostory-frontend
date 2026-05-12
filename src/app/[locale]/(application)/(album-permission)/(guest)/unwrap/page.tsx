@@ -3,8 +3,8 @@ import UnwrapAlbum from "@/components/Application/AlbumPermission/Guest/UnwrapAl
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
-  title: "(Demo) Unwrap Your Photostory | Photostory",
-  description: "(Demo) Unwrap your photostory by enter unique code sent to you",
+  title: "Unwrap Your Photostory | Photostory",
+  description: "Unwrap your photostory by enter unique code sent to you",
 };
 
 export default function UnwrapAlbumPage() {
