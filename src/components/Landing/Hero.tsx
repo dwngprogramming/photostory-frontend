@@ -41,7 +41,7 @@ const Hero = () => {
               className="bg-amber-500 text-white px-8 py-4 rounded-xl font-semibold hover:bg-amber-600 hover:scale-105 shadow-md hover:shadow-soft-lg transition-all duration-200 flex items-center justify-center gap-2">
               {t('startFree')} <ArrowRight className="w-5 h-5"/>
             </button>
-            <Link href="/unwrap" className="block w-fit">
+            <Link href="/demo/unwrap" className="block w-fit">
               <button
                 className="border-2 border-amber-400 text-amber-600 dark:text-amber-400 px-8 py-4 rounded-xl font-semibold hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-all duration-200 flex items-center justify-center gap-2">
                 <Play className="w-5 h-5"/> {t('viewDemo')}

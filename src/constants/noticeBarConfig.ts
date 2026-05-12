@@ -30,7 +30,7 @@ export const NOTICE_BAR_CONFIG: NoticeBar[] = [
     closable: true,
     message: "nowDemoOnly.message",
     links: [
-      {label: "nowDemoOnly.linkText", href: "/unwrap"},
+      {label: "nowDemoOnly.linkText", href: "/demo/unwrap"},
     ],
   },
 ];
