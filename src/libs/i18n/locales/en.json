@@ -38,7 +38,8 @@
         "message": "Our website is currently under development. In the meantime, we invite you to explore the demo to experience the features of photo-story. Thank you for your interest in this website.",
         "linkText": "View Demo"
       }
-    }
+    },
+    "close": "Close"
   },
   "Landing": {
     "features": "Features",
@@ -190,6 +191,40 @@
           "title": "Couldn't load your albums",
           "description": "Check your connection and try again.",
           "retry": "Try again"
+        },
+        "actions": {
+          "menu": "Actions for album {title}",
+          "share": "Share",
+          "copyCode": "Copy share code",
+          "makePrivate": "Make private",
+          "makePublic": "Make public",
+          "delete": "Delete album",
+          "codeCopied": "Share code copied.",
+          "copyFailed": "Couldn't copy. Select the code and copy it manually.",
+          "madePrivate": "“{title}” is now private.",
+          "madePublic": "“{title}” is now public."
+        },
+        "share": {
+          "title": "Share album",
+          "codeLabel": "Unwrap code",
+          "copy": "Copy",
+          "copied": "Copied",
+          "copyFailed": "Couldn't copy. Select the code and copy it manually.",
+          "withPin": "This album has a PIN. Send the PIN to the recipient too, ideally separately from the code.",
+          "withoutPin": "This album has no PIN: anyone with this code can open it.",
+          "howTo": "The recipient enters this code on the Unwrap page to open the album.",
+          "openUnwrap": "Open Unwrap page",
+          "notShared": "This album has no share code yet.",
+          "createCode": "Create share code",
+          "createComingSoon": "Creating share codes is still in development."
+        },
+        "delete": {
+          "title": "Delete album?",
+          "description": "<b>{title}</b> and all of its photos and stories will be deleted. This can't be undone.",
+          "codeWarning": "Its share code will stop working; recipients won't be able to open it anymore.",
+          "confirm": "Delete album",
+          "cancel": "Cancel",
+          "done": "Deleted “{title}”."
         }
       },
       "sharedWithMe": "Shared With Me",

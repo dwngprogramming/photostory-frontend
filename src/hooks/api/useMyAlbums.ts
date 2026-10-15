@@ -1,4 +1,4 @@
-import {useQuery} from "@tanstack/react-query";
+import {useQuery, useQueryClient} from "@tanstack/react-query";
 import {Album} from "@/types";
 import {INITIAL_ALBUMS} from "@/mock_data/constants";
 
@@ -16,9 +16,25 @@ const fetchMyAlbumsMock = async (): Promise<Album[]> => {
   return INITIAL_ALBUMS;
 };
 
+const MY_ALBUMS_KEY = ['my-albums'];
+
 export const useMyAlbums = () => {
   return useQuery({
-    queryKey: ['my-albums'],
+    queryKey: MY_ALBUMS_KEY,
     queryFn: fetchMyAlbumsMock,
   });
+};
+
+// Backend chưa có API sửa/xoá album: tạm sửa thẳng dữ liệu trong cache.
+export const useMyAlbumActions = () => {
+  const queryClient = useQueryClient();
+  const update = (fn: (albums: Album[]) => Album[]) =>
+    queryClient.setQueryData<Album[]>(MY_ALBUMS_KEY, (albums) => albums && fn(albums));
+
+  return {
+    togglePrivacy: (id: string) => update((albums) => albums.map((album) => album.id === id
+      ? {...album, privacy: album.privacy === 'public' ? 'private' : 'public'}
+      : album)),
+    deleteAlbum: (id: string) => update((albums) => albums.filter((album) => album.id !== id)),
+  };
 };

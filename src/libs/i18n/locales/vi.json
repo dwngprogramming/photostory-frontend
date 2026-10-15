@@ -38,7 +38,8 @@
         "message": "Trang web của chúng tôi hiện đang trong quá trình phát triển. Trong thời gian chờ đợi, mời bạn khám phá bản demo để trải nghiệm các tính năng của photo-story. Cảm ơn vì sự quan tâm của bạn.",
         "linkText": "Xem Demo"
       }
-    }
+    },
+    "close": "Đóng"
   },
   "Landing": {
     "features": "Tính năng",
@@ -190,6 +191,40 @@
           "title": "Không tải được danh sách album",
           "description": "Kiểm tra kết nối mạng rồi thử lại.",
           "retry": "Thử lại"
+        },
+        "actions": {
+          "menu": "Thao tác với album {title}",
+          "share": "Chia sẻ",
+          "copyCode": "Sao chép mã chia sẻ",
+          "makePrivate": "Chuyển sang riêng tư",
+          "makePublic": "Chuyển sang công khai",
+          "delete": "Xoá album",
+          "codeCopied": "Đã sao chép mã chia sẻ.",
+          "copyFailed": "Không sao chép được. Hãy chọn mã và sao chép thủ công.",
+          "madePrivate": "Đã chuyển “{title}” sang riêng tư.",
+          "madePublic": "Đã chuyển “{title}” sang công khai."
+        },
+        "share": {
+          "title": "Chia sẻ album",
+          "codeLabel": "Mã mở album",
+          "copy": "Sao chép",
+          "copied": "Đã chép",
+          "copyFailed": "Không sao chép được. Hãy chọn mã và sao chép thủ công.",
+          "withPin": "Album có mã PIN. Gửi kèm mã PIN cho người nhận, nhưng nên gửi riêng với mã mở album.",
+          "withoutPin": "Album không có mã PIN: ai có mã này đều mở được album.",
+          "howTo": "Người nhận vào trang Unwrap, nhập mã này để mở album.",
+          "openUnwrap": "Mở trang Unwrap",
+          "notShared": "Album này chưa có mã chia sẻ.",
+          "createCode": "Tạo mã chia sẻ",
+          "createComingSoon": "Tính năng tạo mã chia sẻ đang được phát triển."
+        },
+        "delete": {
+          "title": "Xoá album?",
+          "description": "Album <b>{title}</b> cùng toàn bộ ảnh và câu chuyện sẽ bị xoá và không khôi phục được.",
+          "codeWarning": "Mã chia sẻ của album sẽ ngừng hoạt động; người nhận không mở được nữa.",
+          "confirm": "Xoá album",
+          "cancel": "Huỷ",
+          "done": "Đã xoá “{title}”."
         }
       },
       "sharedWithMe": "Album chia sẻ với tôi",

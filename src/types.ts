@@ -72,6 +72,8 @@ export interface Album {
   photoCount: number;
   createdAt: string; // ISO date, ví dụ "2024-08-12"
   privacy: AlbumPrivacy;
+  shareCode?: string; // mã unwrap gửi người nhận; không có nghĩa là chưa chia sẻ
+  hasPin: boolean;
   pages: PageData[];
 }
 

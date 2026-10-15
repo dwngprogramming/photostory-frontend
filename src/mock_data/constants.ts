@@ -25,6 +25,8 @@ export const INITIAL_ALBUMS: Album[] = [
     photoCount: 42,
     createdAt: '2024-08-12',
     privacy: 'public',
+    shareCode: 'SUMMER-IN-TUSCANY',
+    hasPin: false,
     pages: []
   },
   {
@@ -34,6 +36,8 @@ export const INITIAL_ALBUMS: Album[] = [
     photoCount: 18,
     createdAt: '2023-12-24',
     privacy: 'private',
+    shareCode: 'WINTER-LODGE-2023',
+    hasPin: true,
     pages: []
   },
   {
@@ -43,6 +47,8 @@ export const INITIAL_ALBUMS: Album[] = [
     photoCount: 1256,
     createdAt: '2023-10-03',
     privacy: 'public',
+    shareCode: 'TOKYO-ADVENTURE',
+    hasPin: false,
     pages: []
   },
   {
@@ -52,6 +58,7 @@ export const INITIAL_ALBUMS: Album[] = [
     photoCount: 24,
     createdAt: '2023-09-16',
     privacy: 'private',
+    hasPin: true,
     pages: []
   },
   {
@@ -61,6 +68,8 @@ export const INITIAL_ALBUMS: Album[] = [
     photoCount: 87,
     createdAt: '2025-06-01',
     privacy: 'private',
+    shareCode: 'CHIEU-QUE-NGOAI',
+    hasPin: true,
     pages: []
   },
   {
@@ -69,6 +78,7 @@ export const INITIAL_ALBUMS: Album[] = [
     photoCount: 0,
     createdAt: '2025-10-10',
     privacy: 'private',
+    hasPin: true,
     pages: []
   },
 ];

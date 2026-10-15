@@ -107,14 +107,19 @@ const AlbumMeta = ({album}: { album: Album }) => {
 interface AlbumCollectionProps {
   albums: Album[];
   onOpenAlbum: (album: Album) => void;
+  // Menu thao tác đặt cạnh nút mở album (không lồng button trong button)
+  renderActions?: (album: Album, variant: 'plain' | 'onImage') => React.ReactNode;
 }
 
-export const AlbumGrid: React.FC<AlbumCollectionProps> = ({albums, onOpenAlbum}) => {
+export const AlbumGrid: React.FC<AlbumCollectionProps> = ({albums, onOpenAlbum, renderActions}) => {
   const t = useTranslations('App.User.myAlbums');
   return (
     <ul className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
       {albums.map((album) => (
-        <li key={album.id}>
+        <li key={album.id} className="relative">
+          {renderActions && (
+            <div className="absolute top-3 left-3 z-10">{renderActions(album, 'onImage')}</div>
+          )}
           <button
             type="button"
             onClick={() => onOpenAlbum(album)}
@@ -156,17 +161,17 @@ export const AlbumGrid: React.FC<AlbumCollectionProps> = ({albums, onOpenAlbum})
 };
 
 // --- ALBUM LIST ---
-export const AlbumList: React.FC<AlbumCollectionProps> = ({albums, onOpenAlbum}) => {
+export const AlbumList: React.FC<AlbumCollectionProps> = ({albums, onOpenAlbum, renderActions}) => {
   const t = useTranslations('App.User.myAlbums');
   return (
-    <ul className="bg-white dark:bg-stone-900 rounded-xl border border-stone-200 dark:border-stone-800 divide-y divide-stone-100 dark:divide-stone-800 overflow-hidden">
+    <ul className="bg-white dark:bg-stone-900 rounded-xl border border-stone-200 dark:border-stone-800 divide-y divide-stone-100 dark:divide-stone-800">
       {albums.map((album) => (
-        <li key={album.id}>
+        <li key={album.id} className="flex items-center pr-2 sm:pr-3 first:rounded-t-xl last:rounded-b-xl hover:bg-stone-50 dark:hover:bg-stone-800/50 transition-colors">
           <button
             type="button"
             onClick={() => onOpenAlbum(album)}
             aria-label={`${t('openAlbum')}: ${album.title}`}
-            className="group w-full flex items-center gap-4 p-3 sm:px-4 text-left hover:bg-stone-50 dark:hover:bg-stone-800/50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-amber-400"
+            className="group flex-1 min-w-0 flex items-center gap-4 p-3 sm:px-4 text-left rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-amber-400"
           >
             <div className="w-20 aspect-[4/3] shrink-0 rounded-lg overflow-hidden bg-stone-100 dark:bg-stone-800">
               <AlbumCover album={album} compact className="w-full h-full"/>
@@ -184,6 +189,7 @@ export const AlbumList: React.FC<AlbumCollectionProps> = ({albums, onOpenAlbum})
               className="hidden sm:inline-flex shrink-0 text-xs font-medium px-2 py-1 rounded-md bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300"
             />
           </button>
+          {renderActions?.(album, 'plain')}
         </li>
       ))}
     </ul>

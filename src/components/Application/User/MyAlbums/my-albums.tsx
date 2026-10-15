@@ -17,7 +17,8 @@ import StatsOverview from "@/components/Application/User/MyAlbums/StatsOverview"
 // Data & Types
 import {Album, AlbumPrivacy, Stats} from '@/types';
 import {MOCK_STATS} from '@/mock_data/constants';
-import {useMyAlbums} from "@/hooks/api/useMyAlbums";
+import {useMyAlbumActions, useMyAlbums} from "@/hooks/api/useMyAlbums";
+import {AlbumActionsMenu, DeleteAlbumModal, ShareAlbumModal} from "@/components/Application/User/MyAlbums/AlbumActions";
 import {useTranslations} from "next-intl";
 
 type PrivacyFilter = 'all' | AlbumPrivacy;
@@ -52,6 +53,9 @@ export default function MyAlbums() {
   const [privacy, setPrivacy] = useState<PrivacyFilter>('all');
   const [sortKey, setSortKey] = useState<SortKey>('newest');
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
+  const [sharingId, setSharingId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const {togglePrivacy, deleteAlbum} = useMyAlbumActions();
 
   const stats = useMemo(() => albums && toStats(albums), [albums]);
 
@@ -71,6 +75,21 @@ export default function MyAlbums() {
   const handleDropFiles = () => toast.info(t('createComingSoon'));
   const handleOpenAlbum = () => toast.info(t('openComingSoon'));
 
+  // Giữ id thay vì cả album để hộp thoại luôn thấy dữ liệu mới nhất
+  const sharingAlbum = albums?.find((album) => album.id === sharingId) ?? null;
+  const deletingAlbum = albums?.find((album) => album.id === deletingId) ?? null;
+
+  const handleTogglePrivacy = (album: Album) => {
+    togglePrivacy(album.id);
+    toast.success(t(album.privacy === 'public' ? 'actions.madePrivate' : 'actions.madePublic', {title: album.title}));
+  };
+
+  const handleConfirmDelete = (album: Album) => {
+    deleteAlbum(album.id);
+    setDeletingId(null);
+    toast.success(t('delete.done', {title: album.title}));
+  };
+
   const resetFilters = () => {
     setQuery('');
     setPrivacy('all');
@@ -81,9 +100,18 @@ export default function MyAlbums() {
     if (isError) return <LoadError onRetry={() => refetch()}/>;
     if (!hasAlbums) return <EmptyState onCreateAlbum={handleCreateAlbum} onDropFiles={handleDropFiles}/>;
     if (visibleAlbums.length === 0) return <NoResults query={query.trim()} onReset={resetFilters}/>;
+    const renderActions = (album: Album, variant: 'plain' | 'onImage') => (
+      <AlbumActionsMenu
+        album={album}
+        variant={variant}
+        onShare={() => setSharingId(album.id)}
+        onTogglePrivacy={() => handleTogglePrivacy(album)}
+        onDelete={() => setDeletingId(album.id)}
+      />
+    );
     return viewMode === 'grid'
-      ? <AlbumGrid albums={visibleAlbums} onOpenAlbum={handleOpenAlbum}/>
-      : <AlbumList albums={visibleAlbums} onOpenAlbum={handleOpenAlbum}/>;
+      ? <AlbumGrid albums={visibleAlbums} onOpenAlbum={handleOpenAlbum} renderActions={renderActions}/>
+      : <AlbumList albums={visibleAlbums} onOpenAlbum={handleOpenAlbum} renderActions={renderActions}/>;
   };
 
   return (
@@ -198,6 +226,9 @@ export default function MyAlbums() {
 
       {/* Main Content */}
       {renderContent()}
+
+      <ShareAlbumModal album={sharingAlbum} onClose={() => setSharingId(null)}/>
+      <DeleteAlbumModal album={deletingAlbum} onClose={() => setDeletingId(null)} onConfirm={handleConfirmDelete}/>
     </div>
   );
 }
