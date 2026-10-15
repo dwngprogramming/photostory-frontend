@@ -8,11 +8,10 @@ interface AlbumPageProps extends React.HTMLAttributes<HTMLDivElement> {
   number?: number | string;
   isInteractive?: boolean;
   flap?: React.ReactNode; // Prop dành cho FrenchFlap
-  onCloseCover?: () => void;
 }
 
 const AlbumPage = React.forwardRef<HTMLDivElement, AlbumPageProps>(
-  ({ side, children, header, number, isInteractive = true, flap, onCloseCover, className, ...props }, ref) => {
+  ({ side, children, header, number, isInteractive = true, flap, className, ...props }, ref) => {
     const isLeft = side === 'left';
 
     return (
@@ -21,7 +20,6 @@ const AlbumPage = React.forwardRef<HTMLDivElement, AlbumPageProps>(
         className={`relative shadow-xl overflow-visible bg-white ${className || ''} ${!isInteractive ? 'pointer-events-none' : ''
           } ${isLeft ? 'rounded-l-sm' : 'rounded-r-sm'}`}
         data-density="soft"
-        onClick={onCloseCover}
         {...props}
       >
         {/* Background */}

@@ -139,37 +139,12 @@ export const GlassLocationBadge: React.FC<GlassLocationBadgeProps> = ({
                                                                         theme: selectedTheme = 'standard',
                                                                         size = 'md'
                                                                       }) => {
-  const containerRef = React.useRef<HTMLDivElement | null>(null);
-  
   const theme = themeConfig[selectedTheme];
   const sizeStyle = sizeConfig[size];
   const IconComponent = theme.icon;
-  
-  React.useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-    
-    const stopPropagation = (e: Event) => {
-      e.stopPropagation();
-      e.stopImmediatePropagation();
-    };
-    
-    const events = ['mousedown', 'touchstart', 'pointerdown'];
-    
-    events.forEach(event => {
-      container.addEventListener(event, stopPropagation, { capture: true });
-    });
-    
-    return () => {
-      events.forEach(event => {
-        container.removeEventListener(event, stopPropagation, { capture: true } as any);
-      });
-    };
-  }, []);
-  
+
   return (
     <div
-      ref={containerRef}
       className="relative inline-block"
       style={{
         padding: '4px',

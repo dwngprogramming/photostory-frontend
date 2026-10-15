@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import HTMLFlipBook from 'react-pageflip';
 import Image from "next/image";
 import {useIsMobile} from "@/hooks/useIsMobile";
@@ -20,6 +20,7 @@ import {format, parseISO} from 'date-fns';
 import {vi, enUS} from 'date-fns/locale';
 import {useAppDispatch, useAppSelector} from "@/libs/redux/hook";
 import {playThemeSong} from "@/libs/redux/features/audioSlice";
+import FlipInputLayer, {FlipDirection, PageFlipApi} from "@/components/Application/Showtime/Album/Plugin/FlipInputLayer";
 
 interface DigitalAlbumProps {
   album: AlbumResponse;
@@ -27,12 +28,11 @@ interface DigitalAlbumProps {
 }
 
 const DigitalAlbum = ({album, phase}: DigitalAlbumProps) => {
-  // Đổi tên ref cho chuẩn
   const t = useTranslations("App.Showtime.album");
-  const albumRef = useRef<any>(null);
+  const albumRef = useRef<{ pageFlip: () => PageFlipApi | undefined } | null>(null);
   
   const [visualCurrentPage, setVisualCurrentPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
+  const [initCount, setInitCount] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [xPosition, setXPosition] = useState(-200);
   const [mounted, setMounted] = useState(false);
@@ -40,25 +40,9 @@ const DigitalAlbum = ({album, phase}: DigitalAlbumProps) => {
   const isMobile = useIsMobile();
   const {startTour, isTourOpen} = useAlbumTour();
   const locale = useLocale();
-  const lastChapter = album.tableOfContents[album.tableOfContents.length - 1];
-  const lastPageNumber = lastChapter.page;
   const dispatch = useAppDispatch();
   const {isThemeSongPlayed} = useAppSelector(state => state.audio);
-  
-  const fullTOC = [
-    {
-      page: 1,
-      storyTitle: t('toc.preface'),
-      eventDate: '0001-01-01',
-    },
-    ...album.tableOfContents,
-    {
-      page: lastPageNumber + 2,
-      storyTitle: t('toc.afterword'),
-      eventDate: '0001-01-01',
-    }
-  ];
-  
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -67,34 +51,205 @@ const DigitalAlbum = ({album, phase}: DigitalAlbumProps) => {
     if (phase === UnwrapPhase.REVEALED && albumRef.current) startTour();
   }, [phase]);
   
-  const onFlip = useCallback((e: any) => setVisualCurrentPage(e.data), []);
+  const getPageFlip = useCallback(() => albumRef.current?.pageFlip(), []);
   
-  useEffect(() => {
-    console.log('Visual Current Page:', visualCurrentPage);
-    console.log('Total Pages:', totalPages);
-    console.log('Index', totalPages - 1);
-  }, [visualCurrentPage, totalPages]);
+  // Khi sách đóng (đang ở bìa trước/sau) chỉ còn 1 trang hiển thị -> dịch nửa trang để căn giữa
+  const getCoverShift = useCallback((pageIndex: number) => {
+    const flip = getPageFlip();
+    if (!flip) return 0;
+    const half = flip.getBoundsRect().pageWidth / 2;
+    if (pageIndex === 0) return -half;
+    if (pageIndex >= flip.getPageCount() - 1) return half;
+    return 0;
+  }, [getPageFlip]);
+  
+  // Lưu ý: react-pageflip chỉ bind lại handler khi `children` đổi (xem `pages` bên dưới),
+  // nên các handler dưới đây phải ổn định và đọc trạng thái trực tiếp từ pageFlip.
+  const onFlip = useCallback((e: { data: number }) => setVisualCurrentPage(e.data), []);
   
   const onInit = useCallback(() => {
-    if (albumRef.current) setTotalPages(albumRef.current.pageFlip().getPageCount());
-  }, []);
+    setInitCount((count) => count + 1);
+    setXPosition(getCoverShift(getPageFlip()?.getCurrentPageIndex() ?? 0));
+  }, [getCoverShift, getPageFlip]);
   
-  const onChangeState = useCallback((e: any) => {
-    if (e.data === 'flipping') {
-      if (visualCurrentPage === 0) setXPosition(0);
-      if (totalPages > 0 && visualCurrentPage >= totalPages - 1) setXPosition(0);
-    }
-  }, [visualCurrentPage, totalPages]);
+  const onChangeState = useCallback((e: { data: string }) => {
+    const flip = getPageFlip();
+    if (!flip) return;
+    const current = flip.getCurrentPageIndex();
+    // Mở sách từ bìa -> trả sách về giữa
+    if (e.data === 'flipping' && getCoverShift(current) !== 0) setXPosition(0);
+    // Lật xong / thả tay -> đồng bộ lại vị trí theo trang thực tế
+    if (e.data === 'read') setXPosition(getCoverShift(current));
+  }, [getCoverShift, getPageFlip]);
   
-  // Handle logic đóng bìa bên trên sau khi lật ra/mở lại bìa bên dưới ở cuối sách
-  const handleCloseFromFrontCover = () => {
-    setXPosition(-200);
-  }
+  // Lật chắc chắn (tap, swipe, phím) về bìa -> dịch sách ngay cùng lúc với animation đóng bìa
+  const onFlipIntent = useCallback((direction: FlipDirection) => {
+    const flip = getPageFlip();
+    if (!flip) return;
+    const current = flip.getCurrentPageIndex();
+    const count = flip.getPageCount();
+    if (direction === 'back' && current > 0 && current <= 2) setXPosition(getCoverShift(0));
+    if (direction === 'forward' && current < count - 1 && current >= count - 3) setXPosition(getCoverShift(count - 1));
+  }, [getCoverShift, getPageFlip]);
   
-  const handleCloseFromBackCover = () => {
-    setXPosition(200);
-  }
+  const onInteract = useCallback(() => {
+    if (getPageFlip()?.getCurrentPageIndex() === 0) dispatch(playThemeSong());
+  }, [dispatch, getPageFlip]);
   
+  // react-pageflip dựng lại toàn bộ DOM sách mỗi khi `children` đổi tham chiếu,
+  // nên mảng trang được memo hoá để re-render của DigitalAlbum (modal, vị trí sách...) không đụng tới sách.
+  const pages = useMemo(() => {
+    const lastPageNumber = album.tableOfContents[album.tableOfContents.length - 1].page;
+    const fullTOC = [
+      {
+        page: 1,
+        storyTitle: t('toc.preface'),
+        eventDate: '0001-01-01',
+      },
+      ...album.tableOfContents,
+      {
+        page: lastPageNumber + 2,
+        storyTitle: t('toc.afterword'),
+        eventDate: '0001-01-01',
+      }
+    ];
+
+    return [
+      // --- BÌA TRƯỚC ---
+      <AlbumCover
+        key="front-cover"
+        id="album-digital"
+        side="left"
+        className="cursor-pointer"
+        onClick={() => {
+          dispatch(playThemeSong());
+          getPageFlip()?.flipNext();
+        }}
+      >
+        <div className="text-center text-white">
+          <h2 className="text-5xl font-bold mb-4 drop-shadow-lg gold-foil">{album.title}</h2>
+        </div>
+      </AlbumCover>,
+
+      // --- TRANG GIỚI THIỆU (CÓ FLAP) ---
+      <AlbumPage
+        key="start-with-flap"
+        side="left"
+        flap={
+          <StartFrenchFlap
+            avatarUrl={album.avatarUrl}
+            avatarGender={album.avatarGender}
+            recipients={album.recipients}
+            frenchFlipNote={album.frenchFlipNote}
+            frenchFlipPlace={album.frenchFlipPlace}
+            savedDate={album.savedDate}
+          />
+        }
+      >
+        <div className="w-full h-full cursor-pointer"/>
+      </AlbumPage>,
+
+      <AlbumPage key="introduction-page" side="right">
+        <div className="relative w-full h-full flex flex-col justify-center items-center space-y-4">
+          <p className="text-4xl text-center text-stone-900 font-serif font-bold">{album.title}</p>
+          <p className="text-center text-stone-600">{album.description}</p>
+
+          <p className="absolute bottom-0 text-stone-600 text-xs text-center">
+            {`© ${new Date().getFullYear()} Photostory`}
+          </p>
+        </div>
+      </AlbumPage>,
+
+      // Trang Mục lục
+      <AlbumPage key="table-of-contents" side="left">
+        <div>
+          <p className="text-2xl text-center text-stone-900 font-serif font-bold mb-6">{t('toc.title')}</p>
+          <div className="flex flex-col space-y-6">
+            {fullTOC.map((toc) => (
+              <div key={toc.page} className="flex items-center">
+                {/* Cụm Tiêu đề + Ngày */}
+                <div className="flex flex-col shrink-0">
+                  <span
+                    className="font-serif font-semibold text-stone-900 text-lg leading-tight">{toc.storyTitle}</span>
+                  {toc.eventDate !== '0001-01-01' && (
+                    <span className="font-sans text-[11px] text-stone-500 mt-1 tracking-wide">
+                      {locale === 'vi'
+                        ? format(parseISO(toc.eventDate), 'dd/MM/yyyy', {locale: vi}) // VN: 15/10/2025
+                        : format(parseISO(toc.eventDate), 'MMM d, yyyy', {locale: enUS}) // EN: Oct 15, 2025
+                      }
+                    </span>
+                  )}
+                </div>
+
+                {/* Dấu chấm nối (Leader dots) */}
+                <span className="flex-1 mx-3 mb-1.25 border-b-2 border-dotted border-stone-300"></span>
+
+                {/* Số trang */}
+                <span className="font-semibold text-md text-stone-900">{toc.page}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </AlbumPage>,
+
+      <AlbumPage key="toc-blank" side="right">
+        <div className="w-full h-full cursor-pointer"></div>
+      </AlbumPage>,
+
+      <AlbumPage key="preface" number={1} side="left">
+        <PrefacePiece preface={album.preface || ''}/>
+      </AlbumPage>,
+
+      <AlbumPage key="highlight" number={2} side="right">
+        <HighlightImagePiece
+          imageSrc="https://picsum.photos/600/600?random=5"
+          orientation="square"
+        />
+      </AlbumPage>,
+
+      // --- TRANG NỘI DUNG CHÍNH ---
+      ...album.stories.flatMap((story, index) => [
+        <AlbumPage
+          key={index * 2 + 3}
+          number={index * 2 + 3} side="left" header={story.title}
+        >
+          <div className="flex flex-col space-y-6">
+            <PhotoStack
+              photos={story.photos}
+              interactive={false}
+              onStackClick={() => setIsModalOpen(true)}
+            />
+            <StoryMusic storyMusicUrl={story.musicUrl}/>
+            <Location locations={story.locations}/>
+          </div>
+        </AlbumPage>,
+
+        <AlbumPage
+          key={index * 2 + 4}
+          number={index * 2 + 4}
+          side="right"
+          header={story.title}>
+          <StoryPiece story={story}/>
+        </AlbumPage>
+      ]),
+
+      // --- TRANG KẾT (CÓ FLAP) ---
+      ...(album.afterword ? [
+        <AlbumPage key="afterword" number={5} side="left">
+          <AfterworkPiece afterword={album.afterword}/>
+        </AlbumPage>
+      ] : []),
+
+      <AlbumPage key="end-with-flap" side="right" flap={<EndFrenchFlap/>}>
+        <div className="w-full h-full cursor-pointer"/>
+      </AlbumPage>,
+
+      // --- BÌA SAU ---
+      <AlbumCover key="back-cover" side="right"><></>
+      </AlbumCover>,
+    ];
+  }, [album, t, locale, dispatch, getPageFlip]);
+
   const getAlbumStyle = (): React.CSSProperties => {
     if (isMobile) return {
       transition: 'transform 1s ease-in-out',
@@ -125,31 +280,6 @@ const DigitalAlbum = ({album, phase}: DigitalAlbumProps) => {
             e.preventDefault();
           }
         }}
-        // Quan trọng với react-pageflip (vì nó dùng mousedown/touch để kéo)
-        onMouseDownCapture={(e) => {
-          if (isTourOpen) {
-            e.stopPropagation();
-            e.preventDefault();
-          }
-        }}
-        onMouseMoveCapture={(e) => {
-          if (isTourOpen) {
-            e.stopPropagation();
-            e.preventDefault();
-          }
-        }}
-        onTouchStartCapture={(e) => {
-          if (isTourOpen) {
-            e.stopPropagation();
-            e.preventDefault();
-          }
-        }}
-        onTouchMoveCapture={(e) => {
-          if (isTourOpen) {
-            e.stopPropagation();
-            e.preventDefault();
-          }
-        }}
       >
         {/* @ts-ignore */}
         <HTMLFlipBook
@@ -159,146 +289,22 @@ const DigitalAlbum = ({album, phase}: DigitalAlbumProps) => {
           size="stretch" minWidth={300} maxWidth={500} minHeight={400} maxHeight={600}
           drawShadow={true} flippingTime={750}
           usePortrait={isMobile} startZIndex={0} autoSize={true} maxShadowOpacity={0.1}
-          showCover={true} mobileScrollSupport={true}
+          showCover={true}
           onFlip={onFlip} onInit={onInit} onChangeState={onChangeState}
-          useMouseEvents={!isTourOpen}
-          clickEventForward={!isTourOpen}
+          // Input do FlipInputLayer xử lý: chỉ vùng mép trang mới kéo/lật được
+          useMouseEvents={false}
           style={{margin: '0 auto'}}
         >
-          {/* --- BÌA TRƯỚC --- */}
-          <AlbumCover id="album-digital" side="left" onClick={() => dispatch(playThemeSong())}>
-            <div className="text-center text-white">
-              <h2 className="text-5xl font-bold mb-4 drop-shadow-lg gold-foil">{album.title}</h2>
-            </div>
-          </AlbumCover>
-          
-          {/* --- TRANG GIỚI THIỆU (CÓ FLAP) --- */}
-          <AlbumPage
-            key="start-with-flap"
-            side="left"
-            flap={
-              <StartFrenchFlap
-                avatarUrl={album.avatarUrl}
-                avatarGender={album.avatarGender}
-                recipients={album.recipients}
-                frenchFlipNote={album.frenchFlipNote}
-                frenchFlipPlace={album.frenchFlipPlace}
-                savedDate={album.savedDate}
-              />
-            }
-            onCloseCover={handleCloseFromFrontCover}
-          >
-            <div className="w-full h-full cursor-pointer"/>
-          </AlbumPage>
-          
-          <AlbumPage
-            key="introduction-page"
-            side="right"
-          >
-            <div className="relative w-full h-full flex flex-col justify-center items-center space-y-4">
-              <p className="text-4xl text-center text-stone-900 font-serif font-bold">{album.title}</p>
-              <p className="text-center text-stone-600">{album.description}</p>
-              
-              <p className="absolute bottom-0 text-stone-600 text-xs text-center">
-                {`© ${new Date().getFullYear()} Photostory`}
-              </p>
-            </div>
-          </AlbumPage>
-          
-          {/* Trang Mục lục */}
-          <AlbumPage side="left" key="table-of-contents">
-            <div>
-              <p className="text-2xl text-center text-stone-900 font-serif font-bold mb-6">{t('toc.title')}</p>
-              <div className="flex flex-col space-y-6">
-                {fullTOC.map((toc) => (
-                  <div key={toc.page} className="flex items-center">
-                    {/* Cụm Tiêu đề + Ngày */}
-                    <div className="flex flex-col shrink-0">
-                      <span
-                        className="font-serif font-semibold text-stone-900 text-lg leading-tight">{toc.storyTitle}</span>
-                      {toc.eventDate !== '0001-01-01' && (
-                        <span className="font-sans text-[11px] text-stone-500 mt-1 tracking-wide">
-                          {locale === 'vi'
-                            ? format(parseISO(toc.eventDate), 'dd/MM/yyyy', {locale: vi}) // VN: 15/10/2025
-                            : format(parseISO(toc.eventDate), 'MMM d, yyyy', {locale: enUS}) // EN: Oct 15, 2025
-                          }
-                        </span>
-                      )}
-                    </div>
-                    
-                    {/* Dấu chấm nối (Leader dots) */}
-                    <span className="flex-1 mx-3 mb-1.25 border-b-2 border-dotted border-stone-300"></span>
-                    
-                    {/* Số trang */}
-                    <span className="font-semibold text-md text-stone-900">{toc.page}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </AlbumPage>
-          
-          <AlbumPage side="right">
-            <div className="w-full h-full cursor-pointer"></div>
-          </AlbumPage>
-          
-          <AlbumPage number={1} side="left">
-            <PrefacePiece preface={album.preface || ''}/>
-          </AlbumPage>
-          
-          <AlbumPage number={2} side="right">
-            <HighlightImagePiece
-              imageSrc="https://picsum.photos/600/600?random=5"
-              orientation="square"
-            />
-          </AlbumPage>
-          
-          {/* --- TRANG NỘI DUNG CHÍNH --- */}
-          {album.stories.map((story, index) => [
-              <AlbumPage
-                key={index * 2 + 3}
-                number={index * 2 + 3} side="left" header={story.title}
-                isInteractive={!isModalOpen}
-              >
-                <div className="flex flex-col space-y-6">
-                  <PhotoStack
-                    photos={story.photos}
-                    interactive={false}
-                    onStackClick={() => setIsModalOpen(true)}
-                  />
-                  <StoryMusic storyMusicUrl={story.musicUrl}/>
-                  <Location locations={story.locations}/>
-                </div>
-              </AlbumPage>,
-              
-              <AlbumPage
-                key={index * 2 + 4}
-                number={index * 2 + 4}
-                side="right"
-                header={story.title}>
-                <StoryPiece story={story}/>
-              </AlbumPage>
-          ])}
-          
-          {/* --- TRANG KẾT (CÓ FLAP) --- */}
-          {album.afterword && (
-            <AlbumPage number={5} side="left">
-              <AfterworkPiece afterword={album.afterword}/>
-            </AlbumPage>
-          )}
-          
-          <AlbumPage
-            side="right"
-            flap={<EndFrenchFlap/>}
-            onCloseCover={handleCloseFromBackCover}
-          >
-            <div className="w-full h-full cursor-pointer"/>
-          </AlbumPage>
-          
-          {/* --- BÌA SAU --- */}
-          <AlbumCover side="right"><></>
-          </AlbumCover>
-        
+          {pages}
         </HTMLFlipBook>
+        
+        <FlipInputLayer
+          getPageFlip={getPageFlip}
+          layoutKey={`${initCount}-${visualCurrentPage}`}
+          disabled={isTourOpen || isModalOpen}
+          onInteract={onInteract}
+          onFlipIntent={onFlipIntent}
+        />
       </div>
       
       {/* --- MODAL --- */}

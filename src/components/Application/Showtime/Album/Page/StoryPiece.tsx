@@ -12,22 +12,7 @@ const StoryPiece = ({story}: StoryPieceProps) => {
   const t = useTranslations("App.Showtime.weather");
   
   return (
-    <div
-      onClick={(e) => {
-        // Ngăn sự kiện nổi lên HTMLPageFlip
-        e.stopPropagation();
-        e.preventDefault();
-      }}
-      onMouseDown={(e) => {
-        e.stopPropagation();
-      }}
-      onPointerDown={(e) => {
-        e.stopPropagation();
-        e.preventDefault();
-      }}
-      onTouchStart={(e) => {
-        e.stopPropagation();
-      }}>
+    <div>
       <div className="flex gap-6 mb-6 pb-4 border-b border-stone-400 border-dashed select-text">
         {/* Title Area */}
         <div className="flex-1">

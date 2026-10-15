@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Music} from 'lucide-react';
 import SoundCloudIcon from "@/components/Common/SoundCloudIcon";
 import GlassPlayer from "@/components/Application/Showtime/Album/Plugin/GlassPlayer";
@@ -10,19 +10,8 @@ interface GlassPlayerProps {
 const StoryMusic: React.FC<GlassPlayerProps> = ({
                                                   storyMusicUrl,
                                                 }) => {
-  const storyMusicRef = React.useRef<HTMLDivElement | null>(null);
-  // Chặn event propagation
-  useEffect(() => {
-    const glassPlayer = storyMusicRef.current;
-    if (!glassPlayer) return;
-    const stopPropagation = (e: Event) => e.stopPropagation();
-    const events = ['mousemove', 'touchmove', 'pointermove', 'mousedown', 'touchstart', 'pointerdown'];
-    events.forEach(event => glassPlayer.addEventListener(event, stopPropagation));
-    return () => events.forEach(event => glassPlayer.removeEventListener(event, stopPropagation));
-  }, []);
-  
   return (
-    <div ref={storyMusicRef} className="w-full max-w-sm mx-auto">
+    <div className="w-full max-w-sm mx-auto">
       {/* Header Info */}
       <div className="flex justify-between items-center mb-2 px-1">
         <span

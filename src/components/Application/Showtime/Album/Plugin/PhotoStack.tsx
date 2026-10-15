@@ -141,22 +141,8 @@ const PhotoStack = ({
               onTap={canDrag ? handleTopCardTap : undefined}      // Click (Tap)
               
               whileTap={canDrag ? {cursor: 'grabbing'} : {}}
-              onClick={(e) => {
-                // Ngăn sự kiện nổi lên HTMLPageFlip
-                e.stopPropagation();
-                e.preventDefault();
+              onClick={() => {
                 if (!interactive && onStackClick) onStackClick();
-              }}
-              onMouseDown={(e) => {
-                e.stopPropagation();
-                e.preventDefault(); // Thêm preventDefault để chắc chắn
-              }}
-              onPointerDown={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-              }}
-              onTouchStart={(e) => {
-                e.stopPropagation();
               }}
             >
               <div className="w-full h-full overflow-hidden bg-stone-100 pointer-events-none">
