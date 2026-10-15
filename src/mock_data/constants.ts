@@ -16,13 +16,14 @@ export const MOCK_STATS: Stats = {
   storageTotal: 15,
 };
 
+// Có cả ca biên: tên dài, thiếu ảnh bìa, album chưa có ảnh, số ảnh lớn
 export const INITIAL_ALBUMS: Album[] = [
   {
     id: 'a1',
     title: 'Summer in Tuscany',
     coverImage: 'https://picsum.photos/id/1015/800/600',
     photoCount: 42,
-    date: 'Aug 2024',
+    createdAt: '2024-08-12',
     privacy: 'public',
     pages: []
   },
@@ -31,7 +32,7 @@ export const INITIAL_ALBUMS: Album[] = [
     title: 'Winter Lodge',
     coverImage: 'https://picsum.photos/id/1036/800/600',
     photoCount: 18,
-    date: 'Dec 2023',
+    createdAt: '2023-12-24',
     privacy: 'private',
     pages: []
   },
@@ -39,8 +40,8 @@ export const INITIAL_ALBUMS: Album[] = [
     id: 'a3',
     title: 'Tokyo Adventure',
     coverImage: 'https://picsum.photos/id/1047/800/600',
-    photoCount: 156,
-    date: 'Oct 2023',
+    photoCount: 1256,
+    createdAt: '2023-10-03',
     privacy: 'public',
     pages: []
   },
@@ -49,7 +50,24 @@ export const INITIAL_ALBUMS: Album[] = [
     title: 'Weekend Camping',
     coverImage: 'https://picsum.photos/id/1043/800/600',
     photoCount: 24,
-    date: 'Sep 2023',
+    createdAt: '2023-09-16',
+    privacy: 'private',
+    pages: []
+  },
+  {
+    id: 'a5',
+    title: 'Những buổi chiều cuối tuần cùng cả nhà ở quê ngoại, mùa lúa chín năm 2025',
+    coverImage: 'https://picsum.photos/id/1018/800/600',
+    photoCount: 87,
+    createdAt: '2025-06-01',
+    privacy: 'private',
+    pages: []
+  },
+  {
+    id: 'a6',
+    title: 'Kỷ niệm 1 năm',
+    photoCount: 0,
+    createdAt: '2025-10-10',
     privacy: 'private',
     pages: []
   },

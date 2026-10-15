@@ -137,7 +137,8 @@
           "publicAlbums": "Public Albums",
           "privateAlbums": "Private Albums",
           "storageUsage": "Storage Usage",
-          "upgradeStorage": "Upgrade"
+          "upgradeStorage": "Upgrade",
+          "storageAlmostFull": "Storage is almost full. Delete some photos or upgrade to keep uploading."
         }
       },
       "myAlbums": {
@@ -148,11 +149,53 @@
           "description": "Get started by creating your first photo-story. Drag and drop photo here to set cover album image or use the button below.",
           "dropPhoto": "Drop photo to create album"
         },
-        "createAlbum": "Create Album"
+        "createAlbum": "Create Album",
+        "createComingSoon": "Album creation is still in development. Please check back soon!",
+        "openComingSoon": "The album viewer for your own albums is still in development. For now, open albums with a code on the Unwrap page.",
+        "search": {
+          "label": "Search albums",
+          "placeholder": "Search albums by title",
+          "clear": "Clear search"
+        },
+        "filter": {
+          "label": "Filter by privacy",
+          "all": "All",
+          "public": "Public",
+          "private": "Private"
+        },
+        "sort": {
+          "label": "Sort",
+          "newest": "Newest",
+          "oldest": "Oldest",
+          "title": "Title A–Z",
+          "photos": "Most photos"
+        },
+        "view": {
+          "grid": "Grid view",
+          "list": "List view"
+        },
+        "privacy": {
+          "public": "Public",
+          "private": "Private"
+        },
+        "photoCount": "{count, plural, =0 {No photos yet} one {# photo} other {# photos}}",
+        "openAlbum": "Open album",
+        "noCover": "No cover yet",
+        "noResults": {
+          "query": "No albums match “{query}”.",
+          "filter": "No albums in this view.",
+          "reset": "Clear filters"
+        },
+        "error": {
+          "title": "Couldn't load your albums",
+          "description": "Check your connection and try again.",
+          "retry": "Try again"
+        }
       },
       "sharedWithMe": "Shared With Me",
       "settings": "Settings",
-      "createAlbum": "Create Album"
+      "createAlbum": "Create Album",
+      "appearance": "Appearance"
     },
     "Guest": {
       "unwrap": {

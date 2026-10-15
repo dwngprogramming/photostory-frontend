@@ -17,6 +17,7 @@ interface SidebarProps {
 
 export default function Sidebar({ currentUser, isOpen, onCloseMobile }: SidebarProps) {
   const t = useTranslations('App.User');
+  const tCommon = useTranslations('Common');
   const pathname = usePathname();
   
   const isActive = (path: string) => pathname.startsWith(path);
@@ -56,6 +57,7 @@ export default function Sidebar({ currentUser, isOpen, onCloseMobile }: SidebarP
           </Link>
           <button
             onClick={onCloseMobile}
+            aria-label={tCommon('closeMenu')}
             className="lg:hidden p-2 text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800 rounded-lg"
           >
             <X size={20} />
@@ -86,7 +88,7 @@ export default function Sidebar({ currentUser, isOpen, onCloseMobile }: SidebarP
           
           {/* Theme Toggle Area */}
           <div className="flex items-center justify-between px-2">
-            <span className="text-sm font-medium text-stone-500 dark:text-stone-400">Appearance</span>
+            <span className="text-sm font-medium text-stone-500 dark:text-stone-400">{t('appearance')}</span>
             <ThemeToggle />
           </div>
           
@@ -107,7 +109,7 @@ export default function Sidebar({ currentUser, isOpen, onCloseMobile }: SidebarP
                 {currentUser.email}
               </p>
             </div>
-            <button className="text-stone-400 hover:text-red-500 transition-colors">
+            <button aria-label={tCommon('logout')} className="text-stone-400 hover:text-red-500 transition-colors">
               <LogOut size={18} />
             </button>
           </div>

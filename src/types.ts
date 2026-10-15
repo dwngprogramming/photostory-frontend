@@ -63,13 +63,15 @@ export interface PageData {
   };
 }
 
+export type AlbumPrivacy = 'public' | 'private';
+
 export interface Album {
   id: string;
   title: string;
-  coverImage: string;
+  coverImage?: string;
   photoCount: number;
-  date: string;
-  privacy: 'public' | 'private';
+  createdAt: string; // ISO date, ví dụ "2024-08-12"
+  privacy: AlbumPrivacy;
   pages: PageData[];
 }
 

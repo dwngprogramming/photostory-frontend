@@ -137,7 +137,8 @@
           "publicAlbums": "Album công khai",
           "privateAlbums": "Album riêng tư",
           "storageUsage": "Dung lượng sử dụng",
-          "upgradeStorage": "Nâng cấp"
+          "upgradeStorage": "Nâng cấp",
+          "storageAlmostFull": "Dung lượng sắp đầy. Xoá bớt ảnh hoặc nâng cấp để tiếp tục tải lên."
         }
       },
       "myAlbums": {
@@ -148,11 +149,53 @@
           "description": "Bắt đầu tạo photo-story đầu tiên của bạn. Kéo thả ảnh vào đây để đặt làm ảnh bìa album, hoặc sử dụng nút bên dưới",
           "dropPhoto": "Thả ảnh để tạo album"
         },
-        "createAlbum": "Tạo Album"
+        "createAlbum": "Tạo Album",
+        "createComingSoon": "Tính năng tạo album đang được phát triển. Bạn quay lại sau nhé!",
+        "openComingSoon": "Trình xem album của bạn đang được phát triển. Hiện bạn có thể mở album bằng mã ở trang Unwrap.",
+        "search": {
+          "label": "Tìm album",
+          "placeholder": "Tìm album theo tên",
+          "clear": "Xoá tìm kiếm"
+        },
+        "filter": {
+          "label": "Lọc theo quyền riêng tư",
+          "all": "Tất cả",
+          "public": "Công khai",
+          "private": "Riêng tư"
+        },
+        "sort": {
+          "label": "Sắp xếp",
+          "newest": "Mới nhất",
+          "oldest": "Cũ nhất",
+          "title": "Tên A–Z",
+          "photos": "Nhiều ảnh nhất"
+        },
+        "view": {
+          "grid": "Xem dạng lưới",
+          "list": "Xem dạng danh sách"
+        },
+        "privacy": {
+          "public": "Công khai",
+          "private": "Riêng tư"
+        },
+        "photoCount": "{count, plural, =0 {Chưa có ảnh} other {# ảnh}}",
+        "openAlbum": "Mở album",
+        "noCover": "Chưa có ảnh bìa",
+        "noResults": {
+          "query": "Không có album nào khớp với “{query}”.",
+          "filter": "Không có album nào trong mục này.",
+          "reset": "Xoá bộ lọc"
+        },
+        "error": {
+          "title": "Không tải được danh sách album",
+          "description": "Kiểm tra kết nối mạng rồi thử lại.",
+          "retry": "Thử lại"
+        }
       },
       "sharedWithMe": "Album chia sẻ với tôi",
       "settings": "Cài đặt",
-      "createAlbum": "Tạo album"
+      "createAlbum": "Tạo album",
+      "appearance": "Giao diện"
     },
     "Guest": {
       "unwrap": {
