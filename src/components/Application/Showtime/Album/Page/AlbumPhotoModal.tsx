@@ -42,7 +42,8 @@ export default function AlbumPhotoModal({
           <X className="w-6 h-6" />
         </button>
         
-        <AnimatePresence mode="wait" onExitComplete={() => setViewMode("stack")}>
+        {/* propagate: khi ModalWrapper đóng, view hiện tại cũng chạy exit animation cùng backdrop */}
+        <AnimatePresence mode="wait" propagate onExitComplete={() => setViewMode("stack")}>
           {viewMode === "stack" ? (
             <StackView
               photos={photos}

@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {MapPin} from "lucide-react";
 import {GoogleMapsIcon} from "@/components/Common/GoogleMapsIcon";
 import {GlassLocationBadge} from "@/components/Application/Showtime/Album/Plugin/GlassLocationBadge";
@@ -9,19 +9,8 @@ interface LocationProps {
 }
 
 const Location = ({locations}: LocationProps) => {
-  const locationRef = React.useRef<HTMLDivElement | null>(null);
-  
-  useEffect(() => {
-    const location = locationRef.current;
-    if (!location) return;
-    const stopPropagation = (e: Event) => e.stopPropagation();
-    const events = ['mousemove', 'touchmove', 'pointermove', 'mousedown', 'touchstart', 'pointerdown'];
-    events.forEach(event => location.addEventListener(event, stopPropagation));
-    return () => events.forEach(event => location.removeEventListener(event, stopPropagation));
-  }, []);
-  
   return (
-    <div ref={locationRef}>
+    <div>
       <div className="flex justify-between items-center mb-2">
          <span
            className="inline-flex justify-center items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-600 border border-orange-200">
