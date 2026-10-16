@@ -30,6 +30,7 @@ const stories: StoryResponse[] = [
     eventDate: '2025-10-11',
     displayOrderInDay: 1,
     weather: 'cloudy',
+    musicUrl: 'https://soundcloud.com/nsontung02/richie-d-icy-x-obito-panorama-pegasus-mix',
     content: longContent('Sương sớm Đà Lạt'),
     photos: [
       photo('s1-1', 'landscape', 'Đồi thông', 1),

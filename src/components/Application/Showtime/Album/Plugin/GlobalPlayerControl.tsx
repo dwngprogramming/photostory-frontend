@@ -1,43 +1,73 @@
 'use client';
 
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import ReactPlayer from 'react-player'
 import {useAppDispatch, useAppSelector} from "@/libs/redux/hook";
-import {pauseAudio, playAudio, setAudioLoading} from "@/libs/redux/features/audioSlice";
+import {
+  clearSeekRequest,
+  playerDuration,
+  playerEnded,
+  playerError,
+  playerPaused,
+  playerPlaying,
+  playerProgress
+} from "@/libs/redux/features/audioSlice";
+
+// Player duy nhất của cả app, ẩn đi. Giao diện (GlassPlayer) chỉ gửi lệnh vào Redux;
+// mọi sự kiện thật của player được ghi ngược lại để nút luôn đúng trạng thái.
+const LOAD_TIMEOUT_MS = 20000;
 
 const GlobalAudioPlayer = () => {
   const dispatch = useAppDispatch();
-  const {currentUrl, isPlaying, volume, mode} = useAppSelector((state) => state.audio);
+  const {currentUrl, isPlaying, volume, isMuted, mode, seekRequest, attempt} = useAppSelector((state) => state.audio);
+  const isLoading = useAppSelector((state) => state.audio.isLoading);
+  const playerRef = useRef<ReactPlayer>(null);
   
-  // Không render gì nếu không có URL (đề phòng)
+  // Chờ quá lâu mà player không phát thì coi là lỗi, để nút không quay mãi
+  useEffect(() => {
+    if (!isLoading) return;
+    const timer = setTimeout(() => dispatch(playerError()), LOAD_TIMEOUT_MS);
+    return () => clearTimeout(timer);
+  }, [isLoading, currentUrl, attempt, dispatch]);
+
+  // Thực hiện yêu cầu tua rồi xoá để lần sau tua cùng vị trí vẫn chạy
+  useEffect(() => {
+    if (seekRequest === null) return;
+    playerRef.current?.seekTo(seekRequest, 'fraction');
+    dispatch(clearSeekRequest());
+  }, [seekRequest, dispatch]);
+
   if (!currentUrl) return null;
-  
-  // Chỉ Loop khi đang ở chế độ 'theme'
-  const shouldLoop = mode === 'theme';
-  
+
   return (
     // Dùng hidden để ẩn player nhưng vẫn giữ nó active trong DOM
     <div className="hidden">
       <ReactPlayer
+        // attempt đổi khi người dùng bấm "Thử lại": dựng lại player từ đầu
+        key={attempt}
+        ref={playerRef}
         url={currentUrl}
         playing={isPlaying}
         volume={volume}
+        muted={isMuted}
         width="100%"
         height="100%"
-        
-        loop={shouldLoop}
-        
-        // Callback: Khi player dừng (do user pause trên widget hoặc hết bài)
-        // ta cần update ngược lại Redux store để UI đồng bộ
-        
-        onStart={() => dispatch(setAudioLoading(false))}
-        onPause={() => dispatch(pauseAudio())}
-        onPlay={() => dispatch(playAudio())}
-        
+        progressInterval={500}
+
+        // Chỉ nhạc chủ đề lặp lại
+        loop={mode === 'theme'}
+
+        onPlay={() => dispatch(playerPlaying())}
+        onPause={() => dispatch(playerPaused())}
+        onEnded={() => dispatch(playerEnded())}
+        onError={() => dispatch(playerError())}
+        onDuration={(seconds) => dispatch(playerDuration(seconds))}
+        onProgress={({playedSeconds}) => dispatch(playerProgress(playedSeconds))}
+
         attributes={{
           allow: "autoplay; encrypted-media; picture-in-picture"
         }}
-        
+
         config={{
           soundcloud: {
             options: {

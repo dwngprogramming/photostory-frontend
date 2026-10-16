@@ -286,6 +286,21 @@
         "badge": "Xem thử · nội dung mẫu",
         "exit": "Thoát",
         "notFound": "Không tìm thấy album để xem thử."
+      },
+      "player": {
+        "play": "Phát",
+        "pause": "Tạm dừng",
+        "retry": "Thử lại",
+        "mute": "Tắt tiếng",
+        "unmute": "Bật tiếng",
+        "volume": "Âm lượng",
+        "seek": "Tua bài hát",
+        "themeSong": "Bài chủ đề của album",
+        "unknownTitle": "Chưa rõ tên bài",
+        "unknownArtist": "Chưa rõ nghệ sĩ",
+        "loadFailed": "Không phát được bài này.",
+        "music": "Nhạc",
+        "poweredBy": "Cung cấp bởi"
       }
     }
   }

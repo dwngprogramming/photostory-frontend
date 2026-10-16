@@ -15,7 +15,8 @@ import {useTranslations} from "next-intl";
 import {useGetPermissionAlbum, useGetPublicAlbum} from "@/hooks/api/useAlbums";
 import PreparingAlbum from "@/components/Application/Showtime/PreparingAlbum";
 import GlassPlayer from "@/components/Application/Showtime/Album/Plugin/GlassPlayer";
-import {useAppSelector} from "@/libs/redux/hook";
+import {useAppDispatch, useAppSelector} from "@/libs/redux/hook";
+import {resetAudio} from "@/libs/redux/features/audioSlice";
 import {toast} from "sonner";
 
 interface ShowtimeProps {
@@ -33,7 +34,13 @@ export default function Showtime({previewAlbum, onExitPreview}: ShowtimeProps = 
   const id = params.id as string;
   const key = searchParams.get("key")?.toString();
   const {token} = useAppSelector(state => state.permissionResource);
+  const dispatch = useAppDispatch();
   const startTimeRef = useRef(Date.now());
+  
+  // Rời khỏi album thì dừng nhạc (player nằm ở layout gốc nên không tự tắt theo trang)
+  useEffect(() => () => {
+    dispatch(resetAudio());
+  }, [dispatch]);
   
   const {data: publicAlbum, isError: isPublicError, isLoading: isPublicLoading} = useGetPublicAlbum(key);
   const {data: permissionAlbum, isError: isPermissionError, isLoading: isPermissionLoading} = useGetPermissionAlbum(id);

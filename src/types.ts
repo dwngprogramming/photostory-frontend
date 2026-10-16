@@ -254,9 +254,17 @@ export type AudioAlbumMode = "theme" | "story";
 export interface AudioState {
   currentUrl: string | null;
   themeUrl: string | null;
-  isPlaying: boolean;
-  volume: number;
-  isLoading: boolean;
   mode: AudioAlbumMode;
-  isThemeSongPlayed: boolean;
+  // Ý định của người dùng: true = đang/sắp phát. Trạng thái thật do sự kiện của player cập nhật
+  isPlaying: boolean;
+  // Đang tải bài hoặc đang chờ player bắt đầu phát
+  isLoading: boolean;
+  hasError: boolean;
+  volume: number; // 0..1
+  isMuted: boolean;
+  position: number; // giây
+  duration: number; // giây, 0 = chưa biết
+  seekRequest: number | null; // 0..1; GlobalAudioPlayer thực hiện rồi xoá
+  attempt: number; // tăng khi thử lại để dựng lại player
+  isThemeSongPlayed: boolean; // nhạc chủ đề đã tự phát một lần
 }

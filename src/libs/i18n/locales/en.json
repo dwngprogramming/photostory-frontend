@@ -286,6 +286,21 @@
         "badge": "Preview · sample content",
         "exit": "Exit",
         "notFound": "Couldn't find that album to preview."
+      },
+      "player": {
+        "play": "Play",
+        "pause": "Pause",
+        "retry": "Try again",
+        "mute": "Mute",
+        "unmute": "Unmute",
+        "volume": "Volume",
+        "seek": "Seek",
+        "themeSong": "Album theme song",
+        "unknownTitle": "Unknown title",
+        "unknownArtist": "Unknown artist",
+        "loadFailed": "Couldn't play this track.",
+        "music": "Music",
+        "poweredBy": "Powered by"
       }
     }
   }

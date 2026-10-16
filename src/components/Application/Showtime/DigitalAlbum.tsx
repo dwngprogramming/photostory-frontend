@@ -18,8 +18,8 @@ import AfterworkPiece from "@/components/Application/Showtime/Album/Page/Afterwo
 import {useLocale, useTranslations} from 'next-intl';
 import {format, parseISO} from 'date-fns';
 import {vi, enUS} from 'date-fns/locale';
-import {useAppDispatch, useAppSelector} from "@/libs/redux/hook";
-import {playThemeSong} from "@/libs/redux/features/audioSlice";
+import {useAppDispatch} from "@/libs/redux/hook";
+import {autoStartThemeSong} from "@/libs/redux/features/audioSlice";
 import FlipInputLayer, {FlipDirection, PageFlipApi} from "@/components/Application/Showtime/Album/Plugin/FlipInputLayer";
 
 interface DigitalAlbumProps {
@@ -41,7 +41,6 @@ const DigitalAlbum = ({album, phase}: DigitalAlbumProps) => {
   const {startTour, isTourOpen} = useAlbumTour();
   const locale = useLocale();
   const dispatch = useAppDispatch();
-  const {isThemeSongPlayed} = useAppSelector(state => state.audio);
 
   useEffect(() => {
     setMounted(true);
@@ -93,7 +92,7 @@ const DigitalAlbum = ({album, phase}: DigitalAlbumProps) => {
   }, [getCoverShift, getPageFlip]);
   
   const onInteract = useCallback(() => {
-    if (getPageFlip()?.getCurrentPageIndex() === 0) dispatch(playThemeSong());
+    if (getPageFlip()?.getCurrentPageIndex() === 0) dispatch(autoStartThemeSong());
   }, [dispatch, getPageFlip]);
   
   // react-pageflip dựng lại toàn bộ DOM sách mỗi khi `children` đổi tham chiếu,
@@ -122,7 +121,7 @@ const DigitalAlbum = ({album, phase}: DigitalAlbumProps) => {
         side="left"
         className="cursor-pointer"
         onClick={() => {
-          dispatch(playThemeSong());
+          dispatch(autoStartThemeSong());
           getPageFlip()?.flipNext();
         }}
       >
