@@ -202,7 +202,8 @@
           "codeCopied": "Share code copied.",
           "copyFailed": "Couldn't copy. Select the code and copy it manually.",
           "madePrivate": "“{title}” is now private.",
-          "madePublic": "“{title}” is now public."
+          "madePublic": "“{title}” is now public.",
+          "preview": "Preview"
         },
         "share": {
           "title": "Share album",
@@ -216,7 +217,8 @@
           "openUnwrap": "Open Unwrap page",
           "notShared": "This album has no share code yet.",
           "createCode": "Create share code",
-          "createComingSoon": "Creating share codes is still in development."
+          "createComingSoon": "Creating share codes is still in development.",
+          "preview": "Preview as recipient"
         },
         "delete": {
           "title": "Delete album?",
@@ -279,6 +281,11 @@
           "preface": "Say hello there ~",
           "afterword": "After all..."
         }
+      },
+      "preview": {
+        "badge": "Preview · sample content",
+        "exit": "Exit",
+        "notFound": "Couldn't find that album to preview."
       }
     }
   }

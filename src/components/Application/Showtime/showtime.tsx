@@ -2,7 +2,7 @@
 
 import {useParams, useRouter, useSearchParams} from "next/navigation";
 import {useEffect, useRef, useState} from "react";
-import {UnwrapPhase} from "@/types";
+import {AlbumResponse, UnwrapPhase} from "@/types";
 import {AnimatePresence, motion} from "framer-motion";
 import ThemeToggle from "@/components/Common/ThemeToggle";
 import DigitalAlbum from "@/components/Application/Showtime/DigitalAlbum";
@@ -10,7 +10,7 @@ import Curtains from "@/components/Application/Showtime/Curtains";
 import IntroText from "@/components/Application/Showtime/IntroText";
 import FloatingIcons from "@/components/Application/Showtime/FloatingIcons";
 import RibbonEffects from "@/components/Application/Showtime/RibbonEffect";
-import {Book} from "lucide-react";
+import {Book, X} from "lucide-react";
 import {useTranslations} from "next-intl";
 import {useGetPermissionAlbum, useGetPublicAlbum} from "@/hooks/api/useAlbums";
 import PreparingAlbum from "@/components/Application/Showtime/PreparingAlbum";
@@ -18,7 +18,13 @@ import GlassPlayer from "@/components/Application/Showtime/Album/Plugin/GlassPla
 import {useAppSelector} from "@/libs/redux/hook";
 import {toast} from "sonner";
 
-export default function Showtime() {
+interface ShowtimeProps {
+  // Xem thử: dùng album có sẵn, bỏ qua kiểm tra mã/phiên; onExitPreview hiện nút thoát
+  previewAlbum?: AlbumResponse;
+  onExitPreview?: () => void;
+}
+
+export default function Showtime({previewAlbum, onExitPreview}: ShowtimeProps = {}) {
   const params = useParams();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -34,19 +40,20 @@ export default function Showtime() {
   
   const isLoading = isPublicLoading || isPermissionLoading;
   const isError = isPublicError || isPermissionError;
-  const album = publicAlbum ?? permissionAlbum ?? null;
+  const album = previewAlbum ?? publicAlbum ?? permissionAlbum ?? null;
   
   const isValidPublic = !!(key && publicAlbum);
   const isValidPrivate = !!(id && token && permissionAlbum);
   
   useEffect(() => {
+    if (previewAlbum) return;
     if (!isLoading && !isError && !isValidPublic && !isValidPrivate) {
       if (!key && !(id && token)) {
         toast.error(t('cannotAccess'));
       }
       router.replace('/demo/unwrap');
     }
-  }, [isLoading, isError, isValidPublic, isValidPrivate, router]);
+  }, [previewAlbum, isLoading, isError, isValidPublic, isValidPrivate, router]);
   
   // Validate album existence (In PREPARING_ALBUM phase)
   useEffect(() => {
@@ -125,6 +132,7 @@ export default function Showtime() {
   return (
     <div
       className="relative w-screen h-screen overflow-hidden bg-stone-100 dark:bg-stone-950 font-sans text-stone-900 dark:text-stone-100 transition-colors duration-500">
+      {previewAlbum && onExitPreview && <PreviewBadge onExit={onExitPreview}/>}
       {/* --- LAYER: Màn hình kiểm tra --- */}
       {phase === UnwrapPhase.PREPARING_ALBUM && (
         <PreparingAlbum phase={phase}/>
@@ -220,3 +228,20 @@ export default function Showtime() {
     </div>
   );
 }
+
+const PreviewBadge = ({onExit}: { onExit: () => void }) => {
+  const t = useTranslations('App.Showtime.preview');
+  return (
+    <div className="absolute bottom-4 left-4 md:left-6 z-[110] flex items-center gap-2 pl-4 pr-1.5 py-1.5 rounded-full bg-stone-900/80 backdrop-blur-md text-stone-100 text-sm shadow-lg">
+      <span>{t('badge')}</span>
+      <button
+        type="button"
+        onClick={onExit}
+        className="flex items-center gap-1 h-8 px-3 rounded-full bg-amber-500 hover:bg-amber-600 text-stone-950 font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
+      >
+        <X className="w-4 h-4"/>
+        {t('exit')}
+      </button>
+    </div>
+  );
+};

@@ -1,5 +1,5 @@
 import {Book, Globe, Heart} from "lucide-react";
-import {useLocale} from "use-intl";
+import {useLocale} from "next-intl";
 
 interface FrenchFlapProps {
   avatarUrl?: string;

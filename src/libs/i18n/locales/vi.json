@@ -202,7 +202,8 @@
           "codeCopied": "Đã sao chép mã chia sẻ.",
           "copyFailed": "Không sao chép được. Hãy chọn mã và sao chép thủ công.",
           "madePrivate": "Đã chuyển “{title}” sang riêng tư.",
-          "madePublic": "Đã chuyển “{title}” sang công khai."
+          "madePublic": "Đã chuyển “{title}” sang công khai.",
+          "preview": "Xem thử"
         },
         "share": {
           "title": "Chia sẻ album",
@@ -216,7 +217,8 @@
           "openUnwrap": "Mở trang Unwrap",
           "notShared": "Album này chưa có mã chia sẻ.",
           "createCode": "Tạo mã chia sẻ",
-          "createComingSoon": "Tính năng tạo mã chia sẻ đang được phát triển."
+          "createComingSoon": "Tính năng tạo mã chia sẻ đang được phát triển.",
+          "preview": "Xem thử như người nhận"
         },
         "delete": {
           "title": "Xoá album?",
@@ -279,6 +281,11 @@
           "preface": "Đôi lời xin chào ~",
           "afterword": "Sau cùng thì..."
         }
+      },
+      "preview": {
+        "badge": "Xem thử · nội dung mẫu",
+        "exit": "Thoát",
+        "notFound": "Không tìm thấy album để xem thử."
       }
     }
   }

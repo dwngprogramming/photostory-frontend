@@ -2,11 +2,11 @@
 
 import React, {useEffect, useRef, useState} from "react";
 import {AnimatePresence, motion} from "framer-motion";
-import {Check, Copy, ExternalLink, Globe, KeyRound, Lock, MoreVertical, Share2, Trash2, X} from "lucide-react";
+import {Check, Copy, ExternalLink, Eye, Globe, KeyRound, Lock, MoreVertical, Share2, Trash2, X} from "lucide-react";
 import {useTranslations} from "next-intl";
 import {toast} from "sonner";
 import ModalWrapper from "@/components/Common/ModalWrapper";
-import {Link} from "@/libs/i18n/navigation";
+import {Link, useRouter} from "@/libs/i18n/navigation";
 import {Album} from "@/types";
 
 const copyText = async (text: string) => {
@@ -31,6 +31,7 @@ interface AlbumActionsMenuProps {
 
 export const AlbumActionsMenu = ({album, onShare, onTogglePrivacy, onDelete, variant = 'plain', className = ''}: AlbumActionsMenuProps) => {
   const t = useTranslations('App.User.myAlbums.actions');
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -61,6 +62,7 @@ export const AlbumActionsMenu = ({album, onShare, onTogglePrivacy, onDelete, var
   };
 
   const items = [
+    {key: 'preview', icon: Eye, label: t('preview'), onSelect: () => router.push(`/preview/${album.id}`)},
     {key: 'share', icon: Share2, label: t('share'), onSelect: onShare},
     ...(album.shareCode ? [{key: 'copy', icon: Copy, label: t('copyCode'), onSelect: handleCopyCode}] : []),
     {
@@ -145,6 +147,19 @@ const CloseButton = ({onClick, label}: { onClick: () => void, label: string }) =
   </button>
 );
 
+const PreviewLink = ({albumId}: { albumId: string }) => {
+  const t = useTranslations('App.User.myAlbums.share');
+  return (
+    <Link
+      href={`/preview/${albumId}`}
+      className="w-full h-12 rounded-xl border-2 border-amber-400 text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20 font-semibold flex items-center justify-center gap-2 transition-colors"
+    >
+      <Eye className="w-4 h-4"/>
+      {t('preview')}
+    </Link>
+  );
+};
+
 interface ShareAlbumModalProps {
   album: Album | null;
   onClose: () => void;
@@ -209,6 +224,8 @@ export const ShareAlbumModal = ({album, onClose}: ShareAlbumModalProps) => {
 
               <p className="text-sm text-stone-500 dark:text-stone-400">{t('howTo')}</p>
 
+              <PreviewLink albumId={album.id}/>
+
               <Link
                 href="/demo/unwrap"
                 target="_blank"
@@ -228,6 +245,7 @@ export const ShareAlbumModal = ({album, onClose}: ShareAlbumModalProps) => {
               >
                 {t('createCode')}
               </button>
+              <PreviewLink albumId={album.id}/>
             </div>
           )}
         </motion.div>
