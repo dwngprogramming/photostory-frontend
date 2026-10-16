@@ -10,7 +10,6 @@ import {
   playThemeSong,
   requestSeek,
   retryTrack,
-  setVolume,
   toggleMute
 } from "@/libs/redux/features/audioSlice";
 
@@ -87,7 +86,7 @@ const fillStyle = (percent: number): React.CSSProperties => ({
 const GlassPlayer = ({musicUrl, isThemeMusic, size = "md"}: GlassPlayerProps) => {
   const t = useTranslations('App.Showtime.player');
   const dispatch = useAppDispatch();
-  const {mode, themeUrl, currentUrl, isPlaying, isLoading, hasError, volume, isMuted, position, duration} =
+  const {mode, themeUrl, currentUrl, isPlaying, isLoading, hasError, isMuted, position, duration} =
     useAppSelector(state => state.audio);
   const info = useSongInfo(musicUrl);
   const [dragValue, setDragValue] = useState<number | null>(null);
@@ -125,7 +124,7 @@ const GlassPlayer = ({musicUrl, isThemeMusic, size = "md"}: GlassPlayerProps) =>
 
   const label = isFailed ? t('retry') : isRunning || isBuffering ? t('pause') : t('play');
   const isCompact = size === 'sm';
-  const iconClass = isCompact ? 'w-3.5 h-3.5' : 'w-5 h-5';
+  const iconClass = isCompact ? 'w-3.5 h-3.5' : 'w-4 h-4';
 
   const playButton = (
     <button
@@ -133,7 +132,7 @@ const GlassPlayer = ({musicUrl, isThemeMusic, size = "md"}: GlassPlayerProps) =>
       onClick={handleToggle}
       aria-label={`${label}: ${title}`}
       className={`relative shrink-0 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 text-stone-900 flex items-center justify-center shadow-[0_4px_12px_-2px_rgba(249,115,22,0.4)] transition-transform duration-200 hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-stone-900/60 ${
-        isCompact ? 'w-8 h-8' : 'w-11 h-11'
+        isCompact ? 'w-8 h-8' : 'w-9 h-9'
       }`}
     >
       <span aria-hidden className="absolute inset-x-0 top-0 h-1/2 rounded-t-full bg-gradient-to-b from-white/40 to-transparent pointer-events-none"/>
@@ -157,7 +156,7 @@ const GlassPlayer = ({musicUrl, isThemeMusic, size = "md"}: GlassPlayerProps) =>
   );
 
   const glass = `absolute inset-0 -z-10 backdrop-blur-xl backdrop-saturate-150 transition-all duration-700 ${
-    isCompact ? 'rounded-full bg-white/70' : 'rounded-2xl bg-white/65'
+    isCompact ? 'rounded-full bg-white/70' : 'rounded-xl bg-white/65'
   } ${isRunning
     ? 'border border-orange-400/60 shadow-[inset_0_0_26px_rgba(251,146,60,0.4),inset_0_0_8px_rgba(255,255,255,0.3)]'
     : 'border border-white/60 shadow-lg'}`;
@@ -196,34 +195,23 @@ const GlassPlayer = ({musicUrl, isThemeMusic, size = "md"}: GlassPlayerProps) =>
     <div
       role="group"
       aria-label={title}
-      className="relative isolate w-full p-3 select-none overflow-hidden rounded-2xl"
+      className="relative isolate w-full px-2.5 py-2 select-none overflow-hidden rounded-xl"
     >
       <span aria-hidden className={glass}/>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2.5">
         {playButton}
         <div className="min-w-0 flex-1 leading-tight">
-          <p className="font-serif font-bold text-lg text-stone-800 truncate">{title}</p>
-          <div className="flex items-center gap-2 text-xs text-stone-600">
+          <p className="font-serif font-bold text-sm text-stone-800 truncate">{title}</p>
+          <div className="flex items-center gap-2 text-[11px] text-stone-600">
             <span className="truncate">{artist}</span>
             <Equalizer active={isRunning}/>
           </div>
         </div>
         {muteButton}
-        <input
-          type="range"
-          min={0}
-          max={1}
-          step={0.05}
-          value={isMuted ? 0 : volume}
-          onChange={(e) => dispatch(setVolume(Number(e.target.value)))}
-          aria-label={t('volume')}
-          style={fillStyle((isMuted ? 0 : volume) * 100)}
-          className={`${sliderClass} hidden sm:block !w-16`}
-        />
       </div>
 
-      <div className="mt-2 flex items-center gap-2 text-[11px] tabular-nums text-stone-600">
-        <span className="w-8 text-right">{canSeek ? formatTime(shownPosition) : '–:––'}</span>
+      <div className="mt-1 flex items-center gap-2 text-[10px] tabular-nums text-stone-600">
+        <span className="w-7 text-right">{canSeek ? formatTime(shownPosition) : '–:––'}</span>
         <input
           type="range"
           min={0}
@@ -240,7 +228,7 @@ const GlassPlayer = ({musicUrl, isThemeMusic, size = "md"}: GlassPlayerProps) =>
           style={fillStyle(sliderValue / 10)}
           className={sliderClass}
         />
-        <span className="w-8">{canSeek ? formatTime(duration) : '–:––'}</span>
+        <span className="w-7">{canSeek ? formatTime(duration) : '–:––'}</span>
       </div>
 
       {isFailed && (
