@@ -6,9 +6,9 @@
     "openMenu": "Mở menu",
     "closeMenu": "Đóng menu",
     "watchLater": "Để sau",
-    "copyright": "© {year} Photostory. Tạo ra với ❤\uFE0F của Dũng Phạm để lưu giữ kỷ niệm.",
+    "copyright": "© {year} Photostory. Tạo ra với ❤️ của Dũng Phạm để lưu giữ kỷ niệm.",
     "cannotAccess": "Không thể truy cập. Vui lòng nhập lại mã code.",
-    "relationship" : {
+    "relationship": {
       "lover": "người yêu",
       "boyfriend": "bạn trai",
       "girlfriend": "bạn gái",
@@ -20,7 +20,7 @@
       "son": "con trai",
       "daughter": "con gái",
       "friend": "bạn",
-      "family":  "gia đình",
+      "family": "gia đình",
       "colleague": "đồng nghiệp",
       "parent": "bố mẹ",
       "father": "bố",
@@ -136,7 +136,7 @@
           "myAlbums": "Album của tôi",
           "totalPhotos": "Tổng số ảnh",
           "publicAlbums": "Album công khai",
-          "privateAlbums": "Album riêng tư",
+          "protectedAlbums": "Album có bảo mật",
           "storageUsage": "Dung lượng sử dụng",
           "upgradeStorage": "Nâng cấp",
           "storageAlmostFull": "Dung lượng sắp đầy. Xoá bớt ảnh hoặc nâng cấp để tiếp tục tải lên."
@@ -161,8 +161,9 @@
         "filter": {
           "label": "Lọc theo quyền riêng tư",
           "all": "Tất cả",
-          "public": "Công khai",
-          "private": "Riêng tư"
+          "PUBLIC": "Công khai",
+          "PIN_PROTECTED": "Có mã PIN",
+          "INVITE_ONLY": "Chỉ người được mời"
         },
         "sort": {
           "label": "Sắp xếp",
@@ -176,8 +177,14 @@
           "list": "Xem dạng danh sách"
         },
         "privacy": {
-          "public": "Công khai",
-          "private": "Riêng tư"
+          "PUBLIC": "Công khai",
+          "PIN_PROTECTED": "Có mã PIN",
+          "INVITE_ONLY": "Chỉ người được mời",
+          "hint": {
+            "PUBLIC": "Ai có mã đều mở được, không cần đăng nhập.",
+            "PIN_PROTECTED": "Cần mã và mã PIN, không cần đăng nhập.",
+            "INVITE_ONLY": "Chỉ người trong nhóm được chia sẻ, mở qua link mời. Cần đăng nhập."
+          }
         },
         "photoCount": "{count, plural, =0 {Chưa có ảnh} other {# ảnh}}",
         "openAlbum": "Mở album",
@@ -196,34 +203,43 @@
           "menu": "Thao tác với album {title}",
           "share": "Chia sẻ",
           "copyCode": "Sao chép mã chia sẻ",
-          "makePrivate": "Chuyển sang riêng tư",
-          "makePublic": "Chuyển sang công khai",
+          "copyLink": "Sao chép link mời",
           "delete": "Xoá album",
+          "accessLabel": "Ai được mở album",
           "codeCopied": "Đã sao chép mã chia sẻ.",
+          "linkCopied": "Đã sao chép link mời.",
           "copyFailed": "Không sao chép được. Hãy chọn mã và sao chép thủ công.",
-          "madePrivate": "Đã chuyển “{title}” sang riêng tư.",
-          "madePublic": "Đã chuyển “{title}” sang công khai.",
+          "madePublic": "“{title}” giờ là Công khai. Ai có mã đều mở được.",
+          "madePinProtected": "“{title}” giờ cần mã PIN để mở.",
+          "madeInviteOnly": "“{title}” giờ chỉ người được mời mới mở được. Mã chia sẻ không còn dùng được.",
           "preview": "Xem thử"
         },
         "share": {
           "title": "Chia sẻ album",
           "codeLabel": "Mã mở album",
+          "linkLabel": "Link mời",
           "copy": "Sao chép",
           "copied": "Đã chép",
           "copyFailed": "Không sao chép được. Hãy chọn mã và sao chép thủ công.",
-          "withPin": "Album có mã PIN. Gửi kèm mã PIN cho người nhận, nhưng nên gửi riêng với mã mở album.",
-          "withoutPin": "Album không có mã PIN: ai có mã này đều mở được album.",
+          "note": {
+            "PUBLIC": "Ai có mã này đều mở được album, không cần đăng nhập.",
+            "PIN_PROTECTED": "Album cần mã PIN. Gửi kèm mã PIN cho người nhận, nhưng nên gửi riêng với mã mở album.",
+            "INVITE_ONLY": "Chỉ người trong nhóm được chia sẻ mới mở được link này, sau khi đăng nhập. Người khác có link cũng không xem được."
+          },
           "howTo": "Người nhận vào trang Unwrap, nhập mã này để mở album.",
+          "howToInvite": "Gửi link này cho người trong nhóm được chia sẻ. Họ đăng nhập để mở album.",
           "openUnwrap": "Mở trang Unwrap",
           "notShared": "Album này chưa có mã chia sẻ.",
+          "noLink": "Album này chưa có link mời.",
           "createCode": "Tạo mã chia sẻ",
+          "createLink": "Tạo link mời",
           "createComingSoon": "Tính năng tạo mã chia sẻ đang được phát triển.",
           "preview": "Xem thử như người nhận"
         },
         "delete": {
           "title": "Xoá album?",
           "description": "Album <b>{title}</b> cùng toàn bộ ảnh và câu chuyện sẽ bị xoá và không khôi phục được.",
-          "codeWarning": "Mã chia sẻ của album sẽ ngừng hoạt động; người nhận không mở được nữa.",
+          "codeWarning": "Mã và link chia sẻ sẽ không dùng được nữa, người nhận sẽ không mở được album.",
           "confirm": "Xoá album",
           "cancel": "Huỷ",
           "done": "Đã xoá “{title}”."
@@ -300,6 +316,10 @@
         "loadFailed": "Không phát được bài này.",
         "music": "Nhạc",
         "poweredBy": "Cung cấp bởi"
+      },
+      "locations": {
+        "more": "Xem thêm {count} địa điểm",
+        "less": "Thu gọn"
       }
     }
   }

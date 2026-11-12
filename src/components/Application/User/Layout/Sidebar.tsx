@@ -3,8 +3,9 @@
 import React from 'react';
 import Link from 'next/link';
 
-import {Book, LibraryBig, LogOut, Settings, User as UserIcon, Users, X} from 'lucide-react';
+import {LibraryBig, LogOut, Settings, User as UserIcon, Users, X} from 'lucide-react';
 import ThemeToggle from '@/components/Common/ThemeToggle';
+import Logo from '@/components/Common/Logo';
 import {User} from '@/types';
 import {usePathname} from "@/libs/i18n/navigation";
 import {useTranslations} from "next-intl";
@@ -49,11 +50,8 @@ export default function Sidebar({ currentUser, isOpen, onCloseMobile }: SidebarP
       >
         {/* Header */}
         <div className="h-16 flex items-center justify-between px-6 border-b border-stone-100 dark:border-stone-800">
-          <Link href="/my-albums" className="flex items-center gap-2" onClick={onCloseMobile}>
-            <Book className="w-8 h-8 text-amber-500" />
-            <span className="text-xl font-bold font-serif text-stone-800 dark:text-stone-100">
-              Photostory
-            </span>
+          <Link href="/my-albums" aria-label="Photostory" className="flex items-center" onClick={onCloseMobile}>
+            <Logo className="h-8 w-auto"/>
           </Link>
           <button
             onClick={onCloseMobile}

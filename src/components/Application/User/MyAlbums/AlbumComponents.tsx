@@ -1,4 +1,4 @@
-import {AlertCircle, Calendar, FolderPlus, Globe, Image as ImageIcon, Lock, Plus} from "lucide-react";
+import {AlertCircle, Calendar, FolderPlus, Globe, Image as ImageIcon, KeyRound, Plus, Users} from "lucide-react";
 import {Album} from "@/types";
 import React from "react";
 import {useDropzone} from "react-dropzone";
@@ -53,11 +53,30 @@ export const EmptyState: React.FC<EmptyStateProps> = ({ onCreateAlbum, onDropFil
 };
 
 // --- SHARED PIECES ---
-const PrivacyLabel = ({privacy, className = ''}: { privacy: Album['privacy'], className?: string }) => {
+// Bảo mật tăng dần: công khai xanh lá, có mã PIN hổ phách, chỉ người được mời xanh dương
+const PRIVACY_TONES = {
+  // Nền nhạt, chữ và viền đậm hơn cùng tông màu
+  onImage: {
+    PUBLIC: 'bg-emerald-50/75 border-emerald-500/50 text-emerald-800',
+    PIN_PROTECTED: 'bg-amber-50/75 border-amber-500/50 text-amber-900',
+    INVITE_ONLY: 'bg-sky-50/75 border-sky-500/50 text-sky-800',
+  },
+  plain: {
+    PUBLIC: 'bg-emerald-500/5 border-emerald-500/40 text-emerald-700 dark:bg-emerald-400/5 dark:border-emerald-400/40 dark:text-emerald-300',
+    PIN_PROTECTED: 'bg-amber-500/5 border-amber-500/40 text-amber-700 dark:bg-amber-400/5 dark:border-amber-400/40 dark:text-amber-300',
+    INVITE_ONLY: 'bg-sky-500/5 border-sky-500/40 text-sky-700 dark:bg-sky-400/5 dark:border-sky-400/40 dark:text-sky-300',
+  },
+} as const;
+
+const PrivacyLabel = ({privacy, variant, className = ''}: {
+  privacy: Album['privacy'],
+  variant: keyof typeof PRIVACY_TONES,
+  className?: string
+}) => {
   const t = useTranslations('App.User.myAlbums.privacy');
-  const Icon = privacy === 'private' ? Lock : Globe;
+  const Icon = {PUBLIC: Globe, PIN_PROTECTED: KeyRound, INVITE_ONLY: Users}[privacy];
   return (
-    <span className={`inline-flex items-center gap-1 ${className}`}>
+    <span className={`inline-flex items-center gap-1 border ${PRIVACY_TONES[variant][privacy]} ${className}`}>
       <Icon className="w-3 h-3"/>
       {t(privacy)}
     </span>
@@ -118,27 +137,28 @@ export const AlbumGrid: React.FC<AlbumCollectionProps> = ({albums, onOpenAlbum, 
       {albums.map((album) => (
         <li key={album.id} className="relative">
           {renderActions && (
-            <div className="absolute top-3 left-3 z-10">{renderActions(album, 'onImage')}</div>
+            <div className="absolute top-3 right-3 z-10">{renderActions(album, 'onImage')}</div>
           )}
           <button
             type="button"
             onClick={() => onOpenAlbum(album)}
             aria-label={`${t('openAlbum')}: ${album.title}`}
-            className="group w-full h-full text-left bg-white dark:bg-stone-900 rounded-xl overflow-hidden border border-stone-200 dark:border-stone-800 hover:shadow-soft-lg dark:hover:shadow-dark-lg hover:-translate-y-1 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+            className="group w-full h-full text-left bg-white dark:bg-stone-900 rounded-xl overflow-hidden border border-stone-200 dark:border-stone-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
           >
             {/* Cover */}
             <div className="relative aspect-[4/3] overflow-hidden bg-stone-100 dark:bg-stone-800">
               <AlbumCover
                 album={album}
-                className="w-full h-full transition-transform duration-700 group-hover:scale-105"
+                className="w-full h-full"
               />
               <PrivacyLabel
                 privacy={album.privacy}
-                className="absolute top-3 right-3 bg-black/40 backdrop-blur-md text-white text-xs px-2 py-1 rounded-md"
+                variant="onImage"
+                className="absolute top-3 left-3 z-10 backdrop-blur-md text-xs font-semibold px-2 py-1 rounded-md"
               />
               {/* Hover Overlay */}
-              <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                <span className="bg-white/90 dark:bg-stone-900/90 text-stone-900 dark:text-stone-100 px-4 py-2 rounded-lg font-medium shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+              <div className="absolute inset-0 backdrop-blur-none opacity-0 group-hover:backdrop-blur-[3px] group-focus-visible:backdrop-blur-[3px] group-hover:opacity-100 group-focus-visible:opacity-100 transition-[opacity,backdrop-filter] duration-300 ease-in-out flex items-center justify-center">
+                <span className="bg-white/90 dark:bg-stone-900/90 text-stone-900 dark:text-stone-100 px-4 py-2 rounded-lg font-medium shadow-lg">
                   {t('openAlbum')}
                 </span>
               </div>
@@ -184,9 +204,16 @@ export const AlbumList: React.FC<AlbumCollectionProps> = ({albums, onOpenAlbum, 
                 <AlbumMeta album={album}/>
               </div>
             </div>
+            <span
+              aria-hidden
+              className="hidden sm:inline-flex shrink-0 text-xs font-medium px-2.5 py-1 rounded-md border border-amber-400 text-amber-700 dark:text-amber-400 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-200"
+            >
+              {t('openAlbum')}
+            </span>
             <PrivacyLabel
               privacy={album.privacy}
-              className="hidden sm:inline-flex shrink-0 text-xs font-medium px-2 py-1 rounded-md bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300"
+              variant="plain"
+              className="hidden sm:inline-flex shrink-0 text-xs font-medium px-2 py-1 rounded-md"
             />
           </button>
           {renderActions?.(album, 'plain')}

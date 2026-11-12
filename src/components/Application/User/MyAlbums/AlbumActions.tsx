@@ -2,12 +2,12 @@
 
 import React, {useEffect, useRef, useState} from "react";
 import {AnimatePresence, motion} from "framer-motion";
-import {Check, Copy, ExternalLink, Eye, Globe, KeyRound, Lock, MoreVertical, Share2, Trash2, X} from "lucide-react";
+import {Check, Copy, ExternalLink, Eye, Globe, KeyRound, MoreVertical, Share2, Trash2, Users, X} from "lucide-react";
 import {useTranslations} from "next-intl";
 import {toast} from "sonner";
 import ModalWrapper from "@/components/Common/ModalWrapper";
 import {Link, useRouter} from "@/libs/i18n/navigation";
-import {Album} from "@/types";
+import {Album, AlbumPrivacy} from "@/types";
 
 const copyText = async (text: string) => {
   try {
@@ -18,19 +18,29 @@ const copyText = async (text: string) => {
   }
 };
 
+// Link mời không kèm locale để người nhận mở theo ngôn ngữ của họ
+const inviteLink = (shareLinkId: string) => `${window.location.origin}/share/${shareLinkId}`;
+
 // --- ACTION MENU ---
+const PRIVACY_OPTIONS = [
+  {value: 'PUBLIC', icon: Globe},
+  {value: 'PIN_PROTECTED', icon: KeyRound},
+  {value: 'INVITE_ONLY', icon: Users},
+] as const;
+
 interface AlbumActionsMenuProps {
   album: Album;
   onShare: () => void;
-  onTogglePrivacy: () => void;
+  onChangePrivacy: (privacy: AlbumPrivacy) => void;
   onDelete: () => void;
   // onImage: nút nằm trên ảnh bìa, nền tối mờ
   variant?: 'plain' | 'onImage';
   className?: string;
 }
 
-export const AlbumActionsMenu = ({album, onShare, onTogglePrivacy, onDelete, variant = 'plain', className = ''}: AlbumActionsMenuProps) => {
+export const AlbumActionsMenu = ({album, onShare, onChangePrivacy, onDelete, variant = 'plain', className = ''}: AlbumActionsMenuProps) => {
   const t = useTranslations('App.User.myAlbums.actions');
+  const tPrivacy = useTranslations('App.User.myAlbums.privacy');
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -55,24 +65,24 @@ export const AlbumActionsMenu = ({album, onShare, onTogglePrivacy, onDelete, var
     };
   }, [isOpen]);
 
-  const handleCopyCode = async () => {
-    if (!album.shareCode) return;
-    if (await copyText(album.shareCode)) toast.success(t('codeCopied'));
+  const copyItem = album.privacy === 'INVITE_ONLY'
+    ? album.shareLinkId && {label: t('copyLink'), text: inviteLink(album.shareLinkId), done: t('linkCopied')}
+    : album.shareCode && {label: t('copyCode'), text: album.shareCode, done: t('codeCopied')};
+
+  const handleCopy = async () => {
+    if (!copyItem) return;
+    if (await copyText(copyItem.text)) toast.success(copyItem.done);
     else toast.error(t('copyFailed'));
   };
 
   const items = [
     {key: 'preview', icon: Eye, label: t('preview'), onSelect: () => router.push(`/preview/${album.id}`)},
     {key: 'share', icon: Share2, label: t('share'), onSelect: onShare},
-    ...(album.shareCode ? [{key: 'copy', icon: Copy, label: t('copyCode'), onSelect: handleCopyCode}] : []),
-    {
-      key: 'privacy',
-      icon: album.privacy === 'public' ? Lock : Globe,
-      label: album.privacy === 'public' ? t('makePrivate') : t('makePublic'),
-      onSelect: onTogglePrivacy,
-    },
-    {key: 'delete', icon: Trash2, label: t('delete'), onSelect: onDelete, danger: true},
+    ...(copyItem ? [{key: 'copy', icon: Copy, label: copyItem.label, onSelect: handleCopy}] : []),
   ];
+
+  const close = () => setIsOpen(false);
+  const itemClass = 'w-full flex items-center gap-3 px-4 py-2 text-sm text-left transition-colors focus:outline-none focus-visible:bg-stone-100 dark:focus-visible:bg-stone-700';
 
   return (
     <div ref={rootRef} className={`relative ${className}`}>
@@ -98,7 +108,7 @@ export const AlbumActionsMenu = ({album, onShare, onTogglePrivacy, onDelete, var
             animate={{opacity: 1, y: 0, scale: 1}}
             exit={{opacity: 0, y: -6, scale: 0.97}}
             transition={{duration: 0.15, ease: "easeOut"}}
-            className={`absolute ${variant === 'onImage' ? 'left-0 origin-top-left' : 'right-0 origin-top-right'} mt-1 w-52 rounded-xl bg-white dark:bg-stone-800 shadow-lg ring-1 ring-stone-200 dark:ring-stone-700 overflow-hidden z-20 py-1`}
+            className={`absolute right-0 origin-top-right mt-1 w-72 max-w-[calc(100vw-2rem)] rounded-xl bg-white dark:bg-stone-800 shadow-lg ring-1 ring-stone-200 dark:ring-stone-700 overflow-hidden z-20 py-1`}
           >
             {items.map((item) => (
               <button
@@ -106,19 +116,62 @@ export const AlbumActionsMenu = ({album, onShare, onTogglePrivacy, onDelete, var
                 type="button"
                 role="menuitem"
                 onClick={() => {
-                  setIsOpen(false);
+                  close();
                   item.onSelect();
                 }}
-                className={`w-full flex items-center gap-3 px-4 py-2 text-sm text-left transition-colors focus:outline-none focus-visible:bg-stone-100 dark:focus-visible:bg-stone-700 ${
-                  item.danger
-                    ? 'text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40'
-                    : 'text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-700'
-                }`}
+                className={`${itemClass} text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-700`}
               >
                 <item.icon className="w-4 h-4 shrink-0"/>
                 {item.label}
               </button>
             ))}
+
+            {/* Chọn quyền trực tiếp, đánh dấu quyền đang áp dụng */}
+            <div role="group" aria-labelledby={`access-${album.id}`} className="border-t border-stone-100 dark:border-stone-700 mt-1 pt-1">
+              <p id={`access-${album.id}`} className="px-4 pt-2 pb-1 text-xs font-medium text-stone-400 dark:text-stone-500">
+                {t('accessLabel')}
+              </p>
+              {PRIVACY_OPTIONS.map((option) => {
+                const isCurrent = option.value === album.privacy;
+                return (
+                  <button
+                    key={option.value}
+                    type="button"
+                    role="menuitemradio"
+                    aria-checked={isCurrent}
+                    onClick={() => {
+                      close();
+                      if (!isCurrent) onChangePrivacy(option.value);
+                    }}
+                    className={`${itemClass} items-start text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-700`}
+                  >
+                    <option.icon className="w-4 h-4 mt-0.5 shrink-0"/>
+                    <span className="flex-1 min-w-0">
+                      <span className={`block ${isCurrent ? 'font-semibold text-stone-900 dark:text-stone-100' : ''}`}>
+                        {tPrivacy(option.value)}
+                      </span>
+                      <span className="block text-xs text-stone-500 dark:text-stone-400">{tPrivacy(`hint.${option.value}`)}</span>
+                    </span>
+                    {isCurrent && <Check className="w-4 h-4 mt-0.5 shrink-0 text-amber-600 dark:text-amber-400"/>}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="border-t border-stone-100 dark:border-stone-700 mt-1 pt-1">
+              <button
+                type="button"
+                role="menuitem"
+                onClick={() => {
+                  close();
+                  onDelete();
+                }}
+                className={`${itemClass} text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40`}
+              >
+                <Trash2 className="w-4 h-4 shrink-0"/>
+                {t('delete')}
+              </button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -160,6 +213,12 @@ const PreviewLink = ({albumId}: { albumId: string }) => {
   );
 };
 
+const SHARE_NOTES = {
+  PUBLIC: {icon: Globe, tone: 'text-emerald-600 dark:text-emerald-400'},
+  PIN_PROTECTED: {icon: KeyRound, tone: 'text-amber-600 dark:text-amber-400'},
+  INVITE_ONLY: {icon: Users, tone: 'text-sky-600 dark:text-sky-400'},
+} as const;
+
 interface ShareAlbumModalProps {
   album: Album | null;
   onClose: () => void;
@@ -170,9 +229,16 @@ export const ShareAlbumModal = ({album, onClose}: ShareAlbumModalProps) => {
   const tCommon = useTranslations('Common');
   const [copied, setCopied] = useState(false);
 
+  // INVITE_ONLY chia sẻ bằng link mời, hai quyền còn lại bằng mã unwrap
+  const isInvite = album?.privacy === 'INVITE_ONLY';
+  const shareValue = isInvite
+    ? album?.shareLinkId && inviteLink(album.shareLinkId)
+    : album?.shareCode;
+  const NoteIcon = album ? SHARE_NOTES[album.privacy].icon : Globe;
+
   const handleCopy = async () => {
-    if (!album?.shareCode) return;
-    if (await copyText(album.shareCode)) {
+    if (!shareValue) return;
+    if (await copyText(shareValue)) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } else {
@@ -194,13 +260,13 @@ export const ShareAlbumModal = ({album, onClose}: ShareAlbumModalProps) => {
             <p className="mt-2 text-sm text-stone-500 dark:text-stone-400 line-clamp-2">{album.title}</p>
           </div>
 
-          {album.shareCode ? (
+          {shareValue ? (
             <div className="p-6 space-y-4">
               <div>
-                <p className="text-sm font-medium text-stone-700 dark:text-stone-300 mb-1.5">{t('codeLabel')}</p>
+                <p className="text-sm font-medium text-stone-700 dark:text-stone-300 mb-1.5">{t(isInvite ? 'linkLabel' : 'codeLabel')}</p>
                 <div className="flex gap-2">
-                  <code className="flex-1 min-w-0 h-12 px-4 flex items-center rounded-xl bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 font-mono text-sm sm:text-base tracking-wide text-stone-900 dark:text-stone-100 truncate select-all">
-                    {album.shareCode}
+                  <code className={`flex-1 min-w-0 h-12 px-4 flex items-center rounded-xl bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 font-mono text-stone-900 dark:text-stone-100 truncate select-all ${isInvite ? 'text-xs sm:text-sm' : 'text-sm sm:text-base tracking-wide'}`}>
+                    {shareValue}
                   </code>
                   <button
                     type="button"
@@ -214,36 +280,34 @@ export const ShareAlbumModal = ({album, onClose}: ShareAlbumModalProps) => {
               </div>
 
               <div className="flex items-start gap-3 p-3 rounded-xl bg-stone-50 dark:bg-stone-800/50 border border-stone-100 dark:border-stone-800 text-sm">
-                {album.hasPin
-                  ? <KeyRound className="w-4 h-4 mt-0.5 shrink-0 text-amber-600 dark:text-amber-400"/>
-                  : <Globe className="w-4 h-4 mt-0.5 shrink-0 text-stone-500 dark:text-stone-400"/>}
-                <p className="text-stone-600 dark:text-stone-300">
-                  {album.hasPin ? t('withPin') : t('withoutPin')}
-                </p>
+                <NoteIcon className={`w-4 h-4 mt-0.5 shrink-0 ${SHARE_NOTES[album.privacy].tone}`}/>
+                <p className="text-stone-600 dark:text-stone-300">{t(`note.${album.privacy}`)}</p>
               </div>
 
-              <p className="text-sm text-stone-500 dark:text-stone-400">{t('howTo')}</p>
+              <p className="text-sm text-stone-500 dark:text-stone-400">{t(isInvite ? 'howToInvite' : 'howTo')}</p>
 
               <PreviewLink albumId={album.id}/>
 
-              <Link
-                href="/demo/unwrap"
-                target="_blank"
-                className="w-full h-12 rounded-xl text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 font-medium flex items-center justify-center gap-2 transition-colors"
-              >
-                <ExternalLink className="w-4 h-4"/>
-                {t('openUnwrap')}
-              </Link>
+              {!isInvite && (
+                <Link
+                  href="/demo/unwrap"
+                  target="_blank"
+                  className="w-full h-12 rounded-xl text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 font-medium flex items-center justify-center gap-2 transition-colors"
+                >
+                  <ExternalLink className="w-4 h-4"/>
+                  {t('openUnwrap')}
+                </Link>
+              )}
             </div>
           ) : (
             <div className="p-6 space-y-4 text-center">
-              <p className="text-sm text-stone-600 dark:text-stone-300">{t('notShared')}</p>
+              <p className="text-sm text-stone-600 dark:text-stone-300">{t(isInvite ? 'noLink' : 'notShared')}</p>
               <button
                 type="button"
                 onClick={() => toast.info(t('createComingSoon'))}
                 className="w-full h-12 rounded-xl bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-white font-semibold transition-colors"
               >
-                {t('createCode')}
+                {t(isInvite ? 'createLink' : 'createCode')}
               </button>
               <PreviewLink albumId={album.id}/>
             </div>
@@ -281,7 +345,7 @@ export const DeleteAlbumModal = ({album, onClose, onConfirm}: DeleteAlbumModalPr
                 b: (chunks) => <span className="font-semibold text-stone-800 dark:text-stone-100">{chunks}</span>,
               })}
             </p>
-            {album.shareCode && (
+            {(album.shareCode || album.shareLinkId) && (
               <p className="mt-2 text-sm text-stone-500 dark:text-stone-400">{t('codeWarning')}</p>
             )}
           </div>

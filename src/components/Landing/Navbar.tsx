@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react";
-import { Book, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import Logo from "@/components/Common/Logo";
 import { NavLink } from "@/types";
 import ThemeToggle from "@/components/Common/ThemeToggle";
 import LanguageToggle from "@/components/Common/LanguageToggle";
@@ -34,10 +35,7 @@ const Navbar = ({ navLinks }: { navLinks: NavLink[] }) => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex items-center justify-between">
         {/* Logo */}
-        <div className="flex items-center gap-2">
-          <Book className="w-8 h-8 text-amber-500" />
-          <span className="text-xl font-bold text-stone-800 dark:text-stone-100 font-serif">Photostory</span>
-        </div>
+        <Logo href="/" className="h-12 w-auto" priority/>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">

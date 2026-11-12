@@ -20,7 +20,7 @@ Ngoại lệ: icon thương hiệu bên thứ ba vẽ SVG riêng, giữ màu g�
 | 16px | `w-4 h-4` | Mũi tên trong nút hộp thoại, icon thời tiết, nút xoá ô nhập |
 | 20px | `w-5 h-5`, `size={20}` | Nút icon, mục sidebar, mũi tên nút lớn, nút đóng hộp thoại |
 | 24px | `w-6 h-6` | Nút ☰ và ×, icon trong ô tròn hộp thoại |
-| 32px | `w-8 h-8` | Logo, icon card tính năng |
+| 32px | `w-8 h-8` | Icon card tính năng |
 | 40px | `w-10 h-10` | Icon trạng thái rỗng, vòng quay màn chuẩn bị |
 
 ## Màu
@@ -36,7 +36,7 @@ Dùng nhất quán để người dùng nhận ra:
 
 | Nghĩa | Icon |
 |---|---|
-| Thương hiệu, album | `Book` |
+| Album | `Book` (thương hiệu không dùng icon Lucide: dùng component `Logo`, xem [thuong-hieu.md](../thuong-hieu.md#logo)) |
 | Thư viện album của tôi | `LibraryBig` |
 | Được chia sẻ với tôi | `Users` |
 | Riêng tư / công khai | `Lock` / `Globe` |

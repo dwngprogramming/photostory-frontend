@@ -11,7 +11,7 @@ export const MOCK_STATS: Stats = {
   myAlbums: 12,
   totalPhotos: 1483,
   publicAlbums: 5,
-  privateAlbums: 7,
+  protectedAlbums: 7,
   storageUsed: 4.2,
   storageTotal: 15,
 };
@@ -24,9 +24,8 @@ export const INITIAL_ALBUMS: Album[] = [
     coverImage: 'https://picsum.photos/id/1015/800/600',
     photoCount: 42,
     createdAt: '2024-08-12',
-    privacy: 'public',
+    privacy: 'PUBLIC',
     shareCode: 'SUMMER-IN-TUSCANY',
-    hasPin: false,
     pages: []
   },
   {
@@ -35,9 +34,8 @@ export const INITIAL_ALBUMS: Album[] = [
     coverImage: 'https://picsum.photos/id/1036/800/600',
     photoCount: 18,
     createdAt: '2023-12-24',
-    privacy: 'private',
+    privacy: 'PIN_PROTECTED',
     shareCode: 'WINTER-LODGE-2023',
-    hasPin: true,
     pages: []
   },
   {
@@ -46,9 +44,8 @@ export const INITIAL_ALBUMS: Album[] = [
     coverImage: 'https://picsum.photos/id/1047/800/600',
     photoCount: 1256,
     createdAt: '2023-10-03',
-    privacy: 'public',
+    privacy: 'PUBLIC',
     shareCode: 'TOKYO-ADVENTURE',
-    hasPin: false,
     pages: []
   },
   {
@@ -57,8 +54,8 @@ export const INITIAL_ALBUMS: Album[] = [
     coverImage: 'https://picsum.photos/id/1043/800/600',
     photoCount: 24,
     createdAt: '2023-09-16',
-    privacy: 'private',
-    hasPin: true,
+    privacy: 'INVITE_ONLY',
+    shareLinkId: 'V1StGXR8_Z5jdHi6',
     pages: []
   },
   {
@@ -67,9 +64,8 @@ export const INITIAL_ALBUMS: Album[] = [
     coverImage: 'https://picsum.photos/id/1018/800/600',
     photoCount: 87,
     createdAt: '2025-06-01',
-    privacy: 'private',
+    privacy: 'PIN_PROTECTED',
     shareCode: 'CHIEU-QUE-NGOAI',
-    hasPin: true,
     pages: []
   },
   {
@@ -77,8 +73,7 @@ export const INITIAL_ALBUMS: Album[] = [
     title: 'Kỷ niệm 1 năm',
     photoCount: 0,
     createdAt: '2025-10-10',
-    privacy: 'private',
-    hasPin: true,
+    privacy: 'PIN_PROTECTED',
     pages: []
   },
 ];

@@ -1,5 +1,6 @@
 import type {Metadata} from "next";
 import {Inter, Merriweather, Playfair_Display} from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import React from "react";
 import {ThemeProvider} from "@/contexts/theme-provider";
@@ -32,6 +33,24 @@ const merriweather = Merriweather({
   display: 'swap',
 });
 
+// Caveat bản Việt hoá, đủ 9 độ đậm (100 → 900); giấy phép OFL nằm cùng thư mục font
+const caveat = localFont({
+  src: [
+    {path: '../fonts/caveat-vietnamese/CaveatVietnamese-Thin.woff2', weight: '100', style: 'normal'},
+    {path: '../fonts/caveat-vietnamese/CaveatVietnamese-ExtraLight.woff2', weight: '200', style: 'normal'},
+    {path: '../fonts/caveat-vietnamese/CaveatVietnamese-Light.woff2', weight: '300', style: 'normal'},
+    {path: '../fonts/caveat-vietnamese/CaveatVietnamese-Regular.woff2', weight: '400', style: 'normal'},
+    {path: '../fonts/caveat-vietnamese/CaveatVietnamese-Medium.woff2', weight: '500', style: 'normal'},
+    {path: '../fonts/caveat-vietnamese/CaveatVietnamese-SemiBold.woff2', weight: '600', style: 'normal'},
+    {path: '../fonts/caveat-vietnamese/CaveatVietnamese-Bold.woff2', weight: '700', style: 'normal'},
+    {path: '../fonts/caveat-vietnamese/CaveatVietnamese-ExtraBold.woff2', weight: '800', style: 'normal'},
+    {path: '../fonts/caveat-vietnamese/CaveatVietnamese-Black.woff2', weight: '900', style: 'normal'},
+  ],
+  variable: '--font-caveat', // Biến này sẽ được @theme --font-hand gọi
+  display: 'swap',
+  preload: false, // Font phụ cho chữ viết tay: không nạp trước cả 9 file ở mọi trang
+});
+
 export const metadata: Metadata = {
   title: "Photostory - Preserve Your Memories",
   description: "Create & Preserve your photo-story moments.",
@@ -47,7 +66,7 @@ export default async function RootLayout({
   const locale = await getLocale();
   
   return (
-    <html lang={`${locale}`} className={`${inter.variable} ${playfair.variable} ${merriweather.variable} antialiased`}
+    <html lang={`${locale}`} className={`${inter.variable} ${playfair.variable} ${merriweather.variable} ${caveat.variable} antialiased`}
           suppressHydrationWarning>
     <body>
     <NextIntlClientProvider messages={messages}>

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Menu } from 'lucide-react';
 import Sidebar from '@/components/Application/User/Layout/Sidebar';
+import Logo from '@/components/Common/Logo';
 import { CURRENT_USER } from '@/mock_data/constants';
 
 export default function PhotostoryShell({ children }: { children: React.ReactNode }) {
@@ -18,9 +19,7 @@ export default function PhotostoryShell({ children }: { children: React.ReactNod
         >
           <Menu className="w-6 h-6" />
         </button>
-        <span className="font-serif font-bold text-lg ml-2 text-stone-800 dark:text-stone-100">
-          Photostory
-        </span>
+        <Logo className="h-6 w-auto" wrapperClassName="ml-2"/>
       </div>
       
       {/* Sidebar Component */}

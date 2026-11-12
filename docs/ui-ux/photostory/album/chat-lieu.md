@@ -61,7 +61,7 @@ Nắp gập kiểu sách bìa mềm Pháp, đè lên trang đầu (`StartFrenchF
 | Đệm | `px-4 py-8`, nội dung chia trên/dưới |
 | Chữ | Lời chào `text-2xl font-serif italic amber-300` ("Dear …,"); thân `text-[13px] stone-300`; chân nghiêng `text-[13px] italic stone-300` (nơi, ngày ký) |
 
-Flap cuối: logo Photostory trong vòng tròn, tiêu đề nhỏ in hoa `amber-300` có gạch hai bên (`amber-500/50`), đoạn giới thiệu căn phải, chân có tên miền và "Made by" `text-[12px] stone-400` ngăn bằng viền `stone-500/30`.
+Flap cuối: logo ngang bản tối cao 32px căn giữa, tiêu đề nhỏ in hoa `amber-300` có gạch hai bên (`amber-500/50`), đoạn giới thiệu căn phải, chân có tên miền và "Made by" `text-[12px] stone-400` ngăn bằng viền `stone-500/30`.
 
 ## Polaroid
 

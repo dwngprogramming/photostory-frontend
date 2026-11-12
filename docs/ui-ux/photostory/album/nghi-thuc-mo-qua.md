@@ -57,7 +57,7 @@ Sáng dùng vàng đậm trên nền đá nhạt để đủ tương phản; t�
 
 | Vị trí | Thứ |
 |---|---|
-| Trên trái (`top-4 left-6`) | Logo, chữ trắng / tối `stone-200` |
+| Trên trái (`top-4 left-6`) | Logo bản tối (`variant="dark"`), cao 32px |
 | Trên giữa (`top-16`, từ `md` `top-3`) | Máy phát nhạc chủ đề cỡ `sm` |
 | Trên phải (`top-4 right-6`) | Công tắc sáng/tối |
 | Dưới giữa (`bottom-4`) | Dòng bản quyền `text-sm stone-300` / tối `stone-400` |

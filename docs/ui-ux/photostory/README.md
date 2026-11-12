@@ -68,6 +68,6 @@ Chi tiết ở [nguyen-tac.md](nguyen-tac.md).
 | P1 | Chữ trắng trên nút `amber-500` chỉ đạt 2,15:1. Chọn một trong hai: (a) nền `amber-500` + chữ `stone-950` (9,2:1); (b) nền `amber-600` + chữ trắng, chữ đậm từ 18px (3,19:1, chỉ đạt mức chữ lớn) | Nút chính là thứ quan trọng nhất trên màn, đang khó đọc ngoài nắng | [nut.md](thanh-phan/nut.md#nút-chính) |
 | P2 | Chữ, link, icon màu nhấn trên nền sáng đổi từ `amber-500/600` sang `amber-700` (5,02:1) | `amber-500` trên trắng 2,15:1, `amber-600` 3,19:1 | [mau-sac.md](co-ban/mau-sac.md#tương-phản-đã-đo) |
 | P3 | Gom màu vào token ngữ nghĩa trong `@theme` (`--color-accent`, `--color-muted`…) thay cho class màu thô | Hiện 478 chỗ dùng `stone-*`, 269 chỗ `amber-*` viết trực tiếp; đổi tông phải sửa khắp nơi | [mau-sac.md](co-ban/mau-sac.md#token-đề-xuất) |
-| P4 | Thay biểu tượng `Book` của Lucide bằng logo riêng | Icon chung của thư viện, không nhận diện được | [thuong-hieu.md](thuong-hieu.md#biểu-tượng) |
+| ~~P4~~ | **Đã làm (12/11/2026).** Thay biểu tượng `Book` của Lucide bằng logo riêng từ brand kit, qua component `Logo` | Icon chung của thư viện, không nhận diện được | [thuong-hieu.md](thuong-hieu.md#logo) |
 | P5 | Gom bo góc nút về theo chiều cao (40px → `rounded-lg`, 48px → `rounded-xl`, 56px → `rounded-2xl`) | Hiện cùng cỡ nút mà chỗ `lg` chỗ `xl` | [kich-thuoc.md](co-ban/kich-thuoc.md#bo-góc) |
 | P6 | Tôn trọng `prefers-reduced-motion`: rút nghi thức mở quà còn màn che + mở, tắt khối trôi | Hiện chưa có chỗ nào xét | [tro-nang.md](mau-hinh/tro-nang.md#giảm-chuyển-động) |

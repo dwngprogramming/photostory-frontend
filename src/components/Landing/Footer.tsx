@@ -1,4 +1,5 @@
-import {Book, Facebook, Github, Instagram, Twitter} from "lucide-react";
+import {Facebook, Github, Instagram, Twitter} from "lucide-react";
+import Logo from "@/components/Common/Logo";
 import {FooterSection} from "@/types";
 import {useTranslations} from "next-intl";
 
@@ -12,10 +13,7 @@ const Footer = ({footerSections}: { footerSections: FooterSection[] }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand Column */}
           <div className="flex flex-col items-start">
-            <div className="flex items-center gap-2 mb-4">
-              <Book className="w-8 h-8 text-amber-500"/>
-              <span className="text-xl font-bold text-stone-800 dark:text-stone-100 font-serif">Photostory</span>
-            </div>
+            <Logo href="/" className="h-8 w-auto" wrapperClassName="mb-4"/>
             <p className="text-stone-600 dark:text-stone-300 leading-relaxed mb-6">
               {t('description')}
             </p>

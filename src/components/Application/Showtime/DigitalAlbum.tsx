@@ -212,7 +212,7 @@ const DigitalAlbum = ({album, phase}: DigitalAlbumProps) => {
           key={index * 2 + 3}
           number={index * 2 + 3} side="left" header={story.title}
         >
-          <div className="flex flex-col space-y-6">
+          <div className="flex flex-col space-y-4">
             <PhotoStack
               photos={story.photos}
               interactive={false}
@@ -271,7 +271,7 @@ const DigitalAlbum = ({album, phase}: DigitalAlbumProps) => {
       />
       
       <div
-        className={`relative z-10 flex justify-center items-center w-full max-w-4xl h-150 ${isModalOpen ? 'pointer-events-none' : ''}`}
+        className={`relative z-10 flex justify-center items-center w-full max-w-4xl h-170 md:h-150 ${isModalOpen ? 'pointer-events-none' : ''}`}
         style={getAlbumStyle()}
         onClickCapture={(e) => {
           if (isTourOpen) {
@@ -284,8 +284,9 @@ const DigitalAlbum = ({album, phase}: DigitalAlbumProps) => {
         <HTMLFlipBook
           key={isMobile ? 'mobile-view' : 'desktop-view'}
           ref={albumRef}
-          width={400} height={550}
-          size="stretch" minWidth={300} maxWidth={500} minHeight={400} maxHeight={600}
+          // Mobile: trang dài hơn (tỉ lệ ~1:1.8) để trang trái chứa đủ ảnh, nhạc và tag
+          width={400} height={isMobile ? 720 : 550}
+          size="stretch" minWidth={300} maxWidth={500} minHeight={400} maxHeight={isMobile ? 700 : 600}
           drawShadow={true} flippingTime={750}
           usePortrait={isMobile} startZIndex={0} autoSize={true} maxShadowOpacity={0.1}
           showCover={true}

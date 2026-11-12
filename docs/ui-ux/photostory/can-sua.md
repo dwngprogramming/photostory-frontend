@@ -85,8 +85,5 @@ Chữ đang viết cứng, cần đưa vào `vi.json` / `en.json`:
 
 | Mức | Chỗ | Vấn đề | Sửa |
 |---|---|---|---|
-| Thấp | Logo | Icon `Book` của Lucide | Đề xuất P4 |
-| Thấp | `src/app/favicon.ico` | Favicon mặc định của Next | Thay cùng logo |
 | Thấp | `WashiTape.tsx`, `HighlightImagePiece.tsx` | Ảnh nhiễu lấy từ `grainy-gradients.vercel.app` | Tải về `public/images/` |
 | Thấp | `FrenchFlap.tsx` | Avatar mặc định lấy từ `encrypted-tbn0.gstatic.com` (link ảnh Google, có thể chết) | Ảnh mặc định trong `public/` |
-| Thấp | `UnwrapAlbum/demo-unwrap-album.tsx` | Logo trỏ tới `/public` (`<Link href="/public">`) | Trỏ về `/` |

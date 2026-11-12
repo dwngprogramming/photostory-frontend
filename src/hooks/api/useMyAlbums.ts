@@ -1,5 +1,5 @@
 import {useQuery, useQueryClient} from "@tanstack/react-query";
-import {Album} from "@/types";
+import {Album, AlbumPrivacy} from "@/types";
 import {INITIAL_ALBUMS} from "@/mock_data/constants";
 
 // Backend chưa có API danh sách album của người dùng: tạm trả dữ liệu mẫu.
@@ -32,8 +32,8 @@ export const useMyAlbumActions = () => {
     queryClient.setQueryData<Album[]>(MY_ALBUMS_KEY, (albums) => albums && fn(albums));
 
   return {
-    togglePrivacy: (id: string) => update((albums) => albums.map((album) => album.id === id
-      ? {...album, privacy: album.privacy === 'public' ? 'private' : 'public'}
+    changePrivacy: (id: string, privacy: AlbumPrivacy) => update((albums) => albums.map((album) => album.id === id
+      ? {...album, privacy}
       : album)),
     deleteAlbum: (id: string) => update((albums) => albums.filter((album) => album.id !== id)),
   };

@@ -8,15 +8,15 @@ const AlbumIllustration = () => {
   
   const getSeason = () => {
     const month = new Date().getMonth();
-    if ([11, 0, 1].includes(month)) return {
+    if ([9, 10, 11, 0].includes(month)) return {
       key: 'winter',
       label: t('season.winter')
     }
-    if ([2, 3, 4].includes(month)) return {
+    if ([1, 2, 3].includes(month)) return {
       key: 'spring',
       label: t('season.spring')
     }
-    if ([5, 6, 7].includes(month)) return {
+    if ([4, 5, 6].includes(month)) return {
       key: 'summer',
       label: t('season.summer')
     }

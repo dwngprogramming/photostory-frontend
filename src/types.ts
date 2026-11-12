@@ -63,7 +63,9 @@ export interface PageData {
   };
 }
 
-export type AlbumPrivacy = 'public' | 'private';
+// Khớp ResourceVisibility của backend:
+// PUBLIC: ai có mã đều mở được; PIN_PROTECTED: cần mã + PIN; INVITE_ONLY: chỉ người trong nhóm được chia sẻ, mở qua link mời
+export type AlbumPrivacy = 'PUBLIC' | 'PIN_PROTECTED' | 'INVITE_ONLY';
 
 export interface Album {
   id: string;
@@ -73,7 +75,7 @@ export interface Album {
   createdAt: string; // ISO date, ví dụ "2024-08-12"
   privacy: AlbumPrivacy;
   shareCode?: string; // mã unwrap gửi người nhận; không có nghĩa là chưa chia sẻ
-  hasPin: boolean;
+  shareLinkId?: string; // nanoid 16 ký tự trong link mời (INVITE_ONLY), tránh lộ album id
   pages: PageData[];
 }
 
@@ -81,7 +83,7 @@ export interface Stats {
   myAlbums: number;
   totalPhotos: number;
   publicAlbums: number;
-  privateAlbums: number;
+  protectedAlbums: number; // PIN_PROTECTED + INVITE_ONLY
   storageUsed: number; // in GB
   storageTotal: number; // in GB
 }

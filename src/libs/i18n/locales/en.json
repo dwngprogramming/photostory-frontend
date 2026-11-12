@@ -6,9 +6,9 @@
     "openMenu": "Open Menu",
     "closeMenu": "Close Menu",
     "watchLater": "Watch later",
-    "copyright": "© {year} Photostory. Made with ❤\uFE0F by Dung Pham for preserving memories.",
+    "copyright": "© {year} Photostory. Made with ❤️ by Dung Pham for preserving memories.",
     "cannotAccess": "Cannot access. Please enter code again.",
-    "relationship" : {
+    "relationship": {
       "lover": "lover",
       "boyfriend": "boyfriend",
       "girlfriend": "girlfriend",
@@ -20,7 +20,7 @@
       "son": "son",
       "daughter": "daughter",
       "friend": "friend",
-      "family":  "family",
+      "family": "family",
       "colleague": "colleague",
       "parent": "parent",
       "father": "father",
@@ -136,7 +136,7 @@
           "myAlbums": "My Albums",
           "totalPhotos": "Total Photos",
           "publicAlbums": "Public Albums",
-          "privateAlbums": "Private Albums",
+          "protectedAlbums": "Protected Albums",
           "storageUsage": "Storage Usage",
           "upgradeStorage": "Upgrade",
           "storageAlmostFull": "Storage is almost full. Delete some photos or upgrade to keep uploading."
@@ -161,8 +161,9 @@
         "filter": {
           "label": "Filter by privacy",
           "all": "All",
-          "public": "Public",
-          "private": "Private"
+          "PUBLIC": "Public",
+          "PIN_PROTECTED": "PIN protected",
+          "INVITE_ONLY": "Invite only"
         },
         "sort": {
           "label": "Sort",
@@ -176,8 +177,14 @@
           "list": "List view"
         },
         "privacy": {
-          "public": "Public",
-          "private": "Private"
+          "PUBLIC": "Public",
+          "PIN_PROTECTED": "PIN protected",
+          "INVITE_ONLY": "Invite only",
+          "hint": {
+            "PUBLIC": "Anyone with the code can open it. No sign-in needed.",
+            "PIN_PROTECTED": "Needs the code and a PIN. No sign-in needed.",
+            "INVITE_ONLY": "Only people in the shared group, via the invite link. Sign-in required."
+          }
         },
         "photoCount": "{count, plural, =0 {No photos yet} one {# photo} other {# photos}}",
         "openAlbum": "Open album",
@@ -196,34 +203,43 @@
           "menu": "Actions for album {title}",
           "share": "Share",
           "copyCode": "Copy share code",
-          "makePrivate": "Make private",
-          "makePublic": "Make public",
+          "copyLink": "Copy invite link",
           "delete": "Delete album",
+          "accessLabel": "Who can open this album",
           "codeCopied": "Share code copied.",
+          "linkCopied": "Invite link copied.",
           "copyFailed": "Couldn't copy. Select the code and copy it manually.",
-          "madePrivate": "“{title}” is now private.",
-          "madePublic": "“{title}” is now public.",
+          "madePublic": "“{title}” is now Public. Anyone with the code can open it.",
+          "madePinProtected": "“{title}” now needs a PIN to open.",
+          "madeInviteOnly": "“{title}” is now invite only. Only people in the shared group can open it, and the code no longer works.",
           "preview": "Preview"
         },
         "share": {
           "title": "Share album",
           "codeLabel": "Unwrap code",
+          "linkLabel": "Invite link",
           "copy": "Copy",
           "copied": "Copied",
           "copyFailed": "Couldn't copy. Select the code and copy it manually.",
-          "withPin": "This album has a PIN. Send the PIN to the recipient too, ideally separately from the code.",
-          "withoutPin": "This album has no PIN: anyone with this code can open it.",
+          "note": {
+            "PUBLIC": "Anyone with this code can open the album, no sign-in needed.",
+            "PIN_PROTECTED": "This album needs a PIN. Send the PIN to the recipient too, ideally separately from the code.",
+            "INVITE_ONLY": "Only people in the shared group can open this link, after signing in. Others who get the link won’t see the album."
+          },
           "howTo": "The recipient enters this code on the Unwrap page to open the album.",
+          "howToInvite": "Send this link to people in the shared group. They sign in to open the album.",
           "openUnwrap": "Open Unwrap page",
           "notShared": "This album has no share code yet.",
+          "noLink": "This album has no invite link yet.",
           "createCode": "Create share code",
+          "createLink": "Create invite link",
           "createComingSoon": "Creating share codes is still in development.",
           "preview": "Preview as recipient"
         },
         "delete": {
           "title": "Delete album?",
           "description": "<b>{title}</b> and all of its photos and stories will be deleted. This can't be undone.",
-          "codeWarning": "Its share code will stop working; recipients won't be able to open it anymore.",
+          "codeWarning": "Its share code and invite link will stop working; recipients won’t be able to open it anymore.",
           "confirm": "Delete album",
           "cancel": "Cancel",
           "done": "Deleted “{title}”."
@@ -300,6 +316,10 @@
         "loadFailed": "Couldn't play this track.",
         "music": "Music",
         "poweredBy": "Powered by"
+      },
+      "locations": {
+        "more": "Show {count} more places",
+        "less": "Show less"
       }
     }
   }

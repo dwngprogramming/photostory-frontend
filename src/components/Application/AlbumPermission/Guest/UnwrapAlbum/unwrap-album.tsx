@@ -1,7 +1,8 @@
 "use client";
 
 import React, {useEffect, useRef, useState} from 'react';
-import {Book, PackageOpen, Sparkles, X} from 'lucide-react';
+import {PackageOpen, Sparkles, X} from 'lucide-react';
+import Logo from '@/components/Common/Logo';
 import FloatingDecorations from '@/components/Application/AlbumPermission/Guest/UnwrapAlbum/FloatingDecorations';
 import ThemeToggle from '@/components/Common/ThemeToggle';
 import LanguageToggle from '@/components/Common/LanguageToggle';
@@ -192,13 +193,7 @@ const UnwrapAlbum = () => {
                   <div className="relative group cursor-default">
                     <div
                       className="absolute inset-0 bg-amber-400/20 dark:bg-amber-600/20 blur-2xl rounded-full scale-150 group-hover:scale-175 transition-transform duration-700"></div>
-                    <Link href="/public" className="flex items-center gap-2">
-                      <Book className="w-10 md:w-12 lg:w-14 h-10 md:h-12 lg:h-14 text-amber-500"/>
-                      <span
-                        className="text-2xl md:text-3xl lg:text-4xl font-bold font-serif text-stone-800 dark:text-stone-100">
-                      Photostory
-                    </span>
-                    </Link>
+                    <Logo href="/" className="h-10 md:h-12 lg:h-14 w-auto" wrapperClassName="relative" priority/>
                   </div>
                 </div>
                 

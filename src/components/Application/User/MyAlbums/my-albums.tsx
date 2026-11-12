@@ -25,7 +25,13 @@ type PrivacyFilter = 'all' | AlbumPrivacy;
 type SortKey = 'newest' | 'oldest' | 'title' | 'photos';
 type ViewMode = 'grid' | 'list';
 
-const PRIVACY_FILTERS: PrivacyFilter[] = ['all', 'public', 'private'];
+const PRIVACY_FILTERS: PrivacyFilter[] = ['all', 'PUBLIC', 'PIN_PROTECTED', 'INVITE_ONLY'];
+
+const PRIVACY_CHANGED_KEYS = {
+  PUBLIC: 'actions.madePublic',
+  PIN_PROTECTED: 'actions.madePinProtected',
+  INVITE_ONLY: 'actions.madeInviteOnly',
+} as const;
 const SORT_KEYS: SortKey[] = ['newest', 'oldest', 'title', 'photos'];
 
 const compareAlbums: Record<SortKey, (a: Album, b: Album) => number> = {
@@ -38,8 +44,8 @@ const compareAlbums: Record<SortKey, (a: Album, b: Album) => number> = {
 const toStats = (albums: Album[]): Stats => ({
   myAlbums: albums.length,
   totalPhotos: albums.reduce((sum, album) => sum + album.photoCount, 0),
-  publicAlbums: albums.filter((album) => album.privacy === 'public').length,
-  privateAlbums: albums.filter((album) => album.privacy === 'private').length,
+  publicAlbums: albums.filter((album) => album.privacy === 'PUBLIC').length,
+  protectedAlbums: albums.filter((album) => album.privacy !== 'PUBLIC').length,
   // Backend chưa trả dung lượng: tạm dùng số mẫu
   storageUsed: albums.length > 0 ? MOCK_STATS.storageUsed : 0,
   storageTotal: MOCK_STATS.storageTotal,
@@ -55,7 +61,7 @@ export default function MyAlbums() {
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [sharingId, setSharingId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-  const {togglePrivacy, deleteAlbum} = useMyAlbumActions();
+  const {changePrivacy, deleteAlbum} = useMyAlbumActions();
 
   const stats = useMemo(() => albums && toStats(albums), [albums]);
 
@@ -79,9 +85,9 @@ export default function MyAlbums() {
   const sharingAlbum = albums?.find((album) => album.id === sharingId) ?? null;
   const deletingAlbum = albums?.find((album) => album.id === deletingId) ?? null;
 
-  const handleTogglePrivacy = (album: Album) => {
-    togglePrivacy(album.id);
-    toast.success(t(album.privacy === 'public' ? 'actions.madePrivate' : 'actions.madePublic', {title: album.title}));
+  const handleChangePrivacy = (album: Album, next: AlbumPrivacy) => {
+    changePrivacy(album.id, next);
+    toast.success(t(PRIVACY_CHANGED_KEYS[next], {title: album.title}));
   };
 
   const handleConfirmDelete = (album: Album) => {
@@ -105,7 +111,7 @@ export default function MyAlbums() {
         album={album}
         variant={variant}
         onShare={() => setSharingId(album.id)}
-        onTogglePrivacy={() => handleTogglePrivacy(album)}
+        onChangePrivacy={(next) => handleChangePrivacy(album, next)}
         onDelete={() => setDeletingId(album.id)}
       />
     );

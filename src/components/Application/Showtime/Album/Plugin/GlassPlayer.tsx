@@ -124,16 +124,14 @@ const GlassPlayer = ({musicUrl, isThemeMusic, size = "md"}: GlassPlayerProps) =>
 
   const label = isFailed ? t('retry') : isRunning || isBuffering ? t('pause') : t('play');
   const isCompact = size === 'sm';
-  const iconClass = isCompact ? 'w-3.5 h-3.5' : 'w-4 h-4';
+  const iconClass = 'w-3.5 h-3.5';
 
   const playButton = (
     <button
       type="button"
       onClick={handleToggle}
       aria-label={`${label}: ${title}`}
-      className={`relative shrink-0 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 text-stone-900 flex items-center justify-center shadow-[0_4px_12px_-2px_rgba(249,115,22,0.4)] transition-transform duration-200 hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-stone-900/60 ${
-        isCompact ? 'w-8 h-8' : 'w-9 h-9'
-      }`}
+      className={`relative shrink-0 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 text-stone-900 flex items-center justify-center shadow-[0_4px_12px_-2px_rgba(249,115,22,0.4)] transition-transform duration-200 hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-stone-900/60 w-8 h-8`}
     >
       <span aria-hidden className="absolute inset-x-0 top-0 h-1/2 rounded-t-full bg-gradient-to-b from-white/40 to-transparent pointer-events-none"/>
       {isFailed ? <RotateCcw className={iconClass}/>
@@ -195,44 +193,44 @@ const GlassPlayer = ({musicUrl, isThemeMusic, size = "md"}: GlassPlayerProps) =>
     <div
       role="group"
       aria-label={title}
-      className="relative isolate w-full px-2.5 py-2 select-none overflow-hidden rounded-xl"
+      className="relative isolate w-full px-2 py-1.5 select-none overflow-hidden rounded-xl"
     >
       <span aria-hidden className={glass}/>
-      <div className="flex items-center gap-2.5">
+      <div className="flex items-center gap-2">
         {playButton}
         <div className="min-w-0 flex-1 leading-tight">
-          <p className="font-serif font-bold text-sm text-stone-800 truncate">{title}</p>
-          <div className="flex items-center gap-2 text-[11px] text-stone-600">
-            <span className="truncate">{artist}</span>
-            <Equalizer active={isRunning}/>
+          <div className="flex items-baseline gap-1.5 min-w-0">
+            <p className="font-serif font-bold text-[13px] text-stone-800 truncate">{title}</p>
+            <span className="truncate text-[11px] text-stone-600 shrink-[2]">{artist}</span>
+            <span className="self-center"><Equalizer active={isRunning}/></span>
+          </div>
+
+          <div className="flex items-center gap-1.5 text-[10px] tabular-nums text-stone-600">
+            <span className="w-6 text-right">{canSeek ? formatTime(shownPosition) : '–:––'}</span>
+            <input
+              type="range"
+              min={0}
+              max={1000}
+              step={1}
+              value={sliderValue}
+              disabled={!canSeek}
+              onChange={(e) => setDragValue(Number(e.target.value))}
+              onPointerUp={commitSeek}
+              onKeyUp={commitSeek}
+              onBlur={commitSeek}
+              aria-label={t('seek')}
+              aria-valuetext={canSeek ? `${formatTime(shownPosition)} / ${formatTime(duration)}` : undefined}
+              style={fillStyle(sliderValue / 10)}
+              className={sliderClass}
+            />
+            <span className="w-6">{canSeek ? formatTime(duration) : '–:––'}</span>
           </div>
         </div>
         {muteButton}
       </div>
 
-      <div className="mt-1 flex items-center gap-2 text-[10px] tabular-nums text-stone-600">
-        <span className="w-7 text-right">{canSeek ? formatTime(shownPosition) : '–:––'}</span>
-        <input
-          type="range"
-          min={0}
-          max={1000}
-          step={1}
-          value={sliderValue}
-          disabled={!canSeek}
-          onChange={(e) => setDragValue(Number(e.target.value))}
-          onPointerUp={commitSeek}
-          onKeyUp={commitSeek}
-          onBlur={commitSeek}
-          aria-label={t('seek')}
-          aria-valuetext={canSeek ? `${formatTime(shownPosition)} / ${formatTime(duration)}` : undefined}
-          style={fillStyle(sliderValue / 10)}
-          className={sliderClass}
-        />
-        <span className="w-7">{canSeek ? formatTime(duration) : '–:––'}</span>
-      </div>
-
       {isFailed && (
-        <p role="alert" className="mt-2 flex items-center gap-1.5 text-xs text-red-700">
+        <p role="alert" className="mt-1 flex items-center gap-1.5 text-xs text-red-700">
           <AlertCircle aria-hidden className="w-3.5 h-3.5 shrink-0"/>
           {t('loadFailed')}
         </p>

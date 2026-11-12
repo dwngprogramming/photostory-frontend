@@ -16,7 +16,7 @@ const StatsOverview: React.FC<{ stats?: Stats }> = ({stats}) => {
     {label: t('myAlbums'), value: stats.myAlbums, icon: Book},
     {label: t('totalPhotos'), value: stats.totalPhotos, icon: Image},
     {label: t('publicAlbums'), value: stats.publicAlbums, icon: Globe},
-    {label: t('privateAlbums'), value: stats.privateAlbums, icon: Lock},
+    {label: t('protectedAlbums'), value: stats.protectedAlbums, icon: Lock},
   ];
 
   const ratio = Math.min(stats.storageUsed / stats.storageTotal, 1);

@@ -10,7 +10,8 @@ import Curtains from "@/components/Application/Showtime/Curtains";
 import IntroText from "@/components/Application/Showtime/IntroText";
 import FloatingIcons from "@/components/Application/Showtime/FloatingIcons";
 import RibbonEffects from "@/components/Application/Showtime/RibbonEffect";
-import {Book, X} from "lucide-react";
+import {X} from "lucide-react";
+import Logo from "@/components/Common/Logo";
 import {useTranslations} from "next-intl";
 import {useGetPermissionAlbum, useGetPublicAlbum} from "@/hooks/api/useAlbums";
 import PreparingAlbum from "@/components/Application/Showtime/PreparingAlbum";
@@ -210,10 +211,7 @@ export default function Showtime({previewAlbum, onExitPreview}: ShowtimeProps = 
                   exit={{opacity: 0, scale: 0.8}}
                   transition={{duration: 0.5, delay: 1}}
                 >
-                  <div className="flex items-center gap-2">
-                    <Book className="w-8 h-8 text-amber-500"/>
-                    <span className="text-xl font-bold text-white dark:text-stone-200 font-serif">Photostory</span>
-                  </div>
+                  <Logo variant="dark" className="h-8 w-auto"/>
                 </motion.div>
                 
                 <motion.div

@@ -1,4 +1,5 @@
-import {Book, Globe, Heart} from "lucide-react";
+import {Globe, Heart} from "lucide-react";
+import Logo from "@/components/Common/Logo";
 import {useLocale} from "next-intl";
 
 interface FrenchFlapProps {
@@ -67,13 +68,8 @@ export const EndFrenchFlap = () => {
         {/* Phần trên: Logo & Giới thiệu */}
         <div>
           {/* Logo Brand */}
-          <div className="flex flex-col items-center gap-2 mb-8">
-            <div className="p-3 bg-stone-800/50 rounded-full border border-stone-500 shadow-inner">
-              <Book className="w-8 h-8 text-amber-500" />
-            </div>
-            <span className="text-xl font-bold text-white font-serif tracking-wide">
-              Photostory
-            </span>
+          <div className="flex justify-center mb-8">
+            <Logo variant="dark" className="h-8 w-auto"/>
           </div>
           
           {/* Heading nhỏ */}

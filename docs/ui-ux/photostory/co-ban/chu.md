@@ -1,19 +1,23 @@
 # Chữ
 
-## Ba họ font
+## Bốn họ font
 
-Nạp qua `next/font/google` trong `src/app/layout.tsx`, gắn vào `@theme` trong `globals.css`.
+Nạp trong `src/app/layout.tsx` (ba font Google qua `next/font/google`, Caveat qua `next/font/local`), gắn vào `@theme` trong `globals.css`.
 
 | Class | Font | Biến | Nạp | Vai |
 |---|---|---|---|---|
-| `font-serif` | Playfair Display | `--font-playfair` | subset `latin`, độ đậm mặc định | Logo, tên trang, tiêu đề, tên album, chú thích ảnh nghiêng |
+| `font-serif` | Playfair Display | `--font-playfair` | subset `latin`, độ đậm mặc định | Tên trang, tiêu đề, tên album, chú thích ảnh nghiêng |
 | `font-story` | Merriweather | `--font-merriweather` | subset `vietnamese`; 300, 400, 700, 900; thường + nghiêng | Nội dung câu chuyện, lời tựa, lời kết (markdown) |
 | `font-sans` | Inter | `--font-inter` | subset `latin` | Mọi thứ còn lại: nút, nhãn, ô nhập, số liệu, mô tả |
+| `font-hand` | Caveat Vietnamese | `--font-caveat` | file `src/fonts/caveat-vietnamese/*.woff2`, đủ 100 → 900, `preload: false` | Chữ nhấn viết tay |
+
+Logo không dùng font nào ở trên: chữ "Photo" (Fraunces SemiBold) và "story" (Caveat Bold) đã nằm sẵn trong SVG dạng path. Không dùng Fraunces ở chỗ khác; xem [thuong-hieu.md](../thuong-hieu.md#logo).
 
 Luật:
 
 - **Serif để kể, sans để làm.** Thứ người dùng *đọc như một câu chuyện* dùng serif; thứ người dùng *bấm, nhập, so sánh* dùng sans. Số liệu (ô thống kê) luôn sans.
 - Không đặt hai font serif cạnh nhau ở cùng cỡ: Playfair cho tiêu đề, Merriweather cho thân bài.
+- Caveat dùng 400–700 cho chữ nhấn thường; 100–200 chỉ từ 32px trở lên; 900 chỉ cho tiêu đề rất lớn. Đặt cạnh Playfair thì cho Caveat lớn hơn khoảng 1,3 lần (`text-[1.3em]`) để chữ thường cao ngang nhau.
 - Playfair và Inter mới nạp subset `latin`. Tiếng Việt có dấu vẫn hiện nhờ font dự phòng nhưng dấu có thể lệch nét; xem [can-sua.md](../can-sua.md).
 
 ## Thang chữ theo vai

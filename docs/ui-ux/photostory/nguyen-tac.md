@@ -29,7 +29,7 @@ Thứ thuộc sân khấu này không mang sang sân khấu khác. Ví dụ: kh�
 
 1. **Đá ấm làm nền, hổ phách làm nhấn.** Mọi màu trung tính là `stone` (không `gray`, `slate`, `zinc`). Màu nhấn là `amber`; `orange` chỉ đi kèm `amber` trong gradient và trong nhãn nhỏ (chip Music, Location). Chi tiết: [mau-sac.md](co-ban/mau-sac.md).
 2. **Một màu nhấn một khu.** Mỗi khu chỉ một nút nền hổ phách cho hành động chính. Hành động phụ dùng nút viền hổ phách hoặc nút chữ.
-3. **Serif để kể chuyện, sans để làm việc.** Playfair Display cho tên, tiêu đề, logo; Merriweather cho nội dung câu chuyện; Inter cho nhãn, nút, ô nhập, số liệu. Chi tiết: [chu.md](co-ban/chu.md).
+3. **Serif để kể chuyện, sans để làm việc.** Playfair Display cho tên, tiêu đề; Merriweather cho nội dung câu chuyện; Inter cho nhãn, nút, ô nhập, số liệu. Chi tiết: [chu.md](co-ban/chu.md).
 4. **Bóng mang màu ấm.** Bóng nổi khi rê dùng bóng nhuốm hổ phách (`shadow-soft*`); ở chế độ tối dùng bóng đen đậm (`shadow-dark*`). Không dùng bóng xám lạnh cho thứ muốn "nhấc lên".
 5. **Trang giấy luôn là giấy.** Bên trong cuốn album không đổi theo chế độ tối: giấy sáng, chữ tối. Chế độ tối chỉ làm tối căn phòng quanh sách.
 6. **Đồ vật thật thì lệch một chút.** Polaroid, ảnh nổi bật, băng dính được xoay nghiêng (±2° tới 5°, băng dính ±15° quanh góc gốc). Thứ thẳng tắp tuyệt đối trông như giao diện máy, không như đồ vật.
