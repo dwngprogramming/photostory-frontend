@@ -2,12 +2,12 @@ import Image from "next/image";
 import {Link} from "@/libs/i18n/navigation";
 
 // Logo ngang Photostory (mark P + chữ "Photostory"), lấy từ brand kit.
-// File gốc: public/brand/photostory-logo-{light,dark}.svg, tỉ lệ ≈ 3.85 : 1.
+// File gốc: public/brand/photostory-logo-{light,dark}.svg, tỉ lệ ≈ 3.73 : 1.
 // Chữ trong SVG đã là path nên không phụ thuộc font. Đừng gõ lại chữ "Photostory" cạnh icon.
 //
 // Đổi kích thước bằng chiều cao trong className (ví dụ "h-8", "h-10 md:h-12"); tối thiểu 24px.
 
-const LOGO_WIDTH = 504;
+const LOGO_WIDTH = 488;
 const LOGO_HEIGHT = 131;
 
 type LogoProps = {

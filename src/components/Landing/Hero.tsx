@@ -2,6 +2,7 @@
 
 import React from 'react';
 import AlbumIllustration from '@/components/Landing/AlbumIllustration';
+import BrushStroke from '@/components/Landing/BrushStroke';
 import {useScrollAnimation} from '@/hooks/useScrollAnimation';
 import {ArrowRight, Play} from 'lucide-react';
 import {useTranslations} from "next-intl";
@@ -29,8 +30,13 @@ const Hero = () => {
           </span>
           <h1
             className="font-serif font-bold text-stone-800 dark:text-stone-100 text-4xl md:text-5xl lg:text-6xl leading-tight mb-6">
-            {t('slogan.left')}<br/><span
-            className="text-amber-500 italic">{t('slogan.highlight')}</span> {t('slogan.right')}
+            {t('slogan.left')}<br/>
+            <span className="relative isolate inline-block px-2 text-amber-500 font-hand text-[5.5rem]">
+              <BrushStroke
+                className="absolute -z-10 -left-3 bottom-[9%] h-[30%] w-[calc(100%+1.5rem)] -rotate-1 text-amber-300 dark:text-amber-500 opacity-80 dark:opacity-50 pointer-events-none"
+              />
+              {t('slogan.highlight')}
+            </span>{' '}{t('slogan.right')}
           </h1>
           <p className="text-stone-600 dark:text-stone-300 text-lg md:text-xl leading-relaxed mb-8 max-w-lg">
             {t('description')}
