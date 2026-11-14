@@ -3,10 +3,11 @@
 import React, {useEffect, useRef, useState, useTransition} from "react";
 import {useRouter} from "next/navigation";
 import {AnimatePresence, motion} from "framer-motion";
+import "flag-icons/css/flag-icons.min.css";
 
 const LANGUAGES = [
-  {locale: "vi", label: "Tiếng Việt", short: "VI", flag: "🇻🇳"},
-  {locale: "en", label: "English", short: "EN", flag: "🇺🇸"},
+  {locale: "vi", label: "Tiếng Việt", short: "VI", country: "vn"},
+  {locale: "en", label: "English", short: "EN", country: "us"},
 ];
 
 const LanguageToggle = () => {
@@ -71,11 +72,11 @@ const LanguageToggle = () => {
       <button
         onClick={() => setIsOpen(!isOpen)}
         disabled={isPending}
-        className={`h-10 px-3 cursor-pointer rounded-lg bg-stone-200 dark:bg-stone-700 text-stone-600 dark:text-stone-300 hover:bg-stone-300 dark:hover:bg-stone-600 transition-all duration-200 flex items-center justify-center gap-2 focus:ring-2 focus:ring-amber-400 focus:outline-none ${isPending ? 'opacity-50 cursor-not-allowed' : ''}`}
+        className={`h-8 px-2.5 cursor-pointer rounded-full bg-stone-200 dark:bg-stone-700 text-stone-600 dark:text-stone-300 hover:bg-stone-300 dark:hover:bg-stone-600 transition-all duration-200 flex items-center justify-center gap-1.5 focus:ring-2 focus:ring-amber-400 focus:outline-none ${isPending ? 'opacity-50 cursor-not-allowed' : ''}`}
         aria-expanded={isOpen}
       >
-        <span className="text-base leading-none" style={{ fontFamily: '"Twemoji Mozilla", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", "EmojiOne Color", "Android Emoji", sans-serif' }}>{current.flag}</span>
-        <span className="text-sm font-bold">{current.short}</span>
+        <span className={`fi fi-${current.country} !w-4 !h-3 rounded-[2px] shrink-0`}/>
+        <span className="text-xs font-bold leading-none">{current.short}</span>
       </button>
 
       <AnimatePresence>
@@ -85,7 +86,7 @@ const LanguageToggle = () => {
             animate={{opacity: 1, y: 0, scale: 1}}
             exit={{opacity: 0, y: -6, scale: 0.97}}
             transition={{duration: 0.15, ease: "easeOut"}}
-            className="absolute right-0 mt-2 w-40 rounded-xl bg-white dark:bg-stone-800 shadow-lg ring-1 ring-stone-200 dark:ring-stone-700 overflow-hidden z-50 origin-top-right"
+            className="absolute right-0 mt-2 w-44 rounded-xl bg-white dark:bg-stone-800 shadow-lg ring-1 ring-stone-200 dark:ring-stone-700 overflow-hidden z-50 origin-top-right"
           >
             <div className="py-1">
               {LANGUAGES.map((lang) => {
@@ -94,13 +95,13 @@ const LanguageToggle = () => {
                   <button
                     key={lang.locale}
                     onClick={() => selectLocale(lang.locale)}
-                    className={`w-full flex items-center gap-3 px-4 py-2 text-sm transition-colors duration-150 ${
+                    className={`w-full flex items-center gap-3 px-3.5 py-2 text-sm transition-colors duration-150 ${
                       isActive
                         ? "bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-500 font-medium"
                         : "text-stone-700 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-700"
                     }`}
                   >
-                    <span className="text-base leading-none">{lang.flag}</span>
+                    <span className={`fi fi-${lang.country} !w-5 !h-[15px] rounded-[2px] shrink-0`}/>
                     <span>{lang.label}</span>
                   </button>
                 );
