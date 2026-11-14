@@ -58,7 +58,7 @@ const Hero = () => {
         
         {/* Right Column */}
         <div
-          className={`transition-all duration-1000 delay-300 ease-out transform ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'} mt-8 md:mt-12 lg:mt-0 w-full`}>
+            className={`transition-all duration-1000 delay-300 ease-out transform ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'} mt-8 md:mt-12 lg:mt-0 w-full`}>
           <AlbumIllustration/>
         </div>
       </div>
