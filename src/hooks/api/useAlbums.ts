@@ -1,6 +1,6 @@
 import {useMutation, UseMutationOptions, useQuery, UseQueryOptions} from "@tanstack/react-query";
 import {albumApi} from "@/apis/album/album.api";
-import {VerifyPinRequest} from "@/types";
+import {SharingResponse, VerifyPinRequest} from "@/types";
 import {useAppSelector} from "@/libs/redux/hook";
 
 export const useGetPublicAlbum = (key?: string) => {
@@ -31,7 +31,7 @@ export const useGetPermissionAlbum = (id: string) => {
   });
 }
 
-export const useGetUnwrapAlbum = (code: string, config?: Partial<UseQueryOptions<any, Error>>) => {
+export const useGetUnwrapAlbum = (code: string, config?: Partial<UseQueryOptions<SharingResponse | undefined, Error>>) => {
   return useQuery({
     queryKey: ['unwrap-album-if-public', code],
     queryFn: async () => {
@@ -46,13 +46,13 @@ export const useGetUnwrapAlbum = (code: string, config?: Partial<UseQueryOptions
 }
 
 export const useUnwrapAlbumWithPin = (
-  config?: UseMutationOptions<any, Error, VerifyPinRequest>
+  config?: UseMutationOptions<SharingResponse, Error, VerifyPinRequest>
 ) => {
   return useMutation({
     mutationKey: ['unwrap-album-with-pin'],
     mutationFn: async (request: VerifyPinRequest) => {
       const response = await albumApi.verifyPinWithCode(request);
-      return response.data;
+      return response.data as SharingResponse;
     },
     ...config,
   });

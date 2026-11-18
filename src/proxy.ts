@@ -1,10 +1,11 @@
 import createMiddleware from "next-intl/middleware";
+import type { NextRequest } from "next/server";
 import { routing } from "@/libs/i18n/routing";
 
 const handleProxy = createMiddleware(routing);
 
 // Export default function (Chuẩn Next.js Proxy)
-export default function proxy(req: any) {
+export default function proxy(req: NextRequest) {
   return handleProxy(req);
 }
 

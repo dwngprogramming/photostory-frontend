@@ -1,4 +1,4 @@
-import {Heart, MapPin, Music} from "lucide-react";
+import {Heart, MapPin, Music2, Play} from "lucide-react";
 import {useTranslations} from "next-intl";
 import {useSeasonGallery} from "@/constants/seasonImage";
 
@@ -32,7 +32,7 @@ const AlbumIllustration = () => {
     <div className="relative w-full max-w-2xl mx-auto animate-float">
       {/* Album Container */}
       <div
-        className="relative bg-white dark:bg-stone-900 rounded-2xl shadow-soft-xl dark:shadow-dark-xl p-4 md:p-8 border-4 border-stone-100 dark:border-stone-800 min-h-[400px] md:min-h-[460px] transition-colors duration-300 flex flex-col justify-center">
+        className="relative bg-white dark:bg-stone-900 rounded-2xl shadow-soft-xl dark:shadow-dark-xl p-4 md:p-8 border-4 border-stone-100 dark:border-stone-800 min-h-[440px] md:min-h-[480px] transition-colors duration-300 flex flex-col justify-center">
         {/* ^^^ Đã thêm: flex flex-col justify-center */}
         
         {/* Center Spine - (Giữ nguyên, vì absolute không bị ảnh hưởng bởi flex) */}
@@ -44,51 +44,81 @@ const AlbumIllustration = () => {
           
           {/* LEFT PAGE - Photo Page */}
           <div
-            className="flex flex-col gap-4 p-2 md:p-4 bg-orange-200/40 dark:bg-orange-700/20 rounded-lg shadow-[inset_0_0_20px_rgba(0,0,0,0.02)] dark:shadow-none">
-            {/* Main Photo */}
+            className="flex flex-col gap-2 p-2 md:p-4 bg-orange-200/40 dark:bg-orange-700/20 rounded-lg shadow-[inset_0_0_20px_rgba(0,0,0,0.02)] dark:shadow-none">
+            {/* Page Header (tiêu đề trang như album thật) */}
+            <div className="flex justify-center">
+              <span
+                className="text-amber-600 dark:text-amber-500 text-[10px] font-bold uppercase tracking-widest border-b border-amber-600/30 pb-1">
+                {getSeason().label}
+              </span>
+            </div>
+
+            {/* Photo Stack (wireframe của PhotoStack): ảnh trên cùng thẳng, các ảnh dưới nghiêng + lệch lên */}
+            <div className="relative w-full h-52 md:h-56 flex items-center justify-center">
+              {[3, 2, 1, 0].map((i) => {
+                const layer = [
+                  {rotate: 0, y: 0, scale: 1},
+                  {rotate: 4, y: -8, scale: 0.97},
+                  {rotate: -6, y: -16, scale: 0.94},
+                  {rotate: 8, y: -24, scale: 0.91},
+                ][i];
+                const isTop = i === 0;
+                return (
+                  <div
+                    key={i}
+                    className={`absolute w-[84%] md:w-[88%] aspect-square bg-white dark:bg-stone-50 p-1.5 pb-5 md:p-2 md:pb-6 border border-stone-100 transition-transform duration-300 ${isTop ? 'shadow-xl hover:scale-[1.03]' : 'shadow-md'}`}
+                    style={{
+                      zIndex: 4 - i,
+                      transform: `translateY(${layer.y}px) rotate(${layer.rotate}deg) scale(${layer.scale})`,
+                      filter: isTop ? undefined : `brightness(${1 - i * 0.08}) sepia(0.2)`,
+                    }}
+                  >
+                    <div className="w-full h-full overflow-hidden bg-stone-100">
+                      <img
+                        src={imageGallery[i]}
+                        alt={isTop ? "Memory Photo" : "Memory Photo stack"}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    {isTop && (
+                      <div
+                        className="absolute bottom-2 md:bottom-2.5 left-1/2 -translate-x-1/2 h-1.5 w-1/2 bg-stone-400/50 rounded-full"/>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Music Player Card (wireframe) */}
             <div
-              className="relative aspect-square bg-gradient-to-br from-amber-100 via-orange-100 to-amber-50 dark:from-amber-900/30 dark:via-orange-900/30 dark:to-amber-950/20 rounded-lg shadow-sm dark:shadow-dark border-4 border-white dark:border-stone-700 rotate-[-1deg] transition-all duration-300 hover:rotate-0 hover:scale-[1.02] group overflow-hidden">
-              <img
-                src={imageGallery[0]}
-                alt="Memory Photo"
-                className="w-full h-full object-cover opacity-80 mix-blend-multiply dark:mix-blend-normal dark:opacity-70 hover:opacity-100 transition-opacity duration-500"
-              />
-              
-              {/* Music Icon */}
+              className="flex items-center gap-2 px-2 py-1.5 rounded-lg bg-white/60 dark:bg-stone-800/60 border border-amber-200/60 dark:border-stone-700 shadow-sm">
               <div
-                className="absolute top-2 right-2 bg-white/90 dark:bg-stone-800/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
-                <Music className="w-4 h-4 text-amber-500"/>
+                className="shrink-0 w-6 h-6 rounded-full bg-amber-400/80 dark:bg-amber-600/80 flex items-center justify-center">
+                <Play className="w-3 h-3 text-white fill-white"/>
               </div>
-              {/* Location Pin */}
-              <div
-                className="absolute bottom-2 left-2 bg-white/90 dark:bg-stone-800/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
-                <MapPin className="w-4 h-4 text-orange-500"/>
+              <div className="flex-1 space-y-1.5">
+                <div className="h-1.5 w-3/4 bg-stone-800/30 dark:bg-stone-100/30 rounded-full"/>
+                <div className="h-1 w-full bg-stone-800/10 dark:bg-stone-100/10 rounded-full overflow-hidden">
+                  <div className="h-full w-1/3 bg-amber-500/70 rounded-full"/>
+                </div>
               </div>
+              <Music2 className="shrink-0 w-4 h-4 text-amber-500"/>
             </div>
-            
-            {/* Small Thumbnails */}
-            <div className="flex gap-2 mt-2 justify-center">
-              <div
-                className="w-12 h-12 bg-amber-100/50 dark:bg-amber-900/20 rounded border-2 border-white dark:border-stone-700 shadow-sm rotate-2 overflow-hidden">
-                <img src={imageGallery[1]} className="w-full h-full object-cover opacity-70"
-                     alt="thumb"/>
-              </div>
-              <div
-                className="w-12 h-12 bg-amber-100/50 dark:bg-amber-900/20 rounded border-2 border-white dark:border-stone-700 shadow-sm -rotate-2 overflow-hidden">
-                <img src={imageGallery[2]} className="w-full h-full object-cover opacity-70"
-                     alt="thumb"/>
-              </div>
-              <div
-                className="w-12 h-12 bg-amber-100/50 dark:bg-amber-900/20 rounded border-2 border-white dark:border-stone-700 shadow-sm rotate-1 overflow-hidden">
-                <img src={imageGallery[3]} className="w-full h-full object-cover opacity-70"
-                     alt="thumb"/>
-              </div>
+
+            {/* Location Badge (wireframe) */}
+            <div
+              className="self-start inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-50/80 dark:bg-rose-950/40 border border-rose-200/50 dark:border-rose-900/50">
+              <MapPin className="w-3 h-3 shrink-0 text-rose-600 dark:text-rose-400" strokeWidth={2.5}/>
+              <div className="h-1.5 w-14 shrink-0 bg-rose-800/30 dark:bg-rose-200/30 rounded-full"/>
             </div>
-            
-            {/* Date Caption */}
-            <p className="text-xs text-stone-600 dark:text-stone-400 italic text-center font-serif mt-auto">
-              {t('caption', {season: getSeason().label, year: year})}
-            </p>
+
+            {/* Date Caption + Page Number */}
+            <div className="mt-auto flex flex-col items-center gap-0.5">
+              <p className="text-xs text-stone-600 dark:text-stone-400 italic text-center font-serif">
+                {t('caption', {season: getSeason().label, year: year})}
+              </p>
+              <span className="text-stone-400 text-[10px]">1</span>
+            </div>
           </div>
           
           {/* RIGHT PAGE - Diary Page */}

@@ -65,7 +65,14 @@ export default function AlbumPhotoModal({
 
 // ─── Sub-views ────────────────────────────────────────────────────────────────
 
-const StackView = ({ photos, currentIndex, onSwipe, onToGrid }: any) => (
+interface StackViewProps {
+  photos: PhotoResponse[];
+  currentIndex: number;
+  onSwipe: () => void;
+  onToGrid: () => void;
+}
+
+const StackView = ({ photos, currentIndex, onSwipe, onToGrid }: StackViewProps) => (
   <motion.div
     key="stack-mode"
     initial={{ scale: 0.8, opacity: 0 }}
@@ -90,7 +97,12 @@ const StackView = ({ photos, currentIndex, onSwipe, onToGrid }: any) => (
   </motion.div>
 );
 
-const GridView = ({ photos, onBack }: any) => (
+interface GridViewProps {
+  photos: PhotoResponse[];
+  onBack: () => void;
+}
+
+const GridView = ({ photos, onBack }: GridViewProps) => (
   <motion.div
     key="grid-mode"
     initial={{ scale: 0.95, opacity: 0 }}
@@ -114,7 +126,7 @@ const GridView = ({ photos, onBack }: any) => (
     </div>
     
     <div className="px-6 pb-6 mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-      {photos.map((photo: any) => (
+      {photos.map((photo) => (
         <div
           key={photo.id}
           className="relative bg-white p-3 shadow-md transform transition-transform duration-300"

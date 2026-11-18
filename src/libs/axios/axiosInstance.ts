@@ -9,7 +9,14 @@ const defaultOptions = {
   withCredentials: true
 };
 
-export const generalErrorMessage: Record<string, any> = {
+export interface GeneralErrorMessage {
+  network_error: string;
+  server_error: string;
+  timeout_error: string;
+  default: string;
+}
+
+export const generalErrorMessage: Record<string, GeneralErrorMessage> = {
   en: {
     network_error: "Unstable connection. Please check your network.",
     server_error: "Server is experiencing issues. Please try again later.",

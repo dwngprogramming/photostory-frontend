@@ -5,7 +5,6 @@ export const TOUR_STEPS: DriveStep[] = [
     popover: {
       title: 'Chào mừng bạn đến với album của Photostory!',
       description: 'Đây là hướng dẫn cơ bản để giúp bạn làm quen với các tính năng chính.',
-      side: 'over',
       align: 'center',
     },
   },
@@ -49,7 +48,6 @@ export const TOUR_STEPS: DriveStep[] = [
     popover: {
       title: 'Hoàn thành!',
       description: 'Bạn đã hoàn thành hướng dẫn cơ bản. Chúc bạn tận hưởng album vui vẻ!',
-      side: 'over',
       align: 'center',
     },
   },

@@ -50,36 +50,36 @@ publicAxiosInstance.interceptors.response.use(
 export default {
   async get<T>(
     endpoint: string,
-    option?: AxiosRequestConfig<never>
+    option?: AxiosRequestConfig
   ): Promise<T> {
-    return await publicAxiosInstance.get(endpoint, option);
+    return (await publicAxiosInstance.get(endpoint, option)) as unknown as T;
   },
   async post<T>(
     endpoint: string,
-    data?: any,
-    option?: AxiosRequestConfig<never>
+    data?: unknown,
+    option?: AxiosRequestConfig
   ): Promise<T> {
-    return await publicAxiosInstance.post(endpoint, data, option);
+    return (await publicAxiosInstance.post(endpoint, data, option)) as unknown as T;
   },
   async put<T>(
     endpoint: string,
-    data?: any,
-    option?: AxiosRequestConfig<never>
+    data?: unknown,
+    option?: AxiosRequestConfig
   ): Promise<T> {
-    return await publicAxiosInstance.put(endpoint, data, option);
+    return (await publicAxiosInstance.put(endpoint, data, option)) as unknown as T;
   },
   async patch<T>(
     endpoint: string,
-    data?: any,
-    option?: AxiosRequestConfig<never>
+    data?: unknown,
+    option?: AxiosRequestConfig
   ): Promise<T> {
-    return await publicAxiosInstance.patch(endpoint, data, option);
+    return (await publicAxiosInstance.patch(endpoint, data, option)) as unknown as T;
   },
   async delete<T>(
     endpoint: string,
-    option?: AxiosRequestConfig<never>
+    option?: AxiosRequestConfig
   ): Promise<T> {
-    return await publicAxiosInstance.delete(endpoint, option);
+    return (await publicAxiosInstance.delete(endpoint, option)) as unknown as T;
   },
   setDefaultHeader(key: string, data?: string) {
     publicAxiosInstance.defaults.headers.common[key] = data;

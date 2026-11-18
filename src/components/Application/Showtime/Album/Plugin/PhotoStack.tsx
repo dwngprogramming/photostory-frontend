@@ -49,7 +49,7 @@ const PhotoStack = ({
   };
   
   // 2. Khi thả tay ra
-  const handleDragEnd = (_: any, info: PanInfo) => {
+  const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     if (isAnimating) return;
     
     const swipeThreshold = 50;
