@@ -1,5 +1,6 @@
 import {Facebook, Github, Instagram, Twitter} from "lucide-react";
 import Logo from "@/components/Common/Logo";
+import LinepieByline from "@/components/Common/LinepieByline";
 import {FooterSection} from "@/types";
 import {useTranslations} from "next-intl";
 
@@ -49,6 +50,7 @@ const Footer = ({footerSections}: { footerSections: FooterSection[] }) => {
           <p className="text-stone-500 dark:text-stone-400 text-sm">
             {tCommon('copyright', {year: new Date().getFullYear()})}
           </p>
+          <LinepieByline className="mt-2 text-stone-500 dark:text-stone-400 text-sm"/>
         </div>
       </div>
     </footer>

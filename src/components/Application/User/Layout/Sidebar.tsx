@@ -6,6 +6,7 @@ import Link from 'next/link';
 import {LibraryBig, LogOut, Settings, User as UserIcon, Users, X} from 'lucide-react';
 import ThemeToggle from '@/components/Common/ThemeToggle';
 import Logo from '@/components/Common/Logo';
+import LinepieByline from '@/components/Common/LinepieByline';
 import {User} from '@/types';
 import {usePathname} from "@/libs/i18n/navigation";
 import {useTranslations} from "next-intl";
@@ -111,6 +112,8 @@ export default function Sidebar({ currentUser, isOpen, onCloseMobile }: SidebarP
               <LogOut size={18} />
             </button>
           </div>
+
+          <LinepieByline className="px-2 text-center text-xs text-stone-400 dark:text-stone-500"/>
         </div>
       </aside>
     </>

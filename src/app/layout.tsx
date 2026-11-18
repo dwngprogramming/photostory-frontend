@@ -54,6 +54,10 @@ const caveat = localFont({
 export const metadata: Metadata = {
   title: "Photostory - Preserve Your Memories",
   description: "Create & Preserve your photo-story moments.",
+  // Photostory là một sản phẩm của Linepie
+  applicationName: "Photostory",
+  creator: "Linepie",
+  publisher: "Linepie",
 };
 
 export default async function RootLayout({

@@ -3,6 +3,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {PackageOpen, Sparkles, X} from 'lucide-react';
 import Logo from '@/components/Common/Logo';
+import LinepieByline from '@/components/Common/LinepieByline';
 import FloatingDecorations from '@/components/Application/AlbumPermission/Guest/UnwrapAlbum/FloatingDecorations';
 import ThemeToggle from '@/components/Common/ThemeToggle';
 import LanguageToggle from '@/components/Common/LanguageToggle';
@@ -277,7 +278,8 @@ const UnwrapAlbum = () => {
                   className="flex items-center justify-center gap-2 mt-6 text-center text-stone-500 dark:text-stone-400 text-sm opacity-80 hover:opacity-100 transition-opacity">
                   {tCommon('copyright', {year: new Date().getFullYear()})}
                 </div>
-              
+                <LinepieByline className="mt-1 text-center text-stone-500 dark:text-stone-400 text-sm"/>
+
               </div>
             
             </div>

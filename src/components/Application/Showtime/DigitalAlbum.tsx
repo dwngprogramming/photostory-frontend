@@ -152,10 +152,6 @@ const DigitalAlbum = ({album, phase}: DigitalAlbumProps) => {
         <div className="relative w-full h-full flex flex-col justify-center items-center space-y-4">
           <p className="text-4xl text-center text-stone-900 font-serif font-bold">{album.title}</p>
           <p className="text-center text-stone-600">{album.description}</p>
-
-          <p className="absolute bottom-0 text-stone-600 text-xs text-center">
-            {`© ${new Date().getFullYear()} Photostory`}
-          </p>
         </div>
       </AlbumPage>,
 
