@@ -52,6 +52,9 @@ const caveat = localFont({
 });
 
 export const metadata: Metadata = {
+  // Gốc URL để Next.js tạo link tuyệt đối cho og:image / twitter:image.
+  // Đặt NEXT_PUBLIC_SITE_URL ở môi trường build (Cloudflare), ví dụ https://photostory.linepie.com
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
   title: "Photostory - Preserve Your Memories",
   description: "Create & Preserve your photo-story moments.",
   // Photostory là một sản phẩm của Linepie
