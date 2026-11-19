@@ -5,7 +5,7 @@ import "./globals.css";
 import React from "react";
 import {ThemeProvider} from "@/contexts/theme-provider";
 import {NextIntlClientProvider} from "next-intl";
-import {getLocale, getMessages} from "next-intl/server";
+import {getLocale, getMessages, getTranslations} from "next-intl/server";
 import "driver.js/dist/driver.css";
 import AppToaster from "@/components/Common/AppToaster";
 import ReactQueryProvider from "@/contexts/react-query-provider";
@@ -51,17 +51,23 @@ const caveat = localFont({
   preload: false, // Font phụ cho chữ viết tay: không nạp trước cả 9 file ở mọi trang
 });
 
-export const metadata: Metadata = {
-  // Gốc URL để Next.js tạo link tuyệt đối cho og:image / twitter:image.
-  // Đặt NEXT_PUBLIC_SITE_URL ở môi trường build (Cloudflare), ví dụ https://photostory.linepie.com
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
-  title: "Photostory - Preserve Your Memories",
-  description: "Create & Preserve your photo-story moments.",
-  // Photostory là một sản phẩm của Linepie
-  applicationName: "Photostory",
-  creator: "Linepie",
-  publisher: "Linepie",
-};
+// Metadata theo ngôn ngữ (lấy từ mục "Metadata" trong file locale)
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const t = await getTranslations({locale, namespace: "Metadata"});
+
+  return {
+    // Gốc URL để Next.js tạo link tuyệt đối cho og:image / twitter:image.
+    // Đặt NEXT_PUBLIC_SITE_URL ở môi trường build (Cloudflare), ví dụ https://photostory.linepie.com
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+    title: t("title"),
+    description: t("description"),
+    // Photostory là một sản phẩm của Linepie
+    applicationName: "Photostory",
+    creator: "Linepie",
+    publisher: "Linepie",
+  };
+}
 
 export default async function RootLayout({
                                            children,

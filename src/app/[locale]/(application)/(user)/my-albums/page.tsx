@@ -1,10 +1,14 @@
 import MyAlbums from "@/components/Application/User/MyAlbums/my-albums";
 import { Metadata } from "next";
+import {getTranslations} from "next-intl/server";
 
-export const metadata: Metadata = {
-  title: "My Albums | Photostory",
-  description: "Manage your digital memories",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Metadata.myAlbums");
+  return {
+    title: t("title"),
+    description: t("description"),
+  };
+}
 
 export default function MyAlbumsPage() {
   return <MyAlbums />;

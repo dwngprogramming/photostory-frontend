@@ -1,4 +1,28 @@
 {
+  "Metadata": {
+    "title": "Photostory - Preserve Your Memories",
+    "description": "Create & Preserve your photo-story moments.",
+    "showtime": {
+      "title": "Showtime | Photostory",
+      "description": "Manage your digital memories"
+    },
+    "myAlbums": {
+      "title": "My Albums | Photostory",
+      "description": "Manage your digital memories"
+    },
+    "preview": {
+      "title": "Preview | Photostory",
+      "description": "Preview your album the way your recipient will see it"
+    },
+    "unwrap": {
+      "title": "Unwrap Your Photostory | Photostory",
+      "description": "Unwrap your photostory by entering the unique code sent to you"
+    },
+    "demoUnwrap": {
+      "title": "(Demo) Unwrap Your Photostory | Photostory",
+      "description": "(Demo) Unwrap your photostory by entering the unique code sent to you"
+    }
+  },
   "Common": {
     "login": "Login",
     "logout": "Logout",

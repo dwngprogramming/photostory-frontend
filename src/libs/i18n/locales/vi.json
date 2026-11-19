@@ -1,4 +1,28 @@
 {
+  "Metadata": {
+    "title": "Photostory - Lưu giữ khoảnh khắc của bạn",
+    "description": "Tạo và lưu giữ những khoảnh khắc photo-story của bạn.",
+    "showtime": {
+      "title": "Showtime | Photostory",
+      "description": "Quản lý những kỷ niệm số của bạn"
+    },
+    "myAlbums": {
+      "title": "Album của tôi | Photostory",
+      "description": "Quản lý những kỷ niệm số của bạn"
+    },
+    "preview": {
+      "title": "Xem trước | Photostory",
+      "description": "Xem trước album đúng như người nhận sẽ thấy"
+    },
+    "unwrap": {
+      "title": "Mở Photostory của bạn | Photostory",
+      "description": "Mở photostory của bạn bằng mã riêng đã được gửi cho bạn"
+    },
+    "demoUnwrap": {
+      "title": "(Demo) Mở Photostory của bạn | Photostory",
+      "description": "(Demo) Mở photostory của bạn bằng mã riêng đã được gửi cho bạn"
+    }
+  },
   "Common": {
     "login": "Đăng nhập",
     "logout": "Đăng xuất",
